@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StampController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('top');
 });
+Route::post('/', function () {
+    return view('top');
+});
+Route::get('stamp', [StampController::class, 'index']);
+Route::post('stamp', [StampController::class, 'post']);
