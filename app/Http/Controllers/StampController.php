@@ -26,4 +26,26 @@ class StampController extends Controller
         ];
         return view('attend.stamp', $param);
     }
+    public function debugShukkin(Request $request)
+    {
+        date_default_timezone_set('Asia/Tokyo');
+        $param = [
+            'pagename' => '出勤',
+            'staff_id' => $request->staff_id,
+            'pwd' => $request->pwd,
+            'current_time' => date("Y/m/d H:i:s"),
+        ];
+        return view('attend.debugResult', $param);
+    }
+    public function debugTaikin(Request $request)
+    {
+        date_default_timezone_set('Asia/Tokyo');
+        $param = [
+            'pagename' => '退勤',
+            'staff_id' => $request->staff_id,
+            'pwd' => $request->pwd,
+            'current_time' => date("Y/m/d H:i:s"),
+        ];
+        return view('attend.debugResult', $param);
+    }
 }

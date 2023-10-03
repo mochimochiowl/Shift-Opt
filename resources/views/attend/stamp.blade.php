@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        @vite('resources/js/currentTimer.js')
     </head>
     <body>
         <h1>User 打刻ページ</h1>
@@ -32,7 +33,8 @@
                 <input type="password" name="pwd">
             </div>
             <div>
-                <input type="submit" value="出勤">
+                <input type="submit" value="出勤" formaction="/stamp/debugShukkin" formmethod="POST">
+                <input type="submit" value="退勤" formaction="/stamp/debugTaikin" formmethod="POST">
             </div>
         </form>
         <a href="/">トップに戻る</a>

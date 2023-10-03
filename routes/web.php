@@ -22,3 +22,5 @@ Route::post('/', function () {
 });
 Route::get('stamp', [StampController::class, 'index']);
 Route::post('stamp', [StampController::class, 'post']);
+Route::post('stamp/debugShukkin', [StampController::class, 'debugShukkin']);
+Route::post('stamp/debugTaikin', [StampController::class, 'debugTaikin']);
