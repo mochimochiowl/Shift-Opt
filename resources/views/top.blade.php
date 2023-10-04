@@ -13,7 +13,22 @@
     <body>
         <h1>Topページ</h1>
         <div>
+            <a href="/register">スタッフ登録画面</a>
+        </div>
+        <div>
             <a href="/stamp">打刻画面</a>
         </div>
+        @if (Auth::check())
+        <p>{{Auth::user()->kanji_last_name . Auth::user()->kanji_first_name}}さん、こんにちは</p>
+        <div>
+            <form action="logout" method="post">
+                @csrf
+                <input type="submit" value="ログアウトする">
+            </form>
+        </div>
+        @else
+        <p>ログインしていません</p>
+        <a href="/login">ログインする</a>
+        @endif
     </body>
 </html>

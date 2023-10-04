@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StampController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,16 @@ Route::get('/', function () {
 Route::post('/', function () {
     return view('top');
 });
+Route::get('register', [UserController::class, 'showRegister']);
+Route::post('register', [UserController::class, 'createUser']);
+Route::middleware('auth')->group(function () {
+    Route::get('userInfo', [UserController::class, 'showUserInfo']);
+    Route::post('logout', [UserController::class, 'logout']);
+});
+
+Route::get('login', [UserController::class, 'showLogin'])->name('login');
+Route::post('login', [UserController::class, 'login']);
+
 Route::get('stamp', [StampController::class, 'index']);
 Route::post('stamp', [StampController::class, 'post']);
 Route::post('stamp/debugShukkin', [StampController::class, 'debugShukkin']);
