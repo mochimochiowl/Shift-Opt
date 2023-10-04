@@ -12,18 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('staff_conditions', function (Blueprint $table) {
-            $name_length = 30;
-
             $table->id('staff_condition_id');
             $table->foreignId('staff_id')->constrained(
                 table: 'staffs',
                 column: 'staff_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('is_working');
-            $table->boolean('is_breaking');
+            $table->boolean('has_attended')->default(false);
+            $table->boolean('is_breaking')->default(false);
             $table->timestamps();
-            $table->string('created_by', $name_length)->default('初回登録');
-            $table->string('updated_by', $name_length)->default('初回登録');
+            $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
         });
     }
 

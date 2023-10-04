@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('staffs', function (Blueprint $table) {
-            $name_length = 30;
-
             $table->id('staff_id');
-            $table->string('staff_kanji_name', $name_length);
-            $table->string('staff_kana_name', $name_length);
+            $table->foreignId('user_id')->constrained(
+                table: 'users',
+                column: 'user_id',
+            )->cascadeOnDelete()->cascadeOnUpdate();
             $table->float('hourly_wage');
             $table->timestamps();
-            $table->string('created_by', $name_length)->default('初回登録');
-            $table->string('updated_by', $name_length)->default('初回登録');
+            $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
         });
     }
 

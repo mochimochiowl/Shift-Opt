@@ -12,8 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendance_records', function (Blueprint $table) {
-            $name_length = 30;
-
             $table->id('at_record_id');
             $table->foreignId('staff_id')->constrained(
                 table: 'staffs',
@@ -22,8 +20,8 @@ return new class extends Migration
             $table->integer('at_record_type');
             $table->timestamp('time');
             $table->timestamps();
-            $table->string('created_by', $name_length)->default('初回登録');
-            $table->string('updated_by', $name_length)->default('初回登録');
+            $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
         });
     }
 
