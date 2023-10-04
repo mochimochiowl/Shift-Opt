@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('kana_first_name', NAME_CHAR_LIMIT);
             $table->string('email', EMAIL_CHAR_LIMIT);
             $table->string('login_id', LOGIN_ID_CHAR_LIMIT)->unique();
-            $table->string('password', PASSWORD_CHAR_LIMIT);
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
