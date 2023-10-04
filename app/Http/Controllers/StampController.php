@@ -12,7 +12,7 @@ class StampController extends Controller
         $param = [
             'staff_id' => '',
             'pwd' => '',
-            'current_time' => date("Y/m/d H:i:s"),
+            'current_time' => getCurrentTime(),
         ];
         return view('attend.stamp', $param);
     }
@@ -22,7 +22,7 @@ class StampController extends Controller
         $param = [
             'staff_id' => $request->staff_id,
             'pwd' => $request->pwd,
-            'current_time' => date("Y/m/d H:i:s"),
+            'current_time' => getCurrentTime(),
         ];
         return view('attend.stamp', $param);
     }
@@ -33,7 +33,7 @@ class StampController extends Controller
             'pagename' => '出勤',
             'staff_id' => $request->staff_id,
             'pwd' => $request->pwd,
-            'current_time' => date("Y/m/d H:i:s"),
+            'current_time' => getCurrentTime(),
         ];
         return view('attend.debugResult', $param);
     }
@@ -44,7 +44,7 @@ class StampController extends Controller
             'pagename' => '退勤',
             'staff_id' => $request->staff_id,
             'pwd' => $request->pwd,
-            'current_time' => date("Y/m/d H:i:s"),
+            'current_time' => getCurrentTime(),
         ];
         return view('attend.debugResult', $param);
     }
