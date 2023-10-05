@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff_conditions', function (Blueprint $table) {
-            $table->id('staff_condition_id');
-            $table->foreignId('staff_id')->constrained(
-                table: 'staffs',
-                column: 'staff_id',
+        Schema::create('user_conditions', function (Blueprint $table) {
+            $table->id('user_condition_id');
+            $table->foreignId('user_id')->constrained(
+                table: 'users',
+                column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('has_attended')->default(false);
             $table->boolean('is_breaking')->default(false);
-            $table->timestamps();
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->timestamps();
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff_conditions');
+        Schema::dropIfExists('user_conditions');
     }
 };

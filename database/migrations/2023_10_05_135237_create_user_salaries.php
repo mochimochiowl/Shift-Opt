@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staffs', function (Blueprint $table) {
-            $table->id('staff_id');
+        Schema::create('user_salaries', function (Blueprint $table) {
+            $table->id('salary_id');
             $table->foreignId('user_id')->constrained(
                 table: 'users',
                 column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float('hourly_wage');
-            $table->timestamps();
+            $table->float('hourly_wage')->default(0.);
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staffs');
+        Schema::dropIfExists('user_salaries');
     }
 };

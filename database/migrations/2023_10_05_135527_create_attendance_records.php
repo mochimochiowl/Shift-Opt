@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('attendance_records', function (Blueprint $table) {
             $table->id('at_record_id');
-            $table->foreignId('staff_id')->constrained(
-                table: 'staffs',
-                column: 'staff_id',
+            $table->foreignId('user_id')->constrained(
+                table: 'users',
+                column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('at_record_type');
             $table->timestamp('time');
-            $table->timestamps();
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->timestamps();
         });
     }
 
