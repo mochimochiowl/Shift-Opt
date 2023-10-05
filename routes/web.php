@@ -24,7 +24,7 @@ Route::post('/', function () {
 Route::get('register', [UserController::class, 'showRegister']);
 Route::post('register', [UserController::class, 'createUser']);
 Route::middleware('auth')->group(function () {
-    Route::get('userInfo', [UserController::class, 'showUserInfo']);
+    Route::get('userInfo', [UserController::class, 'showUserInfo'])->name('userInfo');
     Route::post('logout', [UserController::class, 'logout']);
 });
 
