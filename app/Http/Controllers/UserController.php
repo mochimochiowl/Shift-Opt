@@ -25,8 +25,10 @@ class UserController extends Controller
         return view('login');
     }
 
+    /** Userデータ（給与データや状態データを含む）の新規作成 */
     public function createUser(Request $request)
     {
+        // Userの作成
         $user = User::query()->create(
             [
                 'kanji_last_name' => $request['kanji_last_name'],
@@ -42,6 +44,24 @@ class UserController extends Controller
         );
 
         Auth::login($user);
+
+        $user_id = Auth::user()->user_id;
+        // UserSalaryの作成
+        $user->salary()->create([
+            'user_id' => $user_id,
+            'hourly_wage' => HOURLY_WAGE_DEFAULT,
+            'created_by' => '新規登録',
+            'updated_by' => '新規登録',
+        ]);
+
+        // UserConditionの作成
+        $user->condition()->create([
+            'user_id' => $user_id,
+            'has_attended' => false,
+            'is_breaking' => false,
+            'created_by' => '新規登録',
+            'updated_by' => '新規登録',
+        ]);
 
         return redirect()->route('userInfo');
     }

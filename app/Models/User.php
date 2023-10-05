@@ -50,4 +50,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function salary()
+    {
+        return $this->hasOne(UserSalary::class);
+    }
+
+    public function condition()
+    {
+        return $this->hasOne(UserCondition::class);
+    }
 }
