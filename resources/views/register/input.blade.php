@@ -9,6 +9,11 @@
 </head>
 <body>
     <h1>スタッフ登録画面</h1>
+    @if(session('errors'))
+        <div class="alert alert-danger">
+            {{ session('errors')->first('message') }}
+        </div>
+    @endif
     <form action="" method="post">
         @csrf
         <div>

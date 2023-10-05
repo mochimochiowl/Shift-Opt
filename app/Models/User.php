@@ -53,11 +53,11 @@ class User extends Authenticatable
 
     public function salary()
     {
-        return $this->hasOne(UserSalary::class);
+        return $this->hasOne(UserSalary::class, 'user_id');
     }
 
     public function condition()
     {
-        return $this->hasOne(UserCondition::class);
+        return $this->hasOne(UserCondition::class, 'user_id');
     }
 }

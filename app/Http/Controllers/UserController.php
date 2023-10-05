@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -69,7 +70,7 @@ class UserController extends Controller
                 return redirect()->route('userInfo');
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', '登録に失敗しました。');
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
         }
     }
 
