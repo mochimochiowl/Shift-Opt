@@ -24,8 +24,8 @@
         <p>kana_first_name : {{$user->kana_first_name}}</p>
         <p>login_id : {{$user->login_id}}</p>
         <p>password(ハッシュ処理済) : {{$user->password}}</p>
-        <p>creation_time : {{$user->creation_time}}</p>
-        <p>update_time : {{$user->update_time}}</p>
+        <p>creation_time : {{$user->created_at}}</p>
+        <p>update_time : {{$user->updated_at}}</p>
         <p>created_by : {{$user->created_by}}</p>
         <p>updated_by : {{$user->updated_by}}</p>
     </div>

@@ -36,8 +36,6 @@ class UserController extends Controller
                 'email' => $request['email'],
                 'login_id' => $request['login_id'],
                 'password' => Hash::make($request['password']),
-                'created_at' => getCurrentTime(),
-                'updated_at' => getCurrentTime(),
                 'created_by' => '新規登録',
                 'updated_by' => '新規登録',
             ]
