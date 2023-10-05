@@ -7,3 +7,4 @@ define('PASSWORD_CHAR_LIMIT', 20);
 
 // 初期値の設定
 define('BY_NAME_DEFAULT', 'デフォルト値');
+define('HOURLY_WAGE_DEFAULT', 0.);

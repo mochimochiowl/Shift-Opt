@@ -17,7 +17,7 @@ return new class extends Migration
                 table: 'users',
                 column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float('hourly_wage')->default(0.);
+            $table->float('hourly_wage')->default(HOURLY_WAGE_DEFAULT);
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->timestamps();
