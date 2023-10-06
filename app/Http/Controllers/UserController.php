@@ -94,4 +94,18 @@ class UserController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+    public static function isExistUser(string $login_id): bool
+    {
+        if (UserController::findUser($login_id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function findUser(string $login_id): User | null
+    {
+        return $user = User::where('login_id', $login_id)->first();
+    }
 }
