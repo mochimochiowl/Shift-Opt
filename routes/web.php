@@ -31,7 +31,12 @@ Route::middleware('auth')->group(function () {
 Route::get('login', [UserController::class, 'showLogin'])->name('login');
 Route::post('login', [UserController::class, 'login']);
 
-Route::get('stamp', [StampController::class, 'index']);
-Route::post('stamp', [StampController::class, 'post']);
-Route::post('stamp/debugShukkin', [StampController::class, 'debugShukkin']);
-Route::post('stamp/debugTaikin', [StampController::class, 'debugTaikin']);
+Route::get('stamp', [StampController::class, 'index'])->name('stamp');
+Route::post('stamp', [StampController::class, 'index'])->name('stamp');
+
+Route::post('stamp/startWork', [StampController::class, 'startWork']);
+Route::post('stamp/finishWork', [StampController::class, 'finishWork']);
+Route::post('stamp/startBreak', [StampController::class, 'startBreak']);
+Route::post('stamp/finishBreak', [StampController::class, 'finishBreak']);
+
+Route::get('stamp/result', [StampController::class, 'showResult'])->name('stampResult');

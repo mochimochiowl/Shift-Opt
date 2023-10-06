@@ -16,25 +16,22 @@
         <div>
             <p id="realTimer">TIMER</p>
         </div>
-        <div>
-            <p>入力されたデータ</p>
-            <p>staff_id : {{$staff_id}}</p>
-            <p>pwd : {{$pwd}}</p>
-            <p>current_time : {{$current_time}}</p>
+        @if(session('errors'))
+        <div class="alert alert-danger">
+            {{ session('errors')->first('message') }}
         </div>
-        <form action="/stamp" method="post">
+        @endif
+        <form action="" method="post">
             @csrf
             <div>
-                <span>スタッフID</span>
-                <input type="text" name="staff_id">
+                <span>ログインID</span>
+                <input type="text" name="login_id">
             </div>
             <div>
-                <span>パスワード</span>
-                <input type="password" name="pwd">
-            </div>
-            <div>
-                <input type="submit" value="出勤" formaction="/stamp/debugShukkin" formmethod="POST">
-                <input type="submit" value="退勤" formaction="/stamp/debugTaikin" formmethod="POST">
+                <input type="submit" value="出勤" formaction="/stamp/startWork" formmethod="POST">
+                <input type="submit" value="退勤" formaction="/stamp/finishWork" formmethod="POST">
+                <input type="submit" value="休憩始" formaction="/stamp/startBreak" formmethod="POST">
+                <input type="submit" value="休憩終" formaction="/stamp/finishBreak" formmethod="POST">
             </div>
         </form>
         <a href="/">トップに戻る</a>
