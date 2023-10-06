@@ -60,4 +60,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserCondition::class, 'user_id');
     }
+
+    /**
+     * 漢字のフルネームを取得
+     * @return string
+     */
+    public function getKanjiFullName()
+    {
+        return $this->kanji_last_name . ' ' . $this->kanji_first_name;
+    }
 }
