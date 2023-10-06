@@ -17,7 +17,7 @@ return new class extends Migration
                 table: 'users',
                 column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('at_record_type');
+            $table->string('at_record_type');
             $table->timestamp('time');
             $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
             $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
