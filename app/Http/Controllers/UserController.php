@@ -16,7 +16,13 @@ class UserController extends Controller
         return view('register/input');
     }
 
-    public function showUserInfo()
+    public function showUserInfo(Request $request)
+    {
+        $user = User::where('user_id', $request->user_id)->first();
+        return view('register/userInfo', ['user' => $user]);
+    }
+
+    public function showLoggedInUserInfo()
     {
         $user = Auth::user();
         return view('register/userInfo', ['user' => $user]);
