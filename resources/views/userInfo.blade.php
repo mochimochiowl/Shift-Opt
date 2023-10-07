@@ -34,11 +34,6 @@
     <div>
         <a href="/">トップに戻る</a>
     </div>
-    <div>
-        <form action="logout" method="post">
-            <button>ログアウトする</button>
-        </form>
-    </div>
 </body>
 
 </html>
