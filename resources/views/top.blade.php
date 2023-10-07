@@ -19,7 +19,7 @@
             <a href="/stamp">打刻画面</a>
         </div>
         <div>
-            <a href="/search">Userテーブル検索画面</a>
+            <a href="/search/user">Userテーブル検索画面</a>
         </div>
         @if (Auth::check())
         <p>{{Auth::user()->kanji_last_name . Auth::user()->kanji_first_name}}さん、こんにちは</p>
