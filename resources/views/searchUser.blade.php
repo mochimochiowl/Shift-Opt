@@ -28,21 +28,36 @@
             {{ session('errors')->first('message') }}
         </div>
     @endif
+    <a href="/">トップ画面に戻る</a>
     <form action="/search/user/result" method="post">
         @csrf
+        <h2>検索条件選択・入力</h2>
         <div>
-            <div>
-                <label for="table_name">テーブル名（半角英数字）</label>
-            </div>
-            <div>
-                <input type="text" name="table_name" id="table_name">
-            </div>
+            <label>
+                <input type="radio" name="search_field" value="user_id" required> ユーザーID
+            </label>
+            <label>
+                <input type="radio" name="search_field" value="kanji_last_name"> 名前（姓）
+            </label>
+            <label>
+                <input type="radio" name="search_field" value="kanji_first_name"> 名前（名）
+            </label>
+            <label>
+                <input type="radio" name="search_field" value="email"> メールアドレス
+            </label>
+            <label>
+                <input type="radio" name="search_field" value="all_column"> 全項目
+            </label>
         </div>
+
         <div>
-            <button type="submit">表示</button>
+            <input type="text" name="keyword" placeholder="キーワードを入力してください" required>
+            <input type="submit" value="検索">
         </div>
     </form>
+
     @if ($results)
+    <h2>検索結果</h2>
     <table>
         <thead>
             <tr>

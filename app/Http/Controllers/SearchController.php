@@ -15,11 +15,11 @@ class SearchController extends Controller
 
     public function showResult(Request $request)
     {
-        $results = $this->search($request->table_name);
+        $results = $this->search($request->keyword);
         return view('searchUser', ['results' => $results]);
     }
 
-    private function search(string $table_name)
+    private function search(string $keyword)
     {
         return User::all();
     }
