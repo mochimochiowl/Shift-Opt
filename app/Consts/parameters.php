@@ -44,11 +44,11 @@ define('PASSWORD', 'password');
 define('REMEMBER_TOKEN', 'remember_token');
 
 //DB user_salariesテーブルのカラムの項目名を定義
-define('SALARY_ID', 'salary_id');
+define('USER_SALARY_ID', 'user_salary_id');
 define('HOURLY_WAGE', 'hourly_wage');
 
 //DB user_conditionsテーブルのカラムの項目名を定義
-define('CONDITION_ID', 'user_condition_id');
+define('USER_CONDITION_ID', 'user_condition_id');
 define('HAS_ATTENDED', 'has_attended');
 define('IS_BREAKING', 'is_breaking');
 
@@ -75,11 +75,11 @@ define('LOGIN_ID_JP', 'ログインID');
 define('PASSWORD_JP', 'パスワード');
 
 //DB user_salariesテーブルのカラムの表示名を定義
-define('SALARY_ID_JP', '時給ID');
+define('USER_SALARY_ID_JP', '時給ID');
 define('HOURLY_WAGE_JP', '時給');
 
 //DB user_conditionsテーブルのカラムの表示名を定義
-define('CONDITION_ID_JP', 'コンディションID');
+define('USER_CONDITION_ID_JP', 'コンディションID');
 define('HAS_ATTENDED_JP', AT_RECORD_START_WORK_JP . '打刻済みか');
 define('IS_BREAKING_JP', AT_RECORD_START_BREAK_JP . '打刻済みか');
 
