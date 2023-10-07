@@ -19,7 +19,7 @@
         @csrf
         <div>
             <div>
-                <label for="kanji_last_name">姓（漢字・15文字以内）</label>
+                <label for="kanji_last_name">{{ConstParams::KANJI_LAST_NAME_JP}}（15文字以内）</label>
             </div>
             <div>
                 <input type="text" name="kanji_last_name" id="kanji_last_name">
@@ -27,7 +27,7 @@
         </div>
         <div>
             <div>
-                <label for="kanji_first_name">名（漢字・15文字以内）</label>
+                <label for="kanji_first_name">{{ConstParams::KANJI_FIRST_NAME_JP}}（15文字以内）</label>
             </div>
             <div>
                 <input type="text" name="kanji_first_name" id="kanji_first_name">
@@ -35,7 +35,7 @@
         </div>
         <div>
             <div>
-                <label for="kana_last_name">セイ（かな・15文字以内）</label>
+                <label for="kana_last_name">{{ConstParams::KANA_LAST_NAME_JP}}（15文字以内）</label>
             </div>
             <div>
                 <input type="text" name="kana_last_name" id="kana_last_name">
@@ -43,7 +43,7 @@
         </div>
         <div>
             <div>
-                <label for="kana_first_name">メイ（かな・15文字以内）</label>
+                <label for="kana_first_name">{{ConstParams::KANA_FIRST_NAME_JP}}（15文字以内）</label>
             </div>
             <div>
                 <input type="text" name="kana_first_name" id="kana_first_name">
@@ -51,7 +51,7 @@
         </div>
         <div>
             <div>
-                <label for="email">メールアドレス</label>
+                <label for="email">{{ConstParams::EMAIL_JP}}</label>
             </div>
             <div>
                 <input type="email" name="email" id="email">
@@ -59,7 +59,7 @@
         </div>
         <div>
             <div>
-                <label for="login_id">ログインID（20文字以内）</label>
+                <label for="login_id">{{ConstParams::LOGIN_ID_JP}}（20文字以内）</label>
             </div>
             <div>
                 <input type="text" name="login_id" id="login_id">
@@ -67,7 +67,7 @@
         </div>
         <div>
             <div>
-                <label for="password">パスワード（20文字以内）</label>
+                <label for="password">{{ConstParams::PASSWORD_JP}}（20文字以内）</label>
             </div>
             <div>
                 <input type="password" name="password" id="password">

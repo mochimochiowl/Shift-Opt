@@ -17,19 +17,19 @@
     <h1>User Information</h1>
     <div>
         <p>{{$user->kanji_last_name . $user->kanji_first_name}}さん の データ</p>
-        <p>user_id : {{$user->user_id}}</p>
-        <p>kanji_last_name : {{$user->kanji_last_name}}</p>
-        <p>kanji_first_name : {{$user->kanji_first_name}}</p>
-        <p>kana_last_name : {{$user->kana_last_name}}</p>
-        <p>kana_first_name : {{$user->kana_first_name}}</p>
-        <p>email : {{$user->email}}</p>
-        <p>email_verified_at : {{$user->email_verified_at}}</p>
-        <p>login_id : {{$user->login_id}}</p>
-        <p>password(ハッシュ処理済) : {{$user->password}}</p>
-        <p>creation_time : {{$user->created_at}}</p>
-        <p>update_time : {{$user->updated_at}}</p>
-        <p>created_by : {{$user->created_by}}</p>
-        <p>updated_by : {{$user->updated_by}}</p>
+        <p>{{ConstParams::USER_ID_JP}} : {{$user->user_id}}</p>
+        <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_last_name}}</p>
+        <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_first_name}}</p>
+        <p>{{ConstParams::KANA_LAST_NAME_JP}} : {{$user->kana_last_name}}</p>
+        <p>{{ConstParams::KANA_FIRST_NAME_JP}} : {{$user->kana_first_name}}</p>
+        <p>{{ConstParams::EMAIL_JP}} : {{$user->email}}</p>
+        <p>{{ConstParams::EMAIL_VERIFIED_AT_JP}} : {{$user->email_verified_at}}</p>
+        <p>{{ConstParams::LOGIN_ID_JP}} : {{$user->login_id}}</p>
+        <p>{{ConstParams::PASSWORD_JP}}(ハッシュ処理済) : {{$user->password}}</p>
+        <p>{{ConstParams::CREATED_AT_JP}} : {{$user->created_at}}</p>
+        <p>{{ConstParams::UPDATED_AT_JP}} : {{$user->updated_at}}</p>
+        <p>{{ConstParams::CREATED_BY_JP}} : {{$user->created_by}}</p>
+        <p>{{ConstParams::UPDATED_BY_JP}} : {{$user->updated_by}}</p>
     </div>
     <div>
         <a href="/">トップに戻る</a>

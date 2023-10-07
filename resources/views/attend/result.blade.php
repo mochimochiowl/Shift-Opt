@@ -18,10 +18,11 @@
     <div>
         <p>処理に成功しました。</p>
         <p>入力されたデータ</p>
-        <p>ログインID : {{$login_id}}</p>
-        <p>お名前 : {{$name}} さん</p>
-        <p>種別 : {{$type}}</p>
-        <p>打刻時間 : {{$time}}</p>
+        <p>{{ConstParams::LOGIN_ID_JP}} : {{$user->login_id}}</p>
+        <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_last_name}}</p>
+        <p>{{ConstParams::KANJI_FIRST_NAME_JP}} : {{$user->kanji_first_name}}</p>
+        <p>{{ConstParams::AT_RECORD_TYPE_JP}} : {{$type}}</p>
+        <p>{{ConstParams::AT_RECORD_TIME_JP}} : {{$time}}</p>
     </div>
     <div>
         <a href="/stamp">打刻画面に戻る</a>

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>打刻画面</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,7 +12,7 @@
         {{-- @vite('resources/js/currentTimer.js') --}}
     </head>
     <body>
-        <h1>User 打刻ページ</h1>
+        <h1>打刻画面</h1>
         <div>
             <p id="realTimer">TIMER</p>
         </div>
@@ -24,14 +24,14 @@
         <form action="" method="post">
             @csrf
             <div>
-                <span>ログインID</span>
+                <span>{{ConstParams::LOGIN_ID_JP}}</span>
                 <input type="text" name="login_id">
             </div>
             <div>
-                <input type="submit" value="出勤" formaction="/stamp/startWork" formmethod="POST">
-                <input type="submit" value="退勤" formaction="/stamp/finishWork" formmethod="POST">
-                <input type="submit" value="休憩始" formaction="/stamp/startBreak" formmethod="POST">
-                <input type="submit" value="休憩終" formaction="/stamp/finishBreak" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="/stamp/startWork" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_WORK_JP}}" formaction="/stamp/finishWork" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_START_BREAK_JP}}" formaction="/stamp/startBreak" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_BREAK_JP}}" formaction="/stamp/finishBreak" formmethod="POST">
             </div>
         </form>
         <a href="/">トップに戻る</a>

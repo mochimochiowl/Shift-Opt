@@ -34,16 +34,16 @@
         <h2>検索条件選択・入力</h2>
         <div>
             <label>
-                <input type="radio" name="search_field" value="user_id" required> ユーザーID
+                <input type="radio" name="search_field" value="user_id" required> {{ConstParams::USER_ID_JP}}
             </label>
             <label>
-                <input type="radio" name="search_field" value="login_id" required> ログインID
+                <input type="radio" name="search_field" value="login_id" required> {{ConstParams::LOGIN_ID_JP}}
             </label>
             <label>
                 <input type="radio" name="search_field" value="name"> 名前（漢字・かな）
             </label>
             <label>
-                <input type="radio" name="search_field" value="email"> メールアドレス
+                <input type="radio" name="search_field" value="email"> {{ConstParams::EMAIL_JP}}
             </label>
             <label>
                 <input type="radio" name="search_field" value="all"> 全件表示
@@ -67,9 +67,9 @@
     <table>
         <thead>
             <tr>
-                <th>user_id</th>
-                <th>kanji_last_name</th>
-                <th>kanji_first_name</th>
+                <th>{{ConstParams::USER_ID_JP}}</th>
+                <th>{{ConstParams::KANJI_LAST_NAME_JP}}</th>
+                <th>{{ConstParams::KANJI_FIRST_NAME_JP}}</th>
                 <th>詳細</th>
             </tr>
         </thead>

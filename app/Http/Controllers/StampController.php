@@ -117,8 +117,7 @@ class StampController extends Controller
                 }
 
                 $param = [
-                    ConstParams::LOGIN_ID => $user->login_id,
-                    'name' => $user->getKanjiFullName(),
+                    'user' => $user,
                     'type' => getAtRecordTypeNameJP($at_record_type),
                     'time' => $new_record->time,
                 ];

@@ -16,7 +16,7 @@
         @csrf
         <div>
             <div>
-                <label for="login_id">ログインID</label>
+                <label for="login_id">{{ConstParams::LOGIN_ID_JP}}</label>
             </div>
             <div>
                 <input type="text" name="login_id" id="login_id">
@@ -24,7 +24,7 @@
         </div>
         <div>
             <div>
-                <label for="password">パスワード</label>
+                <label for="password">{{ConstParams::PASSWORD_JP}}</label>
             </div>
             <div>
                 <input type="password" name="password" id="password">
