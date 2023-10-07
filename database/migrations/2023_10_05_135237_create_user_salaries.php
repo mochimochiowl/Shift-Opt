@@ -13,14 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_salaries', function (Blueprint $table) {
-            $table->id('user_salary_id');
-            $table->foreignId('user_id')->constrained(
+            $table->id(ConstParams::USER_SALARY_ID);
+            $table->foreignId(ConstParams::USER_ID)->constrained(
                 table: 'users',
-                column: 'user_id',
+                column: ConstParams::USER_ID,
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float('hourly_wage')->default(ConstParams::HOURLY_WAGE_DEFAULT);
-            $table->string('created_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
-            $table->string('updated_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->float(ConstParams::HOURLY_WAGE)->default(ConstParams::HOURLY_WAGE_DEFAULT);
+            $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();
         });
     }

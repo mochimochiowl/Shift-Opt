@@ -13,18 +13,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id');
-            $table->string('kanji_last_name', ConstParams::NAME_CHAR_LIMIT);
-            $table->string('kanji_first_name', ConstParams::NAME_CHAR_LIMIT);
-            $table->string('kana_last_name', ConstParams::NAME_CHAR_LIMIT);
-            $table->string('kana_first_name', ConstParams::NAME_CHAR_LIMIT);
-            $table->string('email', ConstParams::EMAIL_CHAR_LIMIT)->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('login_id', ConstParams::LOGIN_ID_CHAR_LIMIT)->unique();
-            $table->string('password');
+            $table->id(ConstParams::USER_ID)->index();
+            $table->string(ConstParams::KANJI_LAST_NAME, ConstParams::NAME_CHAR_LIMIT);
+            $table->string(ConstParams::KANJI_FIRST_NAME, ConstParams::NAME_CHAR_LIMIT);
+            $table->string(ConstParams::KANA_LAST_NAME, ConstParams::NAME_CHAR_LIMIT);
+            $table->string(ConstParams::KANA_FIRST_NAME, ConstParams::NAME_CHAR_LIMIT);
+            $table->string(ConstParams::EMAIL, ConstParams::EMAIL_CHAR_LIMIT)->unique();
+            $table->timestamp(ConstParams::EMAIL_VERIFIED_AT)->nullable();
+            $table->string(ConstParams::LOGIN_ID, ConstParams::LOGIN_ID_CHAR_LIMIT)->unique();
+            $table->string(ConstParams::PASSWORD);
             $table->rememberToken();
-            $table->string('created_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
-            $table->string('updated_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();
         });
     }

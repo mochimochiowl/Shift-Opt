@@ -13,15 +13,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_conditions', function (Blueprint $table) {
-            $table->id('user_condition_id');
-            $table->foreignId('user_id')->constrained(
+            $table->id(ConstParams::USER_CONDITION_ID);
+            $table->foreignId(ConstParams::USER_ID)->constrained(
                 table: 'users',
-                column: 'user_id',
+                column: ConstParams::USER_ID,
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('has_attended')->default(false);
-            $table->boolean('is_breaking')->default(false);
-            $table->string('created_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
-            $table->string('updated_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->boolean(ConstParams::HAS_ATTENDED)->default(false);
+            $table->boolean(ConstParams::IS_BREAKING)->default(false);
+            $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();
         });
     }

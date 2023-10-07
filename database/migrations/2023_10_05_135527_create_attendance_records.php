@@ -13,15 +13,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendance_records', function (Blueprint $table) {
-            $table->id('at_record_id');
-            $table->foreignId('user_id')->constrained(
+            $table->id(ConstParams::AT_RECORD_ID);
+            $table->foreignId(ConstParams::USER_ID)->constrained(
                 table: 'users',
-                column: 'user_id',
+                column: ConstParams::USER_ID,
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('at_record_type');
-            $table->timestamp('at_record_time');
-            $table->string('created_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
-            $table->string('updated_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::AT_RECORD_TYPE);
+            $table->timestamp(ConstParams::AT_RECORD_TIME);
+            $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();
         });
     }
