@@ -125,8 +125,6 @@ class StampController extends Controller
                     }
                 }
 
-                $userCondition->is_breaking = true;
-
                 $param = [
                     'login_id' => $user->login_id,
                     'name' => $user->getKanjiFullName(),
