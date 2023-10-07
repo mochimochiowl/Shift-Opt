@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * 色々なファイルで入力する値をここに集約し、一元管理する
+ */
+
 // 文字数上限の設定
 define('EMAIL_CHAR_LIMIT', 200);
 define('NAME_CHAR_LIMIT', 15);
@@ -19,6 +24,38 @@ define('AT_RECORD_START_WORK_JP', '出勤');
 define('AT_RECORD_FINISH_WORK_JP', '退勤');
 define('AT_RECORD_START_BREAK_JP', '休憩始');
 define('AT_RECORD_FINISH_BREAK_JP', '休憩終');
+
+//DB 共通のカラムの項目名を定義
+define('CREATED_BY', 'created_by');
+define('UPDATED_BY', 'updated_by');
+define('CREATED_AT', 'created_at');
+define('UPDATED_AT', 'updated_at');
+
+//DB userテーブルのカラムの項目名を定義
+define('USER_ID', 'user_id');
+define('KANJI_FIRST_NAME', 'kanji_last_name');
+define('KANJI_LAST_NAME', 'kanji_first_name');
+define('KANA_FIRST_NAME', 'kana_last_name');
+define('KANA_LAST_NAME', 'kana_first_name');
+define('EMAIL', 'email');
+define('EMAIL_VERIFIED_AT', 'email_verified_at');
+define('LOGIN_ID', 'login_id');
+define('PASSWORD', 'password');
+define('REMEMBER_TOKEN', 'remember_token');
+
+//DB user_salariesテーブルのカラムの項目名を定義
+define('SALARY_ID', 'salary_id');
+define('HOURLY_WAGE', 'hourly_wage');
+
+//DB user_conditionsテーブルのカラムの項目名を定義
+define('CONDITION_ID', 'user_condition_id');
+define('HAS_ATTENDED', 'has_attended');
+define('IS_BREAKING', 'is_breaking');
+
+//DB attendance_recordsテーブルのカラムの項目名を定義
+define('AT_RECORD_ID', 'at_record_id');
+define('AT_RECORD_TYPE', 'at_record_type');
+define('AT_RECORD_TIME', 'at_record_time');
 
 //DB 共通のカラムの表示名を定義
 define('CREATED_BY_JP', '新規作成者');
