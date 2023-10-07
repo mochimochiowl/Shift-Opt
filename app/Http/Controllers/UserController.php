@@ -109,14 +109,4 @@ class UserController extends Controller
     {
         return $user = User::where('login_id', $login_id)->first();
     }
-
-    public static function getAllUser(): Collection
-    {
-        return User::all();
-    }
-
-    public static function getAllUserArray(): array
-    {
-        return User::all()->toArray();
-    }
 }
