@@ -13,21 +13,11 @@ class StampController extends Controller
 {
     public function index(Request $request)
     {
-        $param = [
-            'staff_id' => '',
-            'pwd' => '',
-            'current_time' => getCurrentTime(),
-        ];
-        return view('attend.stamp', $param);
+        return view('attend.stamp');
     }
     public function post(Request $request)
     {
-        $param = [
-            'staff_id' => $request->staff_id,
-            'pwd' => $request->pwd,
-            'current_time' => getCurrentTime(),
-        ];
-        return view('attend.stamp', $param);
+        return view('attend.stamp');
     }
     /** 出勤のレコードを新規作成 */
     public function startWork(Request $request)
