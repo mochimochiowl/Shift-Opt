@@ -68,7 +68,7 @@ class StampController extends Controller
                     [
                         'user_id' => $user->user_id,
                         'at_record_type' => $at_record_type,
-                        'time' => getCurrentTime(),
+                        'at_record_time' => getCurrentTime(),
                         'created_by' => '新規登録',
                         'updated_by' => '新規登録',
                     ]
