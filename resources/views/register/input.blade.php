@@ -14,6 +14,7 @@
             {{ session('errors')->first('message') }}
         </div>
     @endif
+    <a href="/">トップ画面に戻る</a>
     <form action="" method="post">
         @csrf
         <div>
