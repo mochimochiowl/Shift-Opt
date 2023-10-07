@@ -71,8 +71,8 @@ class ConstParams
     const USER_ID_JP = 'ユーザーID';
     const KANJI_FIRST_NAME_JP = '姓（漢字）';
     const KANJI_LAST_NAME_JP = '名（漢字）';
-    const KANA_FIRST_NAME_JP = '姓（漢字）';
-    const KANA_LAST_NAME_JP = '名（漢字）';
+    const KANA_FIRST_NAME_JP = '姓（かな）';
+    const KANA_LAST_NAME_JP = '名（かな）';
     const EMAIL_JP = 'メールアドレス';
     const EMAIL_VERIFIED_AT_JP = 'メールアドレス最終認証日時';
     const LOGIN_ID_JP = 'ログインID';
