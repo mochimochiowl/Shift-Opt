@@ -43,6 +43,6 @@ Route::post('stamp/finishBreak', [StampController::class, 'finishBreak']);
 Route::get('stamp/result', [StampController::class, 'showResult'])->name('stampResult');
 
 Route::get('search', [SearchController::class, 'showSearchView']);
-Route::post('search', [SearchController::class, 'showResult']);
+Route::post('search/result', [SearchController::class, 'showResult']);
 
 Route::post('search/userInfo', [UserController::class, 'showUserInfo']);
