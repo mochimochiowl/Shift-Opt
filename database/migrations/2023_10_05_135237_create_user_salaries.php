@@ -1,5 +1,6 @@
 <?php
 
+use App\Const\ConstParams;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,9 +18,9 @@ return new class extends Migration
                 table: 'users',
                 column: 'user_id',
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float('hourly_wage')->default(HOURLY_WAGE_DEFAULT);
-            $table->string('created_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
-            $table->string('updated_by', NAME_CHAR_LIMIT * 2)->default(BY_NAME_DEFAULT);
+            $table->float('hourly_wage')->default(ConstParams::HOURLY_WAGE_DEFAULT);
+            $table->string('created_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
+            $table->string('updated_by', ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();
         });
     }
