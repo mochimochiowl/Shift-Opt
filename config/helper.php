@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Const\ConstParams;
+
 /**
  * 現在時刻を取得する
  * @return string
@@ -19,13 +21,13 @@ function getCurrentTime(): string
 function getAtRecordTypeNameJP(string $at_record_type): string
 {
     switch ($at_record_type) {
-        case AT_RECORD_START_WORK:
-            return AT_RECORD_START_WORK_JP;
-        case AT_RECORD_FINISH_WORK:
-            return AT_RECORD_FINISH_WORK_JP;
-        case AT_RECORD_START_BREAK:
-            return AT_RECORD_START_BREAK_JP;
-        case AT_RECORD_FINISH_BREAK:
-            return AT_RECORD_FINISH_BREAK_JP;
+        case ConstParams::AT_RECORD_START_WORK:
+            return ConstParams::AT_RECORD_START_WORK_JP;
+        case ConstParams::AT_RECORD_FINISH_WORK:
+            return ConstParams::AT_RECORD_FINISH_WORK_JP;
+        case ConstParams::AT_RECORD_START_BREAK:
+            return ConstParams::AT_RECORD_START_BREAK_JP;
+        case ConstParams::AT_RECORD_FINISH_BREAK:
+            return ConstParams::AT_RECORD_FINISH_BREAK_JP;
     }
 }

@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Const\ConstParams;
 
 class AttendanceRecord extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'at_record_id';
+    protected $primaryKey = ConstParams::AT_RECORD_ID;
     protected $fillable = [
-        'user_id',
-        'at_record_type',
-        'time',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
+        ConstParams::USER_ID,
+        ConstParams::AT_RECORD_TYPE,
+        ConstParams::AT_RECORD_TIME,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
     ];
 }

@@ -4,20 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Const\ConstParams;
 
 class UserCondition extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'user_condition_id';
+    protected $primaryKey = ConstParams::USER_CONDITION_ID;
     protected $fillable = [
-        'user_id',
-        'has_attended',
-        'is_breaking',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
+        ConstParams::USER_ID,
+        ConstParams::HAS_ATTENDED,
+        ConstParams::IS_BREAKING,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
     ];
 
     public function user()

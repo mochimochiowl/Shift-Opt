@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Const\ConstParams;
 
 class User extends Authenticatable
 {
@@ -17,19 +18,23 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = ConstParams::USER_ID;
     protected $fillable = [
-        'kanji_last_name',
-        'kanji_first_name',
-        'kana_last_name',
-        'kana_first_name',
-        'email',
-        'login_id',
-        'password',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
+        ConstParams::KANJI_LAST_NAME,
+        ConstParams::KANJI_FIRST_NAME,
+        ConstParams::KANA_LAST_NAME,
+        ConstParams::KANA_FIRST_NAME,
+        ConstParams::EMAIL,
+        ConstParams::LOGIN_ID,
+        ConstParams::PASSWORD,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
+        ConstParams::CREATED_BY,
+        ConstParams::UPDATED_BY,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -37,8 +42,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        ConstParams::PASSWORD,
+        ConstParams::REMEMBER_TOKEN,
     ];
 
     /**
@@ -47,8 +52,8 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        ConstParams::EMAIL_VERIFIED_AT => 'datetime',
+        ConstParams::PASSWORD => 'hashed',
     ];
 
     public function salary()

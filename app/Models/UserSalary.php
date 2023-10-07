@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Const\ConstParams;
 
 class UserSalary extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'user_salary_id';
+    protected $primaryKey = ConstParams::USER_SALARY_ID;
     protected $fillable = [
-        'user_id',
-        'hourly_wage',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
+        ConstParams::USER_ID,
+        ConstParams::HOURLY_WAGE,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
+        ConstParams::CREATED_AT,
+        ConstParams::UPDATED_AT,
     ];
 
     public function user()

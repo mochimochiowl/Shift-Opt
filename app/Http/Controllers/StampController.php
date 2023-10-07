@@ -8,6 +8,7 @@ use App\Models\UserCondition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use App\Const\ConstParams;
 
 class StampController extends Controller
 {
@@ -22,25 +23,25 @@ class StampController extends Controller
     /** 出勤のレコードを新規作成 */
     public function startWork(Request $request)
     {
-        return $this->createRecord($request, AT_RECORD_START_WORK);
+        return $this->createRecord($request, ConstParams::AT_RECORD_START_WORK);
     }
 
     /** 退勤のレコードを新規作成 */
     public function finishWork(Request $request)
     {
-        return $this->createRecord($request, AT_RECORD_FINISH_WORK);
+        return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_WORK);
     }
 
     /** 休憩始のレコードを新規作成 */
     public function startBreak(Request $request)
     {
-        return $this->createRecord($request, AT_RECORD_START_BREAK);
+        return $this->createRecord($request, ConstParams::AT_RECORD_START_BREAK);
     }
 
     /** 休憩終のレコードを新規作成 */
     public function finishBreak(Request $request)
     {
-        return $this->createRecord($request, AT_RECORD_FINISH_BREAK);
+        return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_BREAK);
     }
 
     /** at_record を新規作成、 user_condition を更新*/
@@ -56,11 +57,11 @@ class StampController extends Controller
 
                 $new_record = AttendanceRecord::query()->create(
                     [
-                        'user_id' => $user->user_id,
-                        'at_record_type' => $at_record_type,
-                        'at_record_time' => getCurrentTime(),
-                        'created_by' => '新規登録',
-                        'updated_by' => '新規登録',
+                        ConstParams::USER_ID => $user->user_id,
+                        ConstParams::AT_RECORD_TYPE => $at_record_type,
+                        ConstParams::AT_RECORD_TIME => getCurrentTime(),
+                        ConstParams::CREATED_BY => $user->getKanjiFullName(),
+                        ConstParams::UPDATED_BY => $user->getKanjiFullName(),
                     ]
                 );
 
@@ -71,9 +72,9 @@ class StampController extends Controller
 
                 if ($userCondition->has_attended) {
                     switch ($at_record_type) {
-                        case AT_RECORD_START_WORK:
+                        case ConstParams::AT_RECORD_START_WORK:
                             throw new Exception('既に出勤済みです login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
-                        case AT_RECORD_FINISH_WORK:
+                        case ConstParams::AT_RECORD_FINISH_WORK:
                             if ($userCondition->is_breaking) {
                                 throw new Exception('先に休憩終了をしてください login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
@@ -81,7 +82,7 @@ class StampController extends Controller
                                 $userCondition->save();
                                 break;
                             }
-                        case AT_RECORD_START_BREAK:
+                        case ConstParams::AT_RECORD_START_BREAK:
                             if ($userCondition->is_breaking) {
                                 throw new Exception('既に休憩開始済みです login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
@@ -89,7 +90,7 @@ class StampController extends Controller
                                 $userCondition->save();
                                 break;
                             }
-                        case AT_RECORD_FINISH_BREAK:
+                        case ConstParams::AT_RECORD_FINISH_BREAK:
                             if ($userCondition->is_breaking) {
                                 $userCondition->is_breaking = false;
                                 $userCondition->save();
@@ -100,7 +101,7 @@ class StampController extends Controller
                     }
                 } else {
                     switch ($at_record_type) {
-                        case AT_RECORD_START_WORK:
+                        case ConstParams::AT_RECORD_START_WORK:
                             if ($userCondition->is_breaking) {
                                 throw new Exception('状態がおかしいです（バグ） login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
@@ -108,15 +109,15 @@ class StampController extends Controller
                                 $userCondition->save();
                                 break;
                             }
-                        case AT_RECORD_FINISH_WORK:
-                        case AT_RECORD_START_BREAK:
-                        case AT_RECORD_FINISH_BREAK:
+                        case ConstParams::AT_RECORD_FINISH_WORK:
+                        case ConstParams::AT_RECORD_START_BREAK:
+                        case ConstParams::AT_RECORD_FINISH_BREAK:
                             throw new Exception('先に出勤をしてください login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                     }
                 }
 
                 $param = [
-                    'login_id' => $user->login_id,
+                    ConstParams::LOGIN_ID => $user->login_id,
                     'name' => $user->getKanjiFullName(),
                     'type' => getAtRecordTypeNameJP($at_record_type),
                     'time' => $new_record->time,
@@ -133,26 +134,5 @@ class StampController extends Controller
     {
         $param = $request->input('param');
         return view('attend.result', $param);
-    }
-
-    public function debugShukkin(Request $request)
-    {
-        $param = [
-            'pagename' => '出勤',
-            'staff_id' => $request->staff_id,
-            'pwd' => $request->pwd,
-            'current_time' => getCurrentTime(),
-        ];
-        return view('attend.debugResult', $param);
-    }
-    public function debugTaikin(Request $request)
-    {
-        $param = [
-            'pagename' => '退勤',
-            'staff_id' => $request->staff_id,
-            'pwd' => $request->pwd,
-            'current_time' => getCurrentTime(),
-        ];
-        return view('attend.debugResult', $param);
     }
 }

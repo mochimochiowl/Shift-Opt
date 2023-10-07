@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Const\ConstParams;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,15 +43,15 @@ class UserController extends Controller
                 // Userの作成
                 $user = User::query()->create(
                     [
-                        'kanji_last_name' => $request['kanji_last_name'],
-                        'kanji_first_name' => $request['kanji_first_name'],
-                        'kana_last_name' => $request['kana_last_name'],
-                        'kana_first_name' => $request['kana_first_name'],
-                        'email' => $request['email'],
-                        'login_id' => $request['login_id'],
-                        'password' => Hash::make($request['password']),
-                        'created_by' => '新規登録',
-                        'updated_by' => '新規登録',
+                        ConstParams::KANJI_LAST_NAME => $request[ConstParams::KANJI_LAST_NAME],
+                        ConstParams::KANJI_FIRST_NAME => $request[ConstParams::KANJI_FIRST_NAME],
+                        ConstParams::KANA_LAST_NAME => $request[ConstParams::KANA_LAST_NAME],
+                        ConstParams::KANA_FIRST_NAME => $request[ConstParams::KANA_FIRST_NAME],
+                        ConstParams::EMAIL => $request[ConstParams::EMAIL],
+                        ConstParams::LOGIN_ID => $request[ConstParams::LOGIN_ID],
+                        ConstParams::PASSWORD => Hash::make($request[ConstParams::PASSWORD]),
+                        ConstParams::CREATED_BY => '新規登録',
+                        ConstParams::UPDATED_BY => '新規登録',
                     ]
                 );
 
@@ -59,19 +60,19 @@ class UserController extends Controller
                 $user_id = Auth::user()->user_id;
                 // UserSalaryの作成
                 $user->salary()->create([
-                    'user_id' => $user_id,
-                    'hourly_wage' => HOURLY_WAGE_DEFAULT,
-                    'created_by' => '新規登録',
-                    'updated_by' => '新規登録',
+                    ConstParams::USER_ID => $user_id,
+                    ConstParams::HOURLY_WAGE => ConstParams::HOURLY_WAGE_DEFAULT,
+                    ConstParams::CREATED_BY => '新規登録',
+                    ConstParams::UPDATED_BY => '新規登録',
                 ]);
 
                 // UserConditionの作成
                 $user->condition()->create([
-                    'user_id' => $user_id,
-                    'has_attended' => false,
-                    'is_breaking' => false,
-                    'created_by' => '新規登録',
-                    'updated_by' => '新規登録',
+                    ConstParams::USER_ID => $user_id,
+                    ConstParams::HAS_ATTENDED => false,
+                    ConstParams::IS_BREAKING => false,
+                    ConstParams::CREATED_BY => '新規登録',
+                    ConstParams::UPDATED_BY => '新規登録',
                 ]);
 
                 return redirect()->route('userInfo');
@@ -84,8 +85,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'login_id' => ['required'],
-            'password' => ['required'],
+            ConstParams::LOGIN_ID => ['required'],
+            ConstParams::PASSWORD => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -113,6 +114,6 @@ class UserController extends Controller
 
     public static function findUser(string $login_id): User | null
     {
-        return $user = User::where('login_id', $login_id)->first();
+        return $user = User::where(ConstParams::LOGIN_ID, $login_id)->first();
     }
 }
