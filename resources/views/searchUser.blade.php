@@ -37,26 +37,32 @@
                 <input type="radio" name="search_field" value="user_id" required> ユーザーID
             </label>
             <label>
-                <input type="radio" name="search_field" value="kanji_last_name"> 名前（姓）
+                <input type="radio" name="search_field" value="login_id" required> ログインID
             </label>
             <label>
-                <input type="radio" name="search_field" value="kanji_first_name"> 名前（名）
+                <input type="radio" name="search_field" value="name"> 名前（漢字・かな）
             </label>
             <label>
                 <input type="radio" name="search_field" value="email"> メールアドレス
             </label>
             <label>
-                <input type="radio" name="search_field" value="all_column"> 全項目
+                <input type="radio" name="search_field" value="all"> 全件表示
             </label>
         </div>
 
         <div>
-            <input type="text" name="keyword" placeholder="キーワードを入力してください" required>
+            <input type="text" name="keyword" placeholder="キーワードを入力してください">
             <input type="submit" value="検索">
         </div>
     </form>
 
     @if ($results)
+    <h2>検索ワード</h2>
+    <div>
+        <p>検索種類   : {{$search_field}}</p>
+        <p>検索ワード : {{$keyword}}</p>
+        <p>ヒット件数 : {{$results->count()}}</p>
+    </div>
     <h2>検索結果</h2>
     <table>
         <thead>
