@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
 {
@@ -107,6 +108,11 @@ class UserController extends Controller
     public static function findUser(string $login_id): User | null
     {
         return $user = User::where('login_id', $login_id)->first();
+    }
+
+    public static function getAllUser(): Collection
+    {
+        return User::all();
     }
 
     public static function getAllUserArray(): array
