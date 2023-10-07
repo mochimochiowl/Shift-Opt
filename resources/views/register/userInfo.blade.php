@@ -22,6 +22,8 @@
         <p>kanji_first_name : {{$user->kanji_first_name}}</p>
         <p>kana_last_name : {{$user->kana_last_name}}</p>
         <p>kana_first_name : {{$user->kana_first_name}}</p>
+        <p>email : {{$user->email}}</p>
+        <p>email_verified_at : {{$user->email_verified_at}}</p>
         <p>login_id : {{$user->login_id}}</p>
         <p>password(ハッシュ処理済) : {{$user->password}}</p>
         <p>creation_time : {{$user->created_at}}</p>
