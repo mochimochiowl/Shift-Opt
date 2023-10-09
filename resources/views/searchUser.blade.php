@@ -23,10 +23,14 @@
 </head>
 <body>
     <h1>Userテーブル検索画面</h1>
-    @if(session('errors'))
-        <div class="alert alert-danger">
-            {{ session('errors')->first('message') }}
-        </div>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
     <div>
         <a href="{{route('top')}}">トップに戻る</a>

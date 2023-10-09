@@ -16,16 +16,20 @@
         <div>
             <p id="realTimer">TIMER</p>
         </div>
-        @if(session('errors'))
+        @if ($errors->any())
         <div class="alert alert-danger">
-            {{ session('errors')->first('message') }}
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
         @endif
         <form action="" method="post">
             @csrf
             <div>
                 <span>{{ConstParams::LOGIN_ID_JP}}</span>
-                <input type="text" name="login_id">
+                <input type="text" name="login_id" required>
             </div>
             <div>
                 <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="{{route('stamps.startWork')}}" formmethod="POST">

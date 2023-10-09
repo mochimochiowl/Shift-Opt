@@ -15,9 +15,13 @@
 
 <body>
     <h1>ユーザー情報編集画面</h1>
-    @if(session('errors'))
+    @if ($errors->any())
     <div class="alert alert-danger">
-        {{ session('errors')->first('message') }}
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
     @endif
     @if ($user)
