@@ -87,7 +87,7 @@ class UserController extends Controller
                     ConstParams::UPDATED_BY => '新規登録',
                 ]);
 
-                return redirect()->route('userInfo');
+                return redirect()->route('users.show', [ConstParams::USER_ID => $user_id]);
             }, 5);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
@@ -157,10 +157,10 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('userInfo');
+            return redirect()->intended(route('top'));
         }
 
-        return back();
+        return back()->withErrors(['message' => 'There was an error.' . 'ログインIDかパスワードが違います']);
     }
 
     public function logout()

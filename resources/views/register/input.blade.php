@@ -14,8 +14,7 @@
             {{ session('errors')->first('message') }}
         </div>
     @endif
-    <a href="/">トップ画面に戻る</a>
-    <form action="" method="post">
+    <form action="{{route('users.store')}}" method="post">
         @csrf
         <div>
             <div>
@@ -77,4 +76,7 @@
             <button type="submit">送信</button>
         </div>
     </form>
+    <div>
+        <a href="{{route('top')}}">トップに戻る</a>
+    </div>
 </body>

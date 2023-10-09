@@ -13,10 +13,10 @@
     <body>
         <h1>トップ画面</h1>
         <div>
-            <a href="/register">スタッフ登録画面</a>
+            <a href="{{route('users.create')}}">スタッフ登録画面</a>
         </div>
         <div>
-            <a href="/stamp">打刻画面</a>
+            <a href="{{route('stamps.index')}}">打刻画面</a>
         </div>
         <div>
             <a href="{{route('users.search')}}">Userテーブル検索画面</a>
@@ -24,14 +24,16 @@
         @if (Auth::check())
         <p>{{Auth::user()->kanji_last_name . Auth::user()->kanji_first_name}}さん、こんにちは</p>
         <div>
-            <form action="logout" method="post">
+            <form action="{{route('logout')}}" method="post">
                 @csrf
-                <input type="submit" value="ログアウトする">
+                <button type="submit">ログアウトする</button>
             </form>
         </div>
         @else
         <p>ログインしていません</p>
-        <a href="/login">ログインする</a>
+        <div>
+            <a href="{{route('login.form')}}">ログインする</a>
+        </div>
         @endif
     </body>
 </html>

@@ -28,12 +28,17 @@
                 <input type="text" name="login_id">
             </div>
             <div>
-                <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="/stamp/startWork" formmethod="POST">
-                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_WORK_JP}}" formaction="/stamp/finishWork" formmethod="POST">
-                <input type="submit" value="{{ConstParams::AT_RECORD_START_BREAK_JP}}" formaction="/stamp/startBreak" formmethod="POST">
-                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_BREAK_JP}}" formaction="/stamp/finishBreak" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="{{route('stamps.startWork')}}" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_WORK_JP}}" formaction="{{route('stamps.finishWork')}}" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_START_BREAK_JP}}" formaction="{{route('stamps.startBreak')}}" formmethod="POST">
+                <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_BREAK_JP}}" formaction="{{route('stamps.finishBreak')}}" formmethod="POST">
             </div>
         </form>
-        <a href="/">トップに戻る</a>
+        <div>
+            <a href="{{route('stamps.index')}}">打刻画面に戻る</a>
+        </div>
+        <div>
+            <a href="{{route('top')}}">トップに戻る</a>
+        </div>
     </body>
 </html>

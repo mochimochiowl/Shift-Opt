@@ -28,7 +28,9 @@
             {{ session('errors')->first('message') }}
         </div>
     @endif
-    <a href="/">トップ画面に戻る</a>
+    <div>
+        <a href="{{route('top')}}">トップに戻る</a>
+    </div>
     <form action="{{route('users.search.result')}}" method="post">
         @csrf
         <h2>検索条件選択・入力</h2>

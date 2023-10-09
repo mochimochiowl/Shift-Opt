@@ -36,6 +36,6 @@
     </form>
     @endif
     <div>
-        <a href="/">トップに戻る</a>
+        <a href="{{route('top')}}">トップに戻る</a>
     </div>
 </body>

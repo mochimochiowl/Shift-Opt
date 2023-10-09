@@ -32,7 +32,10 @@
         <p>{{ConstParams::UPDATED_BY_JP}} : {{$user->updated_by}}</p>
     </div>
     <div>
-        <a href="/">トップに戻る</a>
+        <a href="{{route('users.search')}}">ユーザー検索画面に戻る</a>
+    </div>
+    <div>
+        <a href="{{route('top')}}">トップに戻る</a>
     </div>
 </body>
 

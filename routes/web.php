@@ -16,31 +16,29 @@ use App\Http\Controllers\SearchController;
 |
 */
 
-Route::get('/', function () {
-    return view('top');
-});
-Route::post('/', function () {
-    return view('top');
-});
-Route::get('register', [UserController::class, 'showRegister']);
-Route::post('register', [UserController::class, 'createUser']);
+// トップページのルート
+Route::view('/', 'top')->name('top');
+
+// ユーザー登録・ログイン・ログアウトにかかわるルート
+Route::get('users/create', [UserController::class, 'showRegister'])->name('users.create');
+Route::post('users', [UserController::class, 'createUser'])->name('users.store');
+
 Route::middleware('auth')->group(function () {
-    Route::get('userInfo', [UserController::class, 'showLoggedInUserInfo'])->name('userInfo');
-    Route::post('logout', [UserController::class, 'logout']);
+    Route::post('logout', [UserController::class, 'logout'])->name('logout');
 });
+Route::get('login', [UserController::class, 'showLogin'])->name('login.form');
+Route::post('login', [UserController::class, 'login'])->name('login.store');
 
-Route::get('login', [UserController::class, 'showLogin'])->name('login');
-Route::post('login', [UserController::class, 'login']);
-
-Route::get('stamp', [StampController::class, 'index'])->name('stamp');
-Route::post('stamp', [StampController::class, 'index'])->name('stamp');
-
-Route::post('stamp/startWork', [StampController::class, 'startWork']);
-Route::post('stamp/finishWork', [StampController::class, 'finishWork']);
-Route::post('stamp/startBreak', [StampController::class, 'startBreak']);
-Route::post('stamp/finishBreak', [StampController::class, 'finishBreak']);
-
-Route::get('stamp/result', [StampController::class, 'showResult'])->name('stampResult');
+// 勤怠にかかわるルート
+Route::prefix('stamps')->name('stamps.')->group(function () {
+    Route::get('/', [StampController::class, 'index'])->name('index');
+    Route::post('/', [StampController::class, 'index']);
+    Route::post('start-work', [StampController::class, 'startWork'])->name('startWork');
+    Route::post('finish-work', [StampController::class, 'finishWork'])->name('finishWork');
+    Route::post('start-break', [StampController::class, 'startBreak'])->name('startBreak');
+    Route::post('finish-break', [StampController::class, 'finishBreak'])->name('finishBreak');
+    Route::get('result', [StampController::class, 'showResult'])->name('result');
+});
 
 // 検索にかかわるルート
 Route::get('users/search', [SearchController::class, 'showSearchView'])->name('users.search');

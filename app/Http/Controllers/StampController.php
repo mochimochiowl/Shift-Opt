@@ -119,19 +119,17 @@ class StampController extends Controller
                 $param = [
                     'user' => $user,
                     'type' => getAtRecordTypeNameJP($at_record_type),
-                    'time' => $new_record->time,
+                    'time' => $new_record->at_record_time,
                 ];
-
-                return redirect()->route('stampResult', ['param' => $param]);
+                return redirect()->route('stamps.result')->with(['param' => $param]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->route('stamp')->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
+            return redirect()->route('stamps.index')->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
         }
     }
 
     public function showResult(Request $request)
     {
-        $param = $request->input('param');
-        return view('attend.result', $param);
+        return view('attend.result', session('param'));
     }
 }

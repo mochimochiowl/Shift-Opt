@@ -25,10 +25,10 @@
         <p>{{ConstParams::AT_RECORD_TIME_JP}} : {{$time}}</p>
     </div>
     <div>
-        <a href="/stamp">打刻画面に戻る</a>
+        <a href="{{route('stamps.index')}}">打刻画面に戻る</a>
     </div>
     <div>
-        <a href="/">トップに戻る</a>
+        <a href="{{route('top')}}">トップに戻る</a>
     </div>
 </body>
 
