@@ -38,15 +38,15 @@
     </div>
     <div>
         <p>本当に削除してもよろしいですか？</p>
-        <form action="/user/edit/delete/exec" method="POST">
+        <form action="{{route('users.delete', [ConstParams::USER_ID => $user->user_id])}}" method="POST">
             @csrf
-            <input type="hidden" name={{ConstParams::USER_ID}} value={{$user->user_id}}>
-            <div><input type="submit" value="このユーザーを削除する"></div>
+            @method('DELETE')
+            <button type="submit">このユーザーを削除する</button>
         </form>
     </div>
     @endif
     <div>
-        <a href="/search/user">ユーザー検索画面に戻る</a>
+        <a href="{{route('users.search')}}">ユーザー検索画面に戻る</a>
     </div>
     <div>
         <a href="/">トップに戻る</a>

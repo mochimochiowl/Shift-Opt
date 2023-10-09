@@ -17,9 +17,9 @@ class UserController extends Controller
         return view('register/input');
     }
 
-    public function showUserInfo(Request $request)
+    public function showUserInfo($user_id)
     {
-        $user = User::where('user_id', $request->user_id)->first();
+        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
         return view('userInfo', ['user' => $user]);
     }
 
@@ -35,9 +35,9 @@ class UserController extends Controller
         return view('userEdit', ['user' => $user]);
     }
 
-    public function showUserEdit(Request $request)
+    public function showUserEdit($user_id)
     {
-        $user = User::where('user_id', $request->user_id)->first();
+        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
         return view('userEdit', ['user' => $user]);
     }
 
@@ -95,11 +95,11 @@ class UserController extends Controller
     }
 
     /** Userデータの更新 */
-    public function updateUser(Request $request)
+    public function updateUser($user_id, Request $request)
     {
         try {
-            return DB::transaction(function () use ($request) {
-                $count = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->update(
+            return DB::transaction(function () use ($user_id, $request) {
+                $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(
                     [
                         ConstParams::KANJI_LAST_NAME => $request[ConstParams::KANJI_LAST_NAME],
                         ConstParams::KANJI_FIRST_NAME => $request[ConstParams::KANJI_FIRST_NAME],
@@ -110,15 +110,16 @@ class UserController extends Controller
                         ConstParams::UPDATED_BY => $request['logged_in_user_name'],
                     ]
                 );
+
                 $user = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->first();
-                return redirect()->route('userEditResult')->with(['user' => $user, 'count' => $count]);
+                return redirect()->route('users.update.result', [ConstParams::USER_ID => $user->user_id])->with(['user' => $user, 'count' => $count]);
             }, 5);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
         }
     }
 
-    public function showUserEditResult(Request $request)
+    public function showUserUpdateResult(Request $request)
     {
         return view('userEditResult', ['user' => session('user'), 'count' => session('count')]);
     }
@@ -130,12 +131,12 @@ class UserController extends Controller
     }
 
     /** Userデータの更新 */
-    public function deleteUser(Request $request)
+    public function deleteUser($user_id)
     {
         try {
-            return DB::transaction(function () use ($request) {
-                $count = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->delete();
-                return redirect()->route('userDeleteResult')->with(['count' => $count]);
+            return DB::transaction(function () use ($user_id) {
+                $count = User::where(ConstParams::USER_ID, '=', $user_id)->delete();
+                return redirect()->route('users.delete.result', [ConstParams::USER_ID => $user_id])->with(['count' => $count]);
             }, 5);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);

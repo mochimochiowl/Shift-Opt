@@ -15,10 +15,16 @@
 
 <body>
     <h1>ユーザー情報編集画面</h1>
+    @if(session('errors'))
+    <div class="alert alert-danger">
+        {{ session('errors')->first('message') }}
+    </div>
+    @endif
     @if ($user)
     <p>{{$user->kanji_last_name . $user->kanji_first_name}}さん の データ</p>
-    <form action="/user/update" method="POST">
+    <form action="{{route('users.update', [ConstParams::USER_ID => $user->user_id])}}" method="POST">
         @csrf
+        @method('PUT')
         <div>
             <div>
                 <label for="{{ConstParams::USER_ID}}">{{ConstParams::USER_ID_JP}} ＊この項目は変更できません。</label>
@@ -99,24 +105,18 @@
     </form>
     @else
         <p>更新に失敗</p>
-        @if(session('errors'))
-            <div class="alert alert-danger">
-                {{ session('errors')->first('message') }}
-            </div>
-        @endif
     @endif
     <div>
-        <a href="/search/user">ユーザー検索画面に戻る</a>
+        <a href="{{route('users.search')}}">ユーザー検索画面に戻る</a>
     </div>
     <div>
         <a href="/">トップに戻る</a>
     </div>
     <div>
         @if ($user)
-        <form action="/user/edit/delete" method="POST">
+        <form action="{{route('users.delete.confirm', [ConstParams::USER_ID => $user->user_id])}}" method="POST">
             @csrf
-            <input type="hidden" name={{ConstParams::USER_ID}} value={{$user->user_id}}>
-            <div><input type="submit" value="このユーザーを削除する"></div>
+            <button type="submit">このユーザーを削除する</button>
         </form>
         @endif
     </div>

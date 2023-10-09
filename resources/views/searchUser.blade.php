@@ -29,7 +29,7 @@
         </div>
     @endif
     <a href="/">トップ画面に戻る</a>
-    <form action="/search/user/result" method="post">
+    <form action="{{route('users.search.result')}}" method="post">
         @csrf
         <h2>検索条件選択・入力</h2>
         <div>
@@ -81,18 +81,10 @@
                 <td>{{$result->kanji_last_name}}</td>
                 <td>{{$result->kanji_first_name}}</td>
                 <td>
-                    <form action="/search/user/info" method="post">
-                        @csrf
-                        <input type="hidden" name="user_id" value="{{$result->user_id}}">
-                        <input type="submit" value="詳細">
-                    </form>
+                    <a href="{{route('users.show', [ConstParams::USER_ID => $result->user_id])}}">詳細</a>
                 </td>
                 <td>
-                    <form action="/search/user/edit" method="post">
-                        @csrf
-                        <input type="hidden" name="user_id" value="{{$result->user_id}}">
-                        <input type="submit" value="編集">
-                    </form>
+                    <a href="{{route('users.edit', [ConstParams::USER_ID => $result->user_id])}}">編集</a>
                 </td>
             </tr>
         @endforeach

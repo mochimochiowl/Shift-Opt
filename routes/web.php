@@ -42,17 +42,17 @@ Route::post('stamp/finishBreak', [StampController::class, 'finishBreak']);
 
 Route::get('stamp/result', [StampController::class, 'showResult'])->name('stampResult');
 
-Route::get('search/user', [SearchController::class, 'showSearchView']);
-Route::post('search/user/result', [SearchController::class, 'showResult']);
+// 検索にかかわるルート
+Route::get('users/search', [SearchController::class, 'showSearchView'])->name('users.search');
+Route::post('users/search', [SearchController::class, 'showResult'])->name('users.search.result');
 
-Route::post('search/user/info', [UserController::class, 'showUserInfo']);
+// ユーザー情報操作にかかわるルート
+Route::get('users/{user_id}', [UserController::class, 'showUserInfo'])->name('users.show');
+Route::get('users/{user_id}/edit', [UserController::class, 'showUserEdit'])->name('users.edit');
+Route::put('users/{user_id}', [UserController::class, 'updateUser'])->name('users.update');
+Route::delete('users/{user_id}', [UserController::class, 'deleteUser'])->name('users.delete');
 
-Route::get('search/user/edit', [UserController::class, 'indexUserEdit']);
-Route::post('search/user/edit', [UserController::class, 'showUserEdit']);
-
-Route::post('user/update', [UserController::class, 'updateUser']);
-Route::get('user/update/result', [UserController::class, 'showUserEditResult'])->name('userEditResult');
-
-Route::post('user/edit/delete', [UserController::class, 'showUserDeleteConfirmation']);
-Route::post('user/edit/delete/exec', [UserController::class, 'deleteUser']);
-Route::get('user/edit/delete/result', [UserController::class, 'showUserDeleteResult'])->name('userDeleteResult');
+// 確認画面や結果画面などのルート
+Route::get('users/{user_id}/edit/result', [UserController::class, 'showUserUpdateResult'])->name('users.update.result');
+Route::post('users/{user_id}/delete/confirm', [UserController::class, 'showUserDeleteConfirmation'])->name('users.delete.confirm');
+Route::get('users/{user_id}/delete/result', [UserController::class, 'showUserDeleteResult'])->name('users.delete.result');
