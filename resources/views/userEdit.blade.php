@@ -104,7 +104,7 @@
             <p>{{ConstParams::CREATED_BY_JP}} : {{$user->created_by}}</p>
             <p>{{ConstParams::UPDATED_BY_JP}} : {{$user->updated_by}}</p>
         </div>
-        <input type="hidden" name="logged_in_user_name" value="編集画面から編集（仮）">
+        <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
         <div><input type="submit" value="更新"></div>
     </form>
     @else
@@ -120,6 +120,7 @@
         @if ($user)
         <form action="{{route('users.delete.confirm', [ConstParams::USER_ID => $user->user_id])}}" method="POST">
             @csrf
+            <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
             <button type="submit">このユーザーを削除する</button>
         </form>
         @endif

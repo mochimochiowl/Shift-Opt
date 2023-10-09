@@ -100,6 +100,9 @@ class UserController extends Controller
     /** Userデータの更新 */
     public function updateUser($user_id, UserUpdateRequest $request)
     {
+        if (!Auth::check()) {
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . 'ログインしていないユーザーの不正な編集は許可されません。']);
+        }
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(
@@ -133,9 +136,12 @@ class UserController extends Controller
         return view('userDeleteConfirmation', ['user' => $user]);
     }
 
-    /** Userデータの更新 */
+    /** Userデータの削除 */
     public function deleteUser($user_id)
     {
+        if (!Auth::check()) {
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . 'ログインしていないユーザーの不正な編集は許可されません。']);
+        }
         try {
             return DB::transaction(function () use ($user_id) {
                 $count = User::where(ConstParams::USER_ID, '=', $user_id)->delete();
