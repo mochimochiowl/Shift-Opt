@@ -80,6 +80,7 @@ class StampController extends Controller
                                 throw new Exception('先に休憩終了をしてください login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
                                 $userCondition->has_attended = false;
+                                $userCondition->updated_by = $user->getKanjiFullName();
                                 $userCondition->save();
                                 break;
                             }
@@ -88,12 +89,14 @@ class StampController extends Controller
                                 throw new Exception('既に休憩開始済みです login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
                                 $userCondition->is_breaking = true;
+                                $userCondition->updated_by = $user->getKanjiFullName();
                                 $userCondition->save();
                                 break;
                             }
                         case ConstParams::AT_RECORD_FINISH_BREAK:
                             if ($userCondition->is_breaking) {
                                 $userCondition->is_breaking = false;
+                                $userCondition->updated_by = $user->getKanjiFullName();
                                 $userCondition->save();
                                 break;
                             } else {
@@ -107,6 +110,7 @@ class StampController extends Controller
                                 throw new Exception('状態がおかしいです（バグ） login_id: ' . $request->login_id . ' user_id:' . $user->user_id . ' has_attended:' . $userCondition->has_attended . ' is_breaking:' . $userCondition->is_breaking);
                             } else {
                                 $userCondition->has_attended = true;
+                                $userCondition->updated_by = $user->getKanjiFullName();
                                 $userCondition->save();
                                 break;
                             }
