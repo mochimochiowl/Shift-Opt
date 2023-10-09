@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -148,25 +149,44 @@ class UserController extends Controller
         return view('userDeleteResult', ['count' => session('count')]);
     }
 
+    /**
+     * ログイン処理、バリデーションもここで定義
+     */
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            ConstParams::LOGIN_ID => ['required'],
-            ConstParams::PASSWORD => ['required'],
+        // 入力されたデータの検証
+        $validator = Validator::make($request->all(), [
+            ConstParams::LOGIN_ID => 'required|exists:users,login_id',
+            ConstParams::PASSWORD => 'required',
+        ], [
+            ConstParams::LOGIN_ID . '.required' => 'ログインIDを入力して下さい。',
+            ConstParams::LOGIN_ID . '.exists' => 'ログインIDが存在しません。',
+            ConstParams::PASSWORD . '.required' => 'パスワードを入力して下さい。',
         ]);
+
+        // 検証が失敗した場合
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput($request->except(ConstParams::PASSWORD));
+        }
+
+        $credentials = $request->only(ConstParams::LOGIN_ID, ConstParams::PASSWORD);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended(route('top'));
         }
 
-        return back()->withErrors(['message' => 'There was an error.' . 'ログインIDかパスワードが違います']);
+        // パスワードが一致しない場合
+        return back()->withErrors(['message' => 'パスワードが一致しません。'])->withInput($request->except(ConstParams::PASSWORD));
     }
 
+    /**
+     * ログアウト処理 トップ画面に戻る
+     */
     public function logout()
     {
         Auth::logout();
-        return redirect('/');
+        return redirect(route('top'));
     }
 
     public static function isExistUser(string $login_id): bool

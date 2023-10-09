@@ -8,6 +8,15 @@
     <title>ログイン画面</title>
 </head>
 <body>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <h1>ログイン画面</h1>
     @if (Auth::check())
     <p>ログイン済みですよ</p>
