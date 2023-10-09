@@ -37,10 +37,10 @@ class ConstParams
 
     //DB userテーブルのカラムの項目名を定義
     const USER_ID = 'user_id';
-    const KANJI_FIRST_NAME = 'kanji_last_name';
-    const KANJI_LAST_NAME = 'kanji_first_name';
-    const KANA_FIRST_NAME = 'kana_last_name';
-    const KANA_LAST_NAME = 'kana_first_name';
+    const KANJI_FIRST_NAME = 'kanji_first_name';
+    const KANJI_LAST_NAME = 'kanji_last_name';
+    const KANA_FIRST_NAME = 'kana_first_name';
+    const KANA_LAST_NAME = 'kana_last_name';
     const EMAIL = 'email';
     const EMAIL_VERIFIED_AT = 'email_verified_at';
     const LOGIN_ID = 'login_id';
@@ -69,10 +69,10 @@ class ConstParams
 
     //DB userテーブルのカラムの表示名を定義
     const USER_ID_JP = 'ユーザーID';
-    const KANJI_FIRST_NAME_JP = '姓（漢字）';
-    const KANJI_LAST_NAME_JP = '名（漢字）';
-    const KANA_FIRST_NAME_JP = '姓（かな）';
-    const KANA_LAST_NAME_JP = '名（かな）';
+    const KANJI_FIRST_NAME_JP = '名（漢字）';
+    const KANJI_LAST_NAME_JP = '姓（漢字）';
+    const KANA_FIRST_NAME_JP = '名（かな）';
+    const KANA_LAST_NAME_JP = '姓（かな）';
     const EMAIL_JP = 'メールアドレス';
     const EMAIL_VERIFIED_AT_JP = 'メールアドレス最終認証日時';
     const LOGIN_ID_JP = 'ログインID';

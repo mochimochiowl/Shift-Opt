@@ -19,7 +19,7 @@
         <p>{{$user->kanji_last_name . $user->kanji_first_name}}さん の データ</p>
         <p>{{ConstParams::USER_ID_JP}} : {{$user->user_id}}</p>
         <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_last_name}}</p>
-        <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_first_name}}</p>
+        <p>{{ConstParams::KANJI_FIRST_NAME_JP}} : {{$user->kanji_first_name}}</p>
         <p>{{ConstParams::KANA_LAST_NAME_JP}} : {{$user->kana_last_name}}</p>
         <p>{{ConstParams::KANA_FIRST_NAME_JP}} : {{$user->kana_first_name}}</p>
         <p>{{ConstParams::EMAIL_JP}} : {{$user->email}}</p>
