@@ -29,7 +29,7 @@
             @csrf
             <div>
                 <span>{{ConstParams::LOGIN_ID_JP}}</span>
-                <input type="text" name="login_id" required>
+                <input type="text" name="{{ConstParams::LOGIN_ID}}" value="{{old(ConstParams::LOGIN_ID)}}" required>
             </div>
             <div>
                 <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="{{route('stamps.startWork')}}" formmethod="POST">

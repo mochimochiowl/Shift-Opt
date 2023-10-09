@@ -124,7 +124,7 @@ class StampController extends Controller
                 return redirect()->route('stamps.result')->with(['param' => $param]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->route('stamps.index')->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
+            return redirect()->route('stamps.index')->withErrors(['message' => 'There was an error.' . $e->getMessage()])->withInput();
         }
     }
 

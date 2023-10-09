@@ -25,18 +25,18 @@
         @csrf
         <div>
             <div>
-                <label for="login_id">{{ConstParams::LOGIN_ID_JP}}</label>
+                <label for="{{ConstParams::LOGIN_ID}}">{{ConstParams::LOGIN_ID_JP}}</label>
             </div>
             <div>
-                <input type="text" name="login_id" id="login_id">
+                <input type="text" name="{{ConstParams::LOGIN_ID}}" id="{{ConstParams::LOGIN_ID}}" value="{{old(ConstParams::LOGIN_ID)}}">
             </div>
         </div>
         <div>
             <div>
-                <label for="password">{{ConstParams::PASSWORD_JP}}</label>
+                <label for="{{ConstParams::PASSWORD}}">{{ConstParams::PASSWORD_JP}}</label>
             </div>
             <div>
-                <input type="password" name="password" id="password">
+                <input type="password" name="{{ConstParams::PASSWORD}}" id="{{ConstParams::PASSWORD}}">
             </div>
         </div>
         <div>

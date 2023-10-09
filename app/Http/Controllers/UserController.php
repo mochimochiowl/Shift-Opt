@@ -50,6 +50,40 @@ class UserController extends Controller
     /** Userデータ（給与データや状態データを含む）の新規作成 */
     public function createUser(Request $request)
     {
+        // バリデーションルールの定義
+        $rules = [
+            ConstParams::KANJI_LAST_NAME => 'required',
+            ConstParams::KANJI_FIRST_NAME => 'required',
+            ConstParams::KANA_LAST_NAME => 'required',
+            ConstParams::KANA_FIRST_NAME => 'required',
+            ConstParams::EMAIL => 'required|email',
+            ConstParams::LOGIN_ID => 'required',
+            ConstParams::PASSWORD => 'required',
+        ];
+
+        // エラーメッセージ
+        $messages = [
+            'required' => ':attributeを入力してください。',
+            'email' => 'メールアドレスの形式が正しくありません。',
+        ];
+
+        //属性名
+        $attributes = [
+            ConstParams::KANJI_LAST_NAME => ConstParams::KANJI_LAST_NAME_JP,
+            ConstParams::KANJI_FIRST_NAME => ConstParams::KANJI_FIRST_NAME_JP,
+            ConstParams::KANA_LAST_NAME => ConstParams::KANA_LAST_NAME_JP,
+            ConstParams::KANA_FIRST_NAME => ConstParams::KANA_FIRST_NAME_JP,
+            ConstParams::EMAIL => ConstParams::EMAIL_JP,
+            ConstParams::LOGIN_ID => ConstParams::LOGIN_ID_JP,
+            ConstParams::PASSWORD => ConstParams::PASSWORD_JP,
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
+
+        // バリデーション失敗時の処理
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput($request->except(ConstParams::PASSWORD));
+        }
 
         try {
             return DB::transaction(function () use ($request) {
@@ -91,13 +125,47 @@ class UserController extends Controller
                 return redirect()->route('users.show', [ConstParams::USER_ID => $user_id]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()])->withInput($request->except(ConstParams::PASSWORD));
         }
     }
 
     /** Userデータの更新 */
     public function updateUser($user_id, Request $request)
     {
+        // バリデーションルールの定義
+        $rules = [
+            ConstParams::KANJI_LAST_NAME => 'required',
+            ConstParams::KANJI_FIRST_NAME => 'required',
+            ConstParams::KANA_LAST_NAME => 'required',
+            ConstParams::KANA_FIRST_NAME => 'required',
+            ConstParams::EMAIL => 'required|email',
+            ConstParams::LOGIN_ID => 'required',
+        ];
+
+        // エラーメッセージ
+        $messages = [
+            'required' => ':attributeを入力してください。',
+            'email' => 'メールアドレスの形式が正しくありません。',
+        ];
+
+        //属性名
+        $attributes = [
+            ConstParams::KANJI_LAST_NAME => ConstParams::KANJI_LAST_NAME_JP,
+            ConstParams::KANJI_FIRST_NAME => ConstParams::KANJI_FIRST_NAME_JP,
+            ConstParams::KANA_LAST_NAME => ConstParams::KANA_LAST_NAME_JP,
+            ConstParams::KANA_FIRST_NAME => ConstParams::KANA_FIRST_NAME_JP,
+            ConstParams::EMAIL => ConstParams::EMAIL_JP,
+            ConstParams::LOGIN_ID => ConstParams::LOGIN_ID_JP,
+            ConstParams::PASSWORD => ConstParams::PASSWORD_JP,
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
+
+        // バリデーション失敗時の処理
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput($request->except(ConstParams::PASSWORD));
+        }
+
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(

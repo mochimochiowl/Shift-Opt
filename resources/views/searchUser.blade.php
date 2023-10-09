@@ -57,7 +57,7 @@
         </div>
 
         <div>
-            <input type="text" name="keyword" placeholder="キーワードを入力してください">
+            <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{$keyword ?? ''}}">
             <input type="submit" value="検索">
         </div>
     </form>
