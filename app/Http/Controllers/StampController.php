@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Const\ConstParams;
+use App\Http\Requests\AtRecordStoreRequest;
 
 class StampController extends Controller
 {
@@ -21,31 +22,31 @@ class StampController extends Controller
         return view('attend.stamp');
     }
     /** 出勤のレコードを新規作成 */
-    public function startWork(Request $request)
+    public function startWork(AtRecordStoreRequest $request)
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_START_WORK);
     }
 
     /** 退勤のレコードを新規作成 */
-    public function finishWork(Request $request)
+    public function finishWork(AtRecordStoreRequest $request)
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_WORK);
     }
 
     /** 休憩始のレコードを新規作成 */
-    public function startBreak(Request $request)
+    public function startBreak(AtRecordStoreRequest $request)
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_START_BREAK);
     }
 
     /** 休憩終のレコードを新規作成 */
-    public function finishBreak(Request $request)
+    public function finishBreak(AtRecordStoreRequest $request)
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_BREAK);
     }
 
     /** at_record を新規作成、 user_condition を更新*/
-    private function createRecord(Request $request, string $at_record_type)
+    private function createRecord($request, string $at_record_type)
     {
         try {
             return DB::transaction(function () use ($request, $at_record_type) {

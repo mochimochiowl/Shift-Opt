@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Const\ConstParams;
+use App\Http\Requests\SearchUserRequest;
 
 class SearchController extends Controller
 {
@@ -15,7 +16,7 @@ class SearchController extends Controller
         return view('searchUser', ['results' => $results]);
     }
 
-    public function showResult(Request $request)
+    public function showResult(SearchUserRequest $request)
     {
         $results = $this->searchUser($request);
         return view('searchUser', [
