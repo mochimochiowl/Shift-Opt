@@ -52,3 +52,7 @@ Route::post('search/user/edit', [UserController::class, 'showUserEdit']);
 
 Route::post('user/update', [UserController::class, 'updateUser']);
 Route::get('user/update/result', [UserController::class, 'showUserEditResult'])->name('userEditResult');
+
+Route::post('user/edit/delete', [UserController::class, 'showUserDeleteConfirmation']);
+Route::post('user/edit/delete/exec', [UserController::class, 'deleteUser']);
+Route::get('user/edit/delete/result', [UserController::class, 'showUserDeleteResult'])->name('userDeleteResult');

@@ -106,7 +106,19 @@
         @endif
     @endif
     <div>
+        <a href="/search/user">ユーザー検索画面に戻る</a>
+    </div>
+    <div>
         <a href="/">トップに戻る</a>
+    </div>
+    <div>
+        @if ($user)
+        <form action="/user/edit/delete" method="POST">
+            @csrf
+            <input type="hidden" name={{ConstParams::USER_ID}} value={{$user->user_id}}>
+            <div><input type="submit" value="このユーザーを削除する"></div>
+        </form>
+        @endif
     </div>
 </body>
 

@@ -123,6 +123,30 @@ class UserController extends Controller
         return view('userEditResult', ['user' => session('user'), 'count' => session('count')]);
     }
 
+    public function showUserDeleteConfirmation(Request $request)
+    {
+        $user = User::where('user_id', $request->user_id)->first();
+        return view('userDeleteConfirmation', ['user' => $user]);
+    }
+
+    /** Userデータの更新 */
+    public function deleteUser(Request $request)
+    {
+        try {
+            return DB::transaction(function () use ($request) {
+                $count = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->delete();
+                return redirect()->route('userDeleteResult')->with(['count' => $count]);
+            }, 5);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
+        }
+    }
+
+    public function showUserDeleteResult(Request $request)
+    {
+        return view('userDeleteResult', ['count' => session('count')]);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
