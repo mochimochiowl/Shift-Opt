@@ -46,3 +46,9 @@ Route::get('search/user', [SearchController::class, 'showSearchView']);
 Route::post('search/user/result', [SearchController::class, 'showResult']);
 
 Route::post('search/user/info', [UserController::class, 'showUserInfo']);
+
+Route::get('search/user/edit', [UserController::class, 'indexUserEdit']);
+Route::post('search/user/edit', [UserController::class, 'showUserEdit']);
+
+Route::post('user/update', [UserController::class, 'updateUser']);
+Route::get('user/update/result', [UserController::class, 'showUserEditResult'])->name('userEditResult');

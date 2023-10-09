@@ -71,6 +71,7 @@
                 <th>{{ConstParams::KANJI_LAST_NAME_JP}}</th>
                 <th>{{ConstParams::KANJI_FIRST_NAME_JP}}</th>
                 <th>詳細</th>
+                <th>編集</th>
             </tr>
         </thead>
         <tbody>
@@ -84,6 +85,13 @@
                         @csrf
                         <input type="hidden" name="user_id" value="{{$result->user_id}}">
                         <input type="submit" value="詳細">
+                    </form>
+                </td>
+                <td>
+                    <form action="/search/user/edit" method="post">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{$result->user_id}}">
+                        <input type="submit" value="編集">
                     </form>
                 </td>
             </tr>

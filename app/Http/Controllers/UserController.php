@@ -29,6 +29,18 @@ class UserController extends Controller
         return view('userInfo', ['user' => $user]);
     }
 
+    public function indexUserEdit(Request $request)
+    {
+        $user = null;
+        return view('userEdit', ['user' => $user]);
+    }
+
+    public function showUserEdit(Request $request)
+    {
+        $user = User::where('user_id', $request->user_id)->first();
+        return view('userEdit', ['user' => $user]);
+    }
+
     public function showLogin()
     {
         return view('login');
@@ -80,6 +92,35 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
         }
+    }
+
+    /** Userデータの更新 */
+    public function updateUser(Request $request)
+    {
+        try {
+            return DB::transaction(function () use ($request) {
+                $count = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->update(
+                    [
+                        ConstParams::KANJI_LAST_NAME => $request[ConstParams::KANJI_LAST_NAME],
+                        ConstParams::KANJI_FIRST_NAME => $request[ConstParams::KANJI_FIRST_NAME],
+                        ConstParams::KANA_LAST_NAME => $request[ConstParams::KANA_LAST_NAME],
+                        ConstParams::KANA_FIRST_NAME => $request[ConstParams::KANA_FIRST_NAME],
+                        ConstParams::EMAIL => $request[ConstParams::EMAIL],
+                        ConstParams::LOGIN_ID => $request[ConstParams::LOGIN_ID],
+                        ConstParams::UPDATED_BY => $request['logged_in_user_name'],
+                    ]
+                );
+                $user = User::where(ConstParams::USER_ID, '=', $request[ConstParams::USER_ID])->first();
+                return redirect()->route('userEditResult')->with(['user' => $user, 'count' => $count]);
+            }, 5);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['message' => 'There was an error.' . $e->getMessage()]);
+        }
+    }
+
+    public function showUserEditResult(Request $request)
+    {
+        return view('userEditResult', ['user' => session('user'), 'count' => session('count')]);
     }
 
     public function login(Request $request)
