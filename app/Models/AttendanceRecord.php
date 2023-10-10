@@ -28,7 +28,7 @@ class AttendanceRecord extends Model
     public static function createNewRecord(User $user, string $at_record_type): AttendanceRecord
     {
         try {
-            $newRecord = AttendanceRecord::query()->create(
+            $newRecord = self::query()->create(
                 [
                     ConstParams::USER_ID => $user->user_id,
                     ConstParams::AT_RECORD_TYPE => $at_record_type,
