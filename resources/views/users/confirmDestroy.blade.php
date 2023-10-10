@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ユーザー削除（確認）</title>
-</head>
-
-<body>
-    <h1>ユーザー削除確認画面</h1>
-    @if ($user->user_id === 1)
+@extends('layouts.base')
+@section('title', 'ユーザー削除確認画面')
+@section('content')
+@if ($user->user_id === 1)
     <p>管理者ユーザーは削除できません。</p>
     @else
     <div>
@@ -38,12 +31,8 @@
         </form>
     </div>
     @endif
-    <div>
-        <a href="{{route('users.search')}}">ユーザー検索画面に戻る</a>
-    </div>
-    <div>
-        <a href="{{route('top')}}">トップに戻る</a>
-    </div>
-</body>
+@endsection
 
-</html>
+@section('footer')
+    copyright 2023 CoderOwlWing
+@endsection

@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>スタッフ登録画面</title>
-</head>
-<body>
-    <h1>スタッフ登録画面</h1>
-    @if ($errors->any())
+@extends('layouts.base')
+@section('title', 'スタッフ登録画面')
+@section('content')
+@if ($errors->any())
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
@@ -78,7 +72,8 @@
             <button type="submit">送信</button>
         </div>
     </form>
-    <div>
-        <a href="{{route('top')}}">トップに戻る</a>
-    </div>
-</body>
+@endsection
+
+@section('footer')
+    copyright 2023 CoderOwlWing
+@endsection

@@ -21,7 +21,7 @@ header {
     flex-shrink: 0;
 }
 
-ul {
+ul.menu {
     list-style-type: none;
     /* リストの先頭の点をなしにする */
     display: flex;
@@ -38,7 +38,7 @@ ul {
     /* ロゴとメニューの間の隙間 */
 }
 
-li {
+ul.menu li {
     flex: 1;
     /* 各項目の幅を均一にする */
     text-align: center;
@@ -49,12 +49,12 @@ li {
     /* 上下のパディングを追加して、見た目を良くする */
 }
 
-li:last-child {
+ul.menu li:last-child {
     border-right: none;
     /* 最後の項目の右側の線を削除 */
 }
 
-a {
+a.menuBtn {
     text-decoration: none;
     /* アンダーラインを削除 */
     color: black;
@@ -67,4 +67,20 @@ a:hover {
     color: #666;
     background-color: blanchedalmond;
     /* ホバー時のテキストの色を暗灰色に変更 */
+}
+
+table {
+    border-collapse: collapse;
+    width: 30%;
+    margin: 20px 0;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px 12px;
+}
+
+th {
+    background-color: #f2f2f2;
 }
