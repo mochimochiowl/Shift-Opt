@@ -7,16 +7,25 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Const\ConstParams;
 use App\Http\Requests\SearchUserRequest;
+use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    public function showSearchView(Request $request)
+    /**
+     * 検索画面を返す
+     * @return View
+     */
+    public function showSearchView(Request $request): View
     {
         $results = null;
         return view('searchUser', ['results' => $results]);
     }
 
-    public function showResult(SearchUserRequest $request)
+    /**
+     * 検索結果を含んだ検索画面を返す
+     * @return View
+     */
+    public function showResult(SearchUserRequest $request): View
     {
         $results = $this->searchUser($request);
         return view('searchUser', [
@@ -26,6 +35,10 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * Userテーブル内を検索する
+     * @return Collection
+     */
     private function searchUser(Request $request): Collection
     {
         $keyword = $request->keyword ?? '';
@@ -45,7 +58,11 @@ class SearchController extends Controller
         return User::where($request->search_field, 'LIKE', '%' . $keyword . '%')->get();;
     }
 
-    private function getFieldNameJP(string $search_field)
+    /**
+     * 検索用の属性「search_field」に対応する日本語表記の項目名を返す
+     * @return string
+     */
+    private function getFieldNameJP(string $search_field): string
     {
         switch ($search_field) {
             case ConstParams::USER_ID:

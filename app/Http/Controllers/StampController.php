@@ -10,43 +10,61 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Const\ConstParams;
 use App\Http\Requests\AtRecordStoreRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StampController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * 打刻画面を返す
+     * @return View
+     */
+    public function index(): View
     {
         return view('attend.stamp');
     }
-    public function post(Request $request)
-    {
-        return view('attend.stamp');
-    }
-    /** 出勤のレコードを新規作成 */
-    public function startWork(AtRecordStoreRequest $request)
+
+    /** 
+     * 出勤のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse
+     *  */
+    public function startWork(AtRecordStoreRequest $request): RedirectResponse
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_START_WORK);
     }
 
-    /** 退勤のレコードを新規作成 */
-    public function finishWork(AtRecordStoreRequest $request)
+    /** 
+     * 退勤のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse
+     *  */
+    public function finishWork(AtRecordStoreRequest $request): RedirectResponse
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_WORK);
     }
 
-    /** 休憩始のレコードを新規作成 */
-    public function startBreak(AtRecordStoreRequest $request)
+    /** 
+     * 休憩始のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse
+     *  */
+    public function startBreak(AtRecordStoreRequest $request): RedirectResponse
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_START_BREAK);
     }
 
-    /** 休憩終のレコードを新規作成 */
-    public function finishBreak(AtRecordStoreRequest $request)
+    /** 
+     * 休憩終のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse
+     *  */
+    public function finishBreak(AtRecordStoreRequest $request): RedirectResponse
     {
         return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_BREAK);
     }
 
-    /** at_record を新規作成、 user_condition を更新*/
-    private function createRecord($request, string $at_record_type)
+    /** 
+     * at_record を新規作成、 user_condition を更新
+     * @return RedirectResponse
+     *  */
+    private function createRecord($request, string $at_record_type): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $at_record_type) {
@@ -133,7 +151,11 @@ class StampController extends Controller
         }
     }
 
-    public function showResult(Request $request)
+    /**
+     * 打刻処理成功画面を返す
+     * @return View
+     */
+    public function showResult(Request $request): View
     {
         return view('attend.result', session('param'));
     }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class AdminUserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * 管理者ユーザーを作成
      */
     public function run(): void
     {
@@ -27,7 +27,5 @@ class AdminUserSeeder extends Seeder
             ConstParams::CREATED_BY => '新規登録',
             ConstParams::UPDATED_BY => '新規登録',
         ]);
-        // AutoIncrementを1に戻す
-        DB::statement("ALTER TABLE users auto_increment = 1;");
     }
 }

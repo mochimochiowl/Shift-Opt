@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Const\ConstParams;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -56,12 +57,20 @@ class User extends Authenticatable
         ConstParams::PASSWORD => 'hashed',
     ];
 
-    public function salary()
+    /**
+     * このUserモデルと紐づくUserSalaryモデルを取得
+     * @return HasOne
+     */
+    public function salary(): HasOne
     {
         return $this->hasOne(UserSalary::class, 'user_id');
     }
 
-    public function condition()
+    /**
+     * このUserモデルと紐づくUserConditionモデルを取得
+     * @return HasOne
+     */
+    public function condition(): HasOne
     {
         return $this->hasOne(UserCondition::class, 'user_id');
     }
@@ -70,7 +79,7 @@ class User extends Authenticatable
      * 漢字のフルネームを取得
      * @return string
      */
-    public function getKanjiFullName()
+    public function getKanjiFullName(): string
     {
         return $this->kanji_last_name . ' ' . $this->kanji_first_name;
     }

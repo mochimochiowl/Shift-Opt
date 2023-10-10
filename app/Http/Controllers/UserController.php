@@ -7,51 +7,58 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function showRegister()
+    /**
+     * ユーザー登録画面を返す
+     * @return View
+     */
+    public function showRegister(): View
     {
         return view('register/input');
     }
 
-    public function showUserInfo($user_id)
+    /**
+     * ユーザー情報詳細画面を返す
+     * @return View
+     */
+    public function showUserInfo($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
         return view('userInfo', ['user' => $user]);
     }
 
-    public function showLoggedInUserInfo()
-    {
-        $user = Auth::user();
-        return view('userInfo', ['user' => $user]);
-    }
-
-    public function indexUserEdit(Request $request)
-    {
-        $user = null;
-        return view('userEdit', ['user' => $user]);
-    }
-
-    public function showUserEdit($user_id)
+    /**
+     * ユーザー編集画面を返す
+     * @return View
+     */
+    public function showUserEdit($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
         return view('userEdit', ['user' => $user]);
     }
 
-    public function showLogin()
+    /**
+     * ログイン画面を返す
+     * @return View
+     */
+    public function showLogin(): View
     {
         return view('login');
     }
 
-    /** Userデータ（給与データや状態データを含む）の新規作成 */
-    public function createUser(UserStoreRequest $request)
+    /** 
+     * Userデータ（給与データや状態データを含む）の新規作成
+     * @return RedirectResponse
+     *  */
+    public function createUser(UserStoreRequest $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -97,12 +104,13 @@ class UserController extends Controller
         }
     }
 
-    /** Userデータの更新 */
-    public function updateUser($user_id, UserUpdateRequest $request)
+
+    /** 
+     * Userデータの更新
+     * @return RedirectResponse
+     *  */
+    public function updateUser($user_id, UserUpdateRequest $request): RedirectResponse
     {
-        if (!Auth::check()) {
-            return redirect()->back()->withErrors(['message' => 'There was an error.' . 'ログインしていないユーザーの不正な編集は許可されません。']);
-        }
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(
@@ -125,19 +133,30 @@ class UserController extends Controller
         }
     }
 
-    public function showUserUpdateResult(Request $request)
+    /**
+     * ユーザー更新処理を行い、その処理が成功したことを表示する画面を返す
+     * @return View
+     */
+    public function showUserUpdateResult(Request $request): View
     {
         return view('userEditResult', ['user' => session('user'), 'count' => session('count')]);
     }
 
-    public function showUserDeleteConfirmation(Request $request)
+    /**
+     * ユーザー削除処理の前の確認画面を返す
+     * @return View
+     */
+    public function showUserDeleteConfirmation(Request $request): View
     {
         $user = User::where('user_id', $request->user_id)->first();
         return view('userDeleteConfirmation', ['user' => $user]);
     }
 
-    /** Userデータの削除 */
-    public function deleteUser($user_id)
+    /** 
+     * Userデータの削除
+     * @return RedirectResponse
+     *  */
+    public function deleteUser($user_id): View
     {
         if (!Auth::check()) {
             return redirect()->back()->withErrors(['message' => 'There was an error.' . 'ログインしていないユーザーの不正な編集は許可されません。']);
@@ -152,15 +171,20 @@ class UserController extends Controller
         }
     }
 
-    public function showUserDeleteResult(Request $request)
+    /**
+     * ユーザー削除処理を行い、その処理が成功したことを表示する画面を返す
+     * @return View
+     */
+    public function showUserDeleteResult(Request $request): View
     {
         return view('userDeleteResult', ['count' => session('count')]);
     }
 
     /**
      * ログイン処理、バリデーションもここで定義
+     * @return RedirectResponse
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only(ConstParams::LOGIN_ID, ConstParams::PASSWORD);
 
@@ -175,13 +199,18 @@ class UserController extends Controller
 
     /**
      * ログアウト処理 トップ画面に戻る
+     * @return RedirectResponse
      */
-    public function logout()
+    public function logout(): RedirectResponse
     {
         Auth::logout();
         return redirect(route('top'));
     }
 
+    /**
+     * 特定のログインIDをもつUserデータが存在するか
+     * @return bool
+     */
     public static function isExistUser(string $login_id): bool
     {
         if (UserController::findUser($login_id)) {
@@ -191,6 +220,10 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * 特定のログインIDをもつUserオブジェクトを取得
+     * @return  User|null
+     */
     public static function findUser(string $login_id): User | null
     {
         return $user = User::where(ConstParams::LOGIN_ID, $login_id)->first();

@@ -32,7 +32,6 @@ Route::post('login', [UserController::class, 'login'])->name('login.store');
 // 勤怠にかかわるルート
 Route::prefix('stamps')->name('stamps.')->group(function () {
     Route::get('/', [StampController::class, 'index'])->name('index');
-    Route::post('/', [StampController::class, 'index']);
     Route::post('start-work', [StampController::class, 'startWork'])->name('startWork');
     Route::post('finish-work', [StampController::class, 'finishWork'])->name('finishWork');
     Route::post('start-break', [StampController::class, 'startBreak'])->name('startBreak');

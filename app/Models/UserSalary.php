@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Const\ConstParams;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserSalary extends Model
 {
@@ -20,7 +21,11 @@ class UserSalary extends Model
         ConstParams::UPDATED_AT,
     ];
 
-    public function user()
+    /**
+     * このUserSalaryモデルが属するUserモデルを取得
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
