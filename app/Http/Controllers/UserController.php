@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        return view('register/input');
+        return view('users.create');
     }
 
     /** 
@@ -56,7 +56,7 @@ class UserController extends Controller
      */
     public function showLogin(): View
     {
-        return view('login');
+        return view('auth.login');
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends Controller
     public function show($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        return view('userInfo', ['user' => $user]);
+        return view('users.show', ['user' => $user]);
     }
 
     /**
@@ -103,7 +103,7 @@ class UserController extends Controller
     public function edit($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        return view('userEdit', ['user' => $user]);
+        return view('users.edit', ['user' => $user]);
     }
 
     /** 
@@ -133,7 +133,7 @@ class UserController extends Controller
      */
     public function showUpdateResult(Request $request): View
     {
-        return view('userEditResult', ['user' => session('user'), 'count' => session('count')]);
+        return view('users.editResult', ['user' => session('user'), 'count' => session('count')]);
     }
 
     /**
@@ -143,7 +143,7 @@ class UserController extends Controller
     public function confirmDestroy(Request $request): View
     {
         $user = User::where('user_id', $request->user_id)->first();
-        return view('userDeleteConfirmation', ['user' => $user]);
+        return view('users.confirmDestroy', ['user' => $user]);
     }
 
     /** 
@@ -168,6 +168,6 @@ class UserController extends Controller
      */
     public function showDestroyResult(Request $request): View
     {
-        return view('userDeleteResult', ['count' => session('count')]);
+        return view('users.destroyResult', ['count' => session('count')]);
     }
 }

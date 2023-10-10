@@ -18,7 +18,7 @@ class SearchController extends Controller
     public function showSearchView(Request $request): View
     {
         $results = null;
-        return view('searchUser', ['results' => $results]);
+        return view('search/index', ['results' => $results]);
     }
 
     /**
@@ -28,7 +28,7 @@ class SearchController extends Controller
     public function showResult(SearchUserRequest $request): View
     {
         $results = $this->searchUser($request);
-        return view('searchUser', [
+        return view('search/index', [
             'results' => $results,
             'search_field' => $this->getFieldNameJP($request->search_field),
             'keyword' => $request->keyword,

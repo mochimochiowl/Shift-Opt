@@ -21,7 +21,7 @@ class StampController extends Controller
      */
     public function index(): View
     {
-        return view('attend.stamp');
+        return view('stamps.index');
     }
 
     /** 
@@ -157,6 +157,6 @@ class StampController extends Controller
      */
     public function showResult(Request $request): View
     {
-        return view('attend.result', session('param'));
+        return view('stamps.result', session('param'));
     }
 }
