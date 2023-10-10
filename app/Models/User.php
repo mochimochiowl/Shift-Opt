@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Const\ConstParams;
+use Exception;
+use Laravel\Sanctum\HasApiTokens;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use App\Const\ConstParams;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -56,6 +58,78 @@ class User extends Authenticatable
         ConstParams::EMAIL_VERIFIED_AT => 'datetime',
         ConstParams::PASSWORD => 'hashed',
     ];
+
+    /**
+     * Userの作成
+     * @return User
+     */
+    public static function createNewUser(array $data): User
+    {
+        try {
+            $user = User::query()->create(
+                [
+                    ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
+                    ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
+                    ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
+                    ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
+                    ConstParams::EMAIL => $data[ConstParams::EMAIL],
+                    ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                    ConstParams::PASSWORD => Hash::make($data[ConstParams::PASSWORD]),
+                    ConstParams::CREATED_BY => '新規登録',
+                    ConstParams::UPDATED_BY => '新規登録',
+                ]
+            );
+
+            return $user;
+        } catch (Exception $e) {
+            throw new Exception('User::createNewUserでエラー : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Userの更新
+     * @return array
+     */
+    public static function updateInfo($user_id, array $data): array
+    {
+        $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(
+            [
+                ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
+                ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
+                ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
+                ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
+                ConstParams::EMAIL => $data[ConstParams::EMAIL],
+                ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                ConstParams::UPDATED_BY => $data['logged_in_user_name'],
+            ]
+        );
+        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
+
+        $result = [
+            'count' => $count,
+            'user' => $user,
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Userの削除
+     * @return int
+     */
+    public static function deletedById($user_id): int
+    {
+        return User::where(ConstParams::USER_ID, '=', $user_id)->delete();
+    }
+
+    /**
+     * 特定のログインIDをもつUserオブジェクトを取得
+     * @return  User|null
+     */
+    public static function findUserByLoginId(string $login_id): User | null
+    {
+        return User::where(ConstParams::LOGIN_ID, $login_id)->first();
+    }
 
     /**
      * このUserモデルと紐づくUserSalaryモデルを取得

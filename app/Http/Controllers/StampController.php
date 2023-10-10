@@ -69,7 +69,7 @@ class StampController extends Controller
         try {
             return DB::transaction(function () use ($request, $at_record_type) {
 
-                $user = UserController::findUser($request->login_id);
+                $user = User::findUserByLoginId($request->login_id);
                 if (!$user) {
                     throw new Exception('ユーザーが見つかりません login_id: ' . $request->login_id);
                 }

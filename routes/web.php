@@ -20,8 +20,8 @@ use App\Http\Controllers\SearchController;
 Route::view('/', 'top')->name('top');
 
 // ユーザー登録・ログイン・ログアウトにかかわるルート
-Route::get('users/create', [UserController::class, 'showRegister'])->name('users.create');
-Route::post('users', [UserController::class, 'createUser'])->name('users.store');
+Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+Route::post('users', [UserController::class, 'store'])->name('users.store');
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
@@ -46,13 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::post('users/search', [SearchController::class, 'showResult'])->name('users.search.result');
 
     // ユーザー情報操作にかかわるルート
-    Route::get('users/{user_id}', [UserController::class, 'showUserInfo'])->name('users.show');
-    Route::get('users/{user_id}/edit', [UserController::class, 'showUserEdit'])->name('users.edit');
-    Route::put('users/{user_id}', [UserController::class, 'updateUser'])->name('users.update');
-    Route::delete('users/{user_id}', [UserController::class, 'deleteUser'])->name('users.delete');
+    Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
+    Route::get('users/{user_id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('users/{user_id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user_id}', [UserController::class, 'destroy'])->name('users.delete');
 
     // 確認画面や結果画面などのルート
-    Route::get('users/{user_id}/edit/result', [UserController::class, 'showUserUpdateResult'])->name('users.update.result');
-    Route::post('users/{user_id}/delete/confirm', [UserController::class, 'showUserDeleteConfirmation'])->name('users.delete.confirm');
-    Route::get('users/{user_id}/delete/result', [UserController::class, 'showUserDeleteResult'])->name('users.delete.result');
+    Route::get('users/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('users.update.result');
+    Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
+    Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
 });

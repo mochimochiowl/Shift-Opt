@@ -29,6 +29,7 @@ class UserUpdateRequest extends FormRequest
             ConstParams::KANA_FIRST_NAME => 'required',
             ConstParams::EMAIL => 'required|email',
             ConstParams::LOGIN_ID => 'required',
+            'logged_in_user_name' => 'required',
         ];
     }
 

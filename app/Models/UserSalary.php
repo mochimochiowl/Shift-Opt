@@ -21,6 +21,24 @@ class UserSalary extends Model
         ConstParams::UPDATED_AT,
     ];
 
+    /** 
+     * UserSalaryデータの新規作成
+     * @return void
+     *  */
+    public static function createForUser(User $user): void
+    {
+        try {
+            $user->salary()->create([
+                ConstParams::USER_ID => $user->user_id,
+                ConstParams::HOURLY_WAGE => ConstParams::HOURLY_WAGE_DEFAULT,
+                ConstParams::CREATED_BY => '新規登録',
+                ConstParams::UPDATED_BY => '新規登録',
+            ]);
+        } catch (Exception $e) {
+            throw new Exception('UserSalary::createForUserでエラー : ' . $e->getMessage());
+        }
+    }
+
     /**
      * このUserSalaryモデルが属するUserモデルを取得
      * @return BelongsTo
