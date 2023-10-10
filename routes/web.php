@@ -24,7 +24,7 @@ Route::get('users/create', [UserController::class, 'create'])->name('users.creat
 Route::post('users', [UserController::class, 'store'])->name('users.store');
 
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('logout', [UserController::class, 'logout'])->name('logout');
 });
 Route::get('login', [UserController::class, 'showLogin'])->name('login.form');
 Route::post('login', [UserController::class, 'login'])->name('login.store');
