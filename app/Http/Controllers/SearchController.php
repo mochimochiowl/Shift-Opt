@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Const\ConstParams;
+use App\Http\Requests\SearchUserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use App\Const\ConstParams;
-use App\Http\Requests\SearchUserRequest;
 use Illuminate\View\View;
 
 class SearchController extends Controller
@@ -42,20 +42,7 @@ class SearchController extends Controller
     private function searchUser(Request $request): Collection
     {
         $keyword = $request->keyword ?? '';
-
-        if ($request->search_field === 'name') {
-            return User::where(ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere(ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere(ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere(ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->get();;
-        }
-
-        if ($request->search_field === 'all') {
-            return User::all();
-        }
-
-        return User::where($request->search_field, 'LIKE', '%' . $keyword . '%')->get();;
+        return User::searchByKeyword($request->search_field, $keyword);
     }
 
     /**

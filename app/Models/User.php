@@ -6,6 +6,7 @@ use App\Const\ConstParams;
 use Exception;
 use Laravel\Sanctum\HasApiTokens;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,7 +67,7 @@ class User extends Authenticatable
     public static function createNewUser(array $data): User
     {
         try {
-            $user = User::query()->create(
+            $user = self::query()->create(
                 [
                     ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
                     ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
@@ -92,7 +93,7 @@ class User extends Authenticatable
      */
     public static function updateInfo($user_id, array $data): array
     {
-        $count = User::where(ConstParams::USER_ID, '=', $user_id)->update(
+        $count = self::where(ConstParams::USER_ID, '=', $user_id)->update(
             [
                 ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
                 ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
@@ -103,7 +104,7 @@ class User extends Authenticatable
                 ConstParams::UPDATED_BY => $data['logged_in_user_name'],
             ]
         );
-        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
+        $user = self::where(ConstParams::USER_ID, '=', $user_id)->first();
 
         $result = [
             'count' => $count,
@@ -119,7 +120,7 @@ class User extends Authenticatable
      */
     public static function deletedById($user_id): int
     {
-        return User::where(ConstParams::USER_ID, '=', $user_id)->delete();
+        return self::where(ConstParams::USER_ID, '=', $user_id)->delete();
     }
 
     /**
@@ -128,8 +129,30 @@ class User extends Authenticatable
      */
     public static function findUserByLoginId(string $login_id): User | null
     {
-        return User::where(ConstParams::LOGIN_ID, $login_id)->first();
+        return self::where(ConstParams::LOGIN_ID, $login_id)->first();
     }
+
+    /**
+     * 条件を満たすUserオブジェクトの配列を取得
+     * @return  Collection
+     */
+    public static function searchByKeyword(string $field, string $keyword): Collection
+    {
+        if ($field === 'name') {
+            return self::where(ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                ->orWhere(ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
+                ->orWhere(ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                ->orWhere(ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
+                ->get();
+        }
+
+        if ($field === 'all') {
+            return self::all();
+        }
+
+        return self::where($field, 'LIKE', '%' . $keyword . '%')->get();
+    }
+
 
     /**
      * このUserモデルと紐づくUserSalaryモデルを取得
