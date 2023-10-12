@@ -13,8 +13,8 @@
 <form action="" method="post">
     @csrf
     <div>
-        <span>{{ConstParams::LOGIN_ID_JP}}</span>
-        <input type="text" name="{{ConstParams::LOGIN_ID}}" value="{{old(ConstParams::LOGIN_ID)}}" required>
+        <label for="target_login_id">{{ConstParams::LOGIN_ID_JP}}</label>
+        <input type="text" name="target_login_id" id="target_login_id" value="{{old('target_login_id')}}">
     </div>
     <div>
         <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="{{route('stamps.startWork')}}" formmethod="POST">

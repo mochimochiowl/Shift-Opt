@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\AtRecordStoreRequest;
+use App\Http\Requests\StampRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use App\Models\UserCondition;
@@ -28,62 +29,83 @@ class StampController extends Controller
      * 出勤のat_record を新規作成（createRecord関数への中継関数）
      * @return RedirectResponse
      *  */
-    public function startWork(AtRecordStoreRequest $request): RedirectResponse
+    public function startWork(StampRequest $request): RedirectResponse
     {
-        return $this->createRecord($request, ConstParams::AT_RECORD_START_WORK);
+        $data = [
+            'target_login_id' => $request->input('target_login_id'),
+            'at_record_type' => ConstParams::AT_RECORD_START_WORK,
+        ];
+        return $this->createRecord($data);
     }
 
     /** 
      * 退勤のat_record を新規作成（createRecord関数への中継関数）
      * @return RedirectResponse
      *  */
-    public function finishWork(AtRecordStoreRequest $request): RedirectResponse
+    public function finishWork(StampRequest $request): RedirectResponse
     {
-        return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_WORK);
+        $data = [
+            'target_login_id' => $request->input('target_login_id'),
+            'at_record_type' => ConstParams::AT_RECORD_FINISH_WORK,
+        ];
+        return $this->createRecord($data);
     }
 
     /** 
      * 休憩始のat_record を新規作成（createRecord関数への中継関数）
      * @return RedirectResponse
      *  */
-    public function startBreak(AtRecordStoreRequest $request): RedirectResponse
+    public function startBreak(StampRequest $request): RedirectResponse
     {
-        return $this->createRecord($request, ConstParams::AT_RECORD_START_BREAK);
+        $data = [
+            'target_login_id' => $request->input('target_login_id'),
+            'at_record_type' => ConstParams::AT_RECORD_START_BREAK,
+        ];
+        return $this->createRecord($data);
     }
 
     /** 
      * 休憩終のat_record を新規作成（createRecord関数への中継関数）
      * @return RedirectResponse
      *  */
-    public function finishBreak(AtRecordStoreRequest $request): RedirectResponse
+    public function finishBreak(StampRequest $request): RedirectResponse
     {
-        return $this->createRecord($request, ConstParams::AT_RECORD_FINISH_BREAK);
+        $data = [
+            'target_login_id' => $request->input('target_login_id'),
+            'at_record_type' => ConstParams::AT_RECORD_FINISH_BREAK,
+        ];
+        return $this->createRecord($data);
     }
 
     /** 
      * at_record を新規作成、 user_condition を更新
      * @return RedirectResponse
      *  */
-    private function createRecord($request, string $at_record_type): RedirectResponse
+    private function createRecord(array $data): RedirectResponse
     {
         try {
-            return DB::transaction(function () use ($request, $at_record_type) {
+            return DB::transaction(function () use ($data) {
 
-                $user = User::findUserByLoginId($request->login_id);
-                if (!$user) {
-                    throw new Exception('ユーザーが見つかりません login_id: ' . $request->login_id);
-                }
-                $userCondition = UserCondition::where('user_id', $user->user_id)->first();
-                if (!$userCondition) {
-                    throw new Exception('ユーザーコンディションデータが見つかりません login_id: ' . $request->login_id . ' user_id:' . $user->user_id);
+                $target_user = User::findUserByLoginId($data['target_login_id']);
+
+                $user_condition = UserCondition::where('user_id', $target_user->user_id)->first();
+                if (!$user_condition) {
+                    throw new Exception('ユーザーコンディションデータが見つかりません login_id: ' . $target_user->login_id . ' user_id:' . $target_user->user_id);
                 }
 
-                $new_record = AttendanceRecord::createNewRecord($user, $at_record_type);
-                $userCondition->updateInfo($user, $at_record_type);
+                $modified_data = [
+                    'target_user_id' => $target_user->user_id,
+                    'at_record_type' => $data['at_record_type'],
+                    'at_record_time' => getCurrentTime(),
+                    'created_by' => $target_user->getKanjiFullName(),
+                ];
+
+                $new_record = AttendanceRecord::createNewRecord($modified_data);
+                $user_condition->updateInfo($target_user, $modified_data['at_record_type']);
 
                 $param = [
-                    'user' => $user,
-                    'type' => getAtRecordTypeNameJP($at_record_type),
+                    'user' => $target_user,
+                    'type' => getAtRecordTypeNameJP($modified_data['at_record_type']),
                     'time' => $new_record->at_record_time,
                 ];
                 return redirect()->route('stamps.result')->with(['param' => $param]);

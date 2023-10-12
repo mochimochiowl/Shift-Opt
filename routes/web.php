@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('users/search', [SearchController::class, 'showUsersSearchView'])->name('users.search');
     Route::post('users/search', [SearchController::class, 'showUsersResult'])->name('users.search.result');
 
-    // ユーザー情報操作にかかわるルート
+    // 情報操作にかかわるルート
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
     Route::get('users/{user_id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user_id}', [UserController::class, 'update'])->name('users.update');
@@ -63,7 +63,9 @@ Route::middleware('auth')->group(function () {
     Route::get('at_records/search', [SearchController::class, 'showAtRecordsSearchView'])->name('at_records.search');
     Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
 
-    // ユーザー情報操作にかかわるルート
+    // 情報操作にかかわるルート
+    Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
+    Route::post('at_records', [AttendanceRecordController::class, 'store'])->name('at_records.store');
     Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
     Route::get('at_records/{at_record_id}/edit', [AttendanceRecordController::class, 'edit'])->name('at_records.edit');
     Route::put('at_records/{at_record_id}', [AttendanceRecordController::class, 'update'])->name('at_records.update');

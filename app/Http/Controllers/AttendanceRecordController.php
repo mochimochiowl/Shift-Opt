@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
+use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\AtRecordUpdateRequest;
 use App\Models\AttendanceRecord;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +22,45 @@ class AttendanceRecordController extends Controller
     {
         $record = AttendanceRecord::searchById($at_record_id);
         return view('at_records.show', ['record' => $record]);
+    }
+
+    /**
+     * データの登録画面（管理者用）を返す
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('at_records.create');
+    }
+
+    /** 
+     * at_record データの新規作成
+     * @return RedirectResponse
+     *  */
+    public function store(AtRecordStoreRequest $request): RedirectResponse
+    {
+        try {
+            return DB::transaction(function () use ($request) {
+                $data = [
+                    'target_user_id' => User::findUserByLoginId($request->target_login_id)->user_id,
+                    'at_record_type' => $request->at_record_type,
+                    'at_record_time' => $request->at_record_time_date . ' ' . $request->at_record_time_time,
+                    'created_by' => User::findUserByUserId($request->created_by_user_id)->getKanjiFullName(),
+                ];
+
+                $new_record = AttendanceRecord::createNewRecord($data);
+
+                $messages = [
+                    [
+                        'type' => 'success',
+                        'text' => ConstParams::AT_RECORD_JP . 'を新規作成しました | 対象の' . ConstParams::AT_RECORD_ID_JP . ' : ' . $new_record->at_record_id,
+                    ],
+                ];
+                return redirect()->route('at_records.search')->with(['messages' => $messages]);
+            }, 5);
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['messages' => 'AttendanceRecordController::storeでエラー' . $e->getMessage()])->withInput();
+        }
     }
 
     /**

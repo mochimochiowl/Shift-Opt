@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', 'スタッフ登録画面')
+@section('title', ConstParams::AT_RECORD_JP . '登録画面')
 @section('content')
 @if ($errors->any())
     <div class="alert alert-danger">
@@ -10,64 +10,44 @@
         </ul>
     </div>
     @endif
-    <form action="{{route('users.store')}}" method="post">
+    <form action="{{route('at_records.store')}}" method="post">
         @csrf
         <div>
             <div>
-                <label for="{{ConstParams::KANJI_LAST_NAME}}">{{ConstParams::KANJI_LAST_NAME_JP}}（15文字以内）</label>
-            </div>
-            <div>
-                <input type="text" name="{{ConstParams::KANJI_LAST_NAME}}" id="{{ConstParams::KANJI_LAST_NAME}}" value="{{old(ConstParams::KANJI_LAST_NAME)}}">
+                <label for="target_login_id">{{ConstParams::LOGIN_ID_JP}}</label>
+                <input type="text" name="target_login_id" id="target_login_id" value="{{old('target_login_id')}}">
             </div>
         </div>
         <div>
-            <div>
-                <label for="{{ConstParams::KANJI_FIRST_NAME}}">{{ConstParams::KANJI_FIRST_NAME_JP}}（15文字以内）</label>
-            </div>
-            <div>
-                <input type="text" name="{{ConstParams::KANJI_FIRST_NAME}}" id="{{ConstParams::KANJI_FIRST_NAME}}" value="{{old(ConstParams::KANJI_FIRST_NAME)}}">
-            </div>
+            <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
+            <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
+                <option value="{{ConstParams::AT_RECORD_START_WORK}}">
+                    {{ConstParams::AT_RECORD_START_WORK_JP}}
+                </option>
+        
+                <option value="{{ConstParams::AT_RECORD_FINISH_WORK}}">
+                    {{ConstParams::AT_RECORD_FINISH_WORK_JP}}
+                </option>
+        
+                <option value="{{ConstParams::AT_RECORD_START_BREAK}}">
+                    {{ConstParams::AT_RECORD_START_BREAK_JP}}
+                </option>
+        
+                <option value="{{ConstParams::AT_RECORD_FINISH_BREAK}}">
+                    {{ConstParams::AT_RECORD_FINISH_BREAK_JP}}
+                </option>
+            </select>
         </div>
         <div>
-            <div>
-                <label for="{{ConstParams::KANA_LAST_NAME}}">{{ConstParams::KANA_LAST_NAME_JP}}（15文字以内）</label>
-            </div>
-            <div>
-                <input type="text" name="{{ConstParams::KANA_LAST_NAME}}" id="{{ConstParams::KANA_LAST_NAME}}" value="{{old(ConstParams::KANA_LAST_NAME)}}">
-            </div>
+            <label for="at_record_time_date">日付 : </label>
+            <input type="date" name="at_record_time_date" id="at_record_time_date" value="{{old('at_record_time_date')}}">
         </div>
         <div>
-            <div>
-                <label for="{{ConstParams::KANA_FIRST_NAME}}">{{ConstParams::KANA_FIRST_NAME_JP}}（15文字以内）</label>
-            </div>
-            <div>
-                <input type="text" name="{{ConstParams::KANA_FIRST_NAME}}" id="{{ConstParams::KANA_FIRST_NAME}}" value="{{old(ConstParams::KANA_FIRST_NAME)}}">
-            </div>
+            <label for="at_record_time_time">時刻 : </label>
+            <input type="time" name="at_record_time_time" id="at_record_time_time" value="{{old('at_record_time_time')}}">
         </div>
-        <div>
-            <div>
-                <label for="{{ConstParams::EMAIL}}">{{ConstParams::EMAIL_JP}}</label>
-            </div>
-            <div>
-                <input type="email" name="{{ConstParams::EMAIL}}" id="{{ConstParams::EMAIL}}" value="{{old(ConstParams::EMAIL)}}">
-            </div>
-        </div>
-        <div>
-            <div>
-                <label for="{{ConstParams::LOGIN_ID}}">{{ConstParams::LOGIN_ID_JP}}（20文字以内）</label>
-            </div>
-            <div>
-                <input type="text" name="{{ConstParams::LOGIN_ID}}" id="{{ConstParams::LOGIN_ID}}" value="{{old(ConstParams::LOGIN_ID)}}">
-            </div>
-        </div>
-        <div>
-            <div>
-                <label for="{{ConstParams::PASSWORD}}">{{ConstParams::PASSWORD_JP}}（20文字以内）</label>
-            </div>
-            <div>
-                <input type="password" name="{{ConstParams::PASSWORD}}" id="{{ConstParams::PASSWORD}}">
-            </div>
-        </div>
+        <input type="hidden" name="created_by_user_id" value="{{Auth::user()->user_id}}">
+        <input type="hidden" name="is_admin" value="true">
         <div>
             <button type="submit">送信</button>
         </div>

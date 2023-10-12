@@ -27,16 +27,17 @@ class AttendanceRecord extends Model
      * At_recordの作成
      * @return AttendanceRecord
      */
-    public static function createNewRecord(User $user, string $at_record_type): AttendanceRecord
+    public static function createNewRecord(array $data): AttendanceRecord
     {
+
         try {
             $newRecord = self::query()->create(
                 [
-                    ConstParams::USER_ID => $user->user_id,
-                    ConstParams::AT_RECORD_TYPE => $at_record_type,
-                    ConstParams::AT_RECORD_TIME => getCurrentTime(),
-                    ConstParams::CREATED_BY => $user->getKanjiFullName(),
-                    ConstParams::UPDATED_BY => $user->getKanjiFullName(),
+                    ConstParams::USER_ID => $data['target_user_id'],
+                    ConstParams::AT_RECORD_TYPE => $data['at_record_type'],
+                    ConstParams::AT_RECORD_TIME => $data['at_record_time'],
+                    ConstParams::CREATED_BY => $data['created_by'],
+                    ConstParams::UPDATED_BY => $data['created_by'],
                 ]
             );
 

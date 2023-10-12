@@ -125,6 +125,15 @@ class User extends Authenticatable
     }
 
     /**
+     * 特定のユーザーIDをもつUserオブジェクトを取得
+     * @return  User|null
+     */
+    public static function findUserByUserId($user_id): User | null
+    {
+        return self::where(ConstParams::USER_ID, $user_id)->first();
+    }
+
+    /**
      * 特定のログインIDをもつUserオブジェクトを取得
      * @return  User|null
      */

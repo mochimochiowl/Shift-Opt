@@ -1,6 +1,15 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '検索画面')
 @section('content')
+@if ($messages)
+<div class="alert alert-success">
+    <ul>
+        @foreach ($messages->all() as $message)
+            <li>{{$message->type}} : {{$message->text}}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 @if ($errors->any())
 <div class="alert alert-danger">
     <ul>
@@ -15,9 +24,9 @@
     <h2>検索条件選択・入力</h2>
     <div>
         <label for="start_date">開始日:</label>
-        <input type="date" id="start_date" name="start_date" value="{{$default_dates['start_date']}}">
+        <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
         <label for="end_date">終了日:</label>
-        <input type="date" id="end_date" name="end_date" value="{{$default_dates['end_date']}}">
+        <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
     </div>
     <div>
         <label>
@@ -37,9 +46,11 @@
         <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{$keyword ?? ''}}">
         <input type="submit" value="検索">
     </div>
-
-
 </form>
+
+<hr>
+<a href="{{route('at_records.create')}}">データの新規作成</a>
+<hr>
 
 @if ($results)
 <h2>検索ワード</h2>

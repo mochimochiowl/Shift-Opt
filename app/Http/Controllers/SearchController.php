@@ -56,9 +56,11 @@ class SearchController extends Controller
     public function showAtRecordsSearchView(Request $request): View
     {
         $results = null;
+        $messages = $request->messages ?? null;
         $default_dates = $this->defaultDates();
         return view('at_records/search', [
             'results' => $results,
+            'messages' => $messages,
             'default_dates' => $default_dates,
         ]);
     }
@@ -73,6 +75,8 @@ class SearchController extends Controller
 
         $results = $this->searchAtRecords($data);
 
+        $messages = $request->messages ?? null;
+
         $search_requirements = $data;
         $search_requirements['search_field'] = $this->getFieldNameJP($search_requirements['search_field']);
 
@@ -80,6 +84,7 @@ class SearchController extends Controller
 
         return view('at_records/search', [
             'results' => $results,
+            'messages' => $messages,
             'search_requirements' => $search_requirements,
             'default_dates' => $default_dates,
         ]);
