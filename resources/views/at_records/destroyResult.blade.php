@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', 'ユーザー情報削除処理成功画面')
+@section('title', ConstParams::AT_RECORD_JP . '削除処理成功画面')
 @section('content')
 <div>
     <p>データ を削除しました。</p>

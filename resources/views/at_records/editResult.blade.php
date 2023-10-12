@@ -1,33 +1,24 @@
 @extends('layouts.base')
-@section('title', 'ユーザー情報更新処理成功画面')
+@section('title', ConstParams::AT_RECORD_JP . '情報更新処理成功画面')
 @section('content')
 <div>
-    <p>{{$user->kanji_last_name . $user->kanji_first_name}}さん の データ を更新しました。</p>
-    <p>更新した項目数：{{$count}}</p>
-    <p>{{ConstParams::USER_ID_JP}} : {{$user->user_id}}</p>
-    <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_last_name}}</p>
-    <p>{{ConstParams::KANJI_LAST_NAME_JP}} : {{$user->kanji_first_name}}</p>
-    <p>{{ConstParams::KANA_LAST_NAME_JP}} : {{$user->kana_last_name}}</p>
-    <p>{{ConstParams::KANA_FIRST_NAME_JP}} : {{$user->kana_first_name}}</p>
-    <p>{{ConstParams::EMAIL_JP}} : {{$user->email}}</p>
-    <p>{{ConstParams::EMAIL_VERIFIED_AT_JP}} : {{$user->email_verified_at}}</p>
-    <p>{{ConstParams::LOGIN_ID_JP}} : {{$user->login_id}}</p>
-    <p>{{ConstParams::PASSWORD_JP}}(ハッシュ処理済) : 非公開</p>
-    <p>{{ConstParams::CREATED_AT_JP}} : {{$user->created_at}}</p>
-    <p>{{ConstParams::UPDATED_AT_JP}} : {{$user->updated_at}}</p>
-    <p>{{ConstParams::CREATED_BY_JP}} : {{$user->created_by}}</p>
-    <p>{{ConstParams::UPDATED_BY_JP}} : {{$user->updated_by}}</p>
-</div>
-<div>
-    <div>
-        <a href="{{route('users.search')}}">ユーザー検索画面に戻る</a>
-    </div>
-    <div>
-        <a href="{{route('top')}}">トップに戻る</a>
-    </div>
+    @if ($count === 0)
+    <p>データが更新できませんでした。</p>
+    @else
+    <p>データを更新しました。</p>
+    <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$record['at_record_id']}}</p>
+    <p>{{ConstParams::USER_ID_JP}} : {{$record['user_id']}}</p>
+    <p>名前 : {{$record['kanji_last_name']}} {{$record['kanji_first_name']}}</p>
+    <p>なまえ : {{$record['kana_last_name']}} {{$record['kana_first_name']}}</p>
+    <p>{{ConstParams::AT_RECORD_TYPE_JP}} : {{$record['at_record_type_jp']}}</p>
+    <p>{{ConstParams::AT_RECORD_TIME_JP}} : {{$record['at_record_time']}}</p>
+    <p>{{ConstParams::CREATED_AT_JP}} : {{$record['created_at']}}</p>
+    <p>{{ConstParams::UPDATED_AT_JP}} : {{$record['updated_at']}}</p>
+    <p>{{ConstParams::CREATED_BY_JP}} : {{$record['created_by']}}</p>
+    <p>{{ConstParams::UPDATED_BY_JP}} : {{$record['updated_by']}}</p>
+    @endif
 </div>
 @endsection
-
 @section('footer')
     copyright 2023 CoderOwlWing
 @endsection

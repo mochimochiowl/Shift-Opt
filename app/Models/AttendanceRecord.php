@@ -100,12 +100,64 @@ class AttendanceRecord extends Model
                 ->get();
         }
 
-        //Viewで加工しないようにするため、at_record_typeのカラムのみ、画面表示用に日本語表記の文字列に差し替え
+        //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
         $modified_records = $records->map(function ($record) {
-            $record->at_record_type = AttendanceRecord::getTypeName($record->at_record_type);
+            $record->at_record_type_jp = AttendanceRecord::getTypeName($record->at_record_type);
             return $record;
         });
         return $modified_records;
+    }
+
+    /**
+     * at_record の更新
+     * @return array
+     */
+    public static function updateInfo($at_record_id, array $data): array
+    {
+        $at_record_time = $data['at_record_time_date'] . ' ' . $data['at_record_time_time'];
+        $count = self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->update(
+            [
+                ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
+                ConstParams::AT_RECORD_TIME => $at_record_time,
+                ConstParams::UPDATED_BY => $data['logged_in_user_name'],
+            ]
+        );
+
+        $updated_record = self::searchById($at_record_id);
+        //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
+        $updated_record->at_record_type_jp = AttendanceRecord::getTypeName($updated_record->at_record_type);
+
+        $result = [
+            'count' => $count,
+            'record' => $updated_record,
+        ];
+
+        return $result;
+    }
+
+    /**
+     * at_record の削除
+     * @return int
+     */
+    public static function deletedById($at_record_id): int
+    {
+        return self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->delete();
+    }
+
+    /**
+     * 条件を満たすat_recordオブジェクトの配列を取得
+     * @return  AttendanceRecord
+     */
+    public static function searchById($at_record_id): AttendanceRecord
+    {
+        $record = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
+            ->where(ConstParams::AT_RECORD_ID, '=', $at_record_id)
+            ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
+            ->first();
+
+        //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
+        $record->at_record_type_jp = AttendanceRecord::getTypeName($record->at_record_type);
+        return $record;
     }
 
     /**

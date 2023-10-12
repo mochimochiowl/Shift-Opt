@@ -73,7 +73,7 @@
             <td>{{$result['user_id']}}</td>
             <td>{{$result['kanji_last_name']}} {{$result['kanji_first_name']}}</td>
             <td>{{$result['kana_last_name']}} {{$result['kana_first_name']}}</td>
-            <td>{{$result['at_record_type']}}</td>
+            <td>{{$result['at_record_type_jp']}}</td>
             <td>{{$result['at_record_time']}}</td>
             <td>
                 <a href="{{route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">詳細</a>

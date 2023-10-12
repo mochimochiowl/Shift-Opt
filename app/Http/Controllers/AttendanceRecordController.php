@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
+use App\Http\Requests\AtRecordUpdateRequest;
 use App\Models\AttendanceRecord;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AttendanceRecordController extends Controller
@@ -16,9 +18,7 @@ class AttendanceRecordController extends Controller
      */
     public function show($at_record_id): View
     {
-        $record = AttendanceRecord::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->first();
-        //Viewで加工しないようにするため、at_record_typeのカラムのみ、画面表示用に日本語表記の文字列に差し替え
-        $record->at_record_type = AttendanceRecord::getTypeName($record->at_record_type);
+        $record = AttendanceRecord::searchById($at_record_id);
         return view('at_records.show', ['record' => $record]);
     }
 
@@ -28,28 +28,28 @@ class AttendanceRecordController extends Controller
      */
     public function edit($at_record_id): View
     {
-        $at_record = AttendanceRecord::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->first();
-        return view('at_records.edit', ['record' => $at_record]);
+        $record = AttendanceRecord::searchById($at_record_id);
+        return view('at_records.edit', ['record' => $record]);
     }
 
     /** 
      * at_record データの更新
      * @return RedirectResponse
      *  */
-    public function update($user_id, UserUpdateRequest $request): RedirectResponse
+    public function update($at_record_id, AtRecordUpdateRequest $request): RedirectResponse
     {
         try {
-            return DB::transaction(function () use ($user_id, $request) {
+            return DB::transaction(function () use ($at_record_id, $request) {
                 $data = $request->validated();
-                $result = User::updateInfo($user_id, $data);
+                $result = AttendanceRecord::updateInfo($at_record_id, $data);
                 return redirect()
-                    ->route('users.update.result', [ConstParams::USER_ID => $result['user']->user_id])
-                    ->with(['user' => $result['user'], 'count' => $result['count']]);
+                    ->route('at_records.update.result', [ConstParams::AT_RECORD_ID => $result['record']->at_record_id])
+                    ->with(['record' => $result['record'], 'count' => $result['count']]);
             }, 5);
         } catch (Exception $e) {
             return redirect()
                 ->back()
-                ->withErrors(['message' => 'UserController::updateでエラー' . $e->getMessage()]);
+                ->withErrors(['message' => 'AttendanceRecordController::updateでエラー' . $e->getMessage()]);
         }
     }
 
@@ -59,7 +59,7 @@ class AttendanceRecordController extends Controller
      */
     public function showUpdateResult(Request $request): View
     {
-        return view('users.editResult', ['user' => session('user'), 'count' => session('count')]);
+        return view('at_records.editResult', ['record' => session('record'), 'count' => session('count')]);
     }
 
     /**
@@ -68,23 +68,23 @@ class AttendanceRecordController extends Controller
      */
     public function confirmDestroy(Request $request): View
     {
-        $user = User::where('user_id', $request->user_id)->first();
-        return view('users.confirmDestroy', ['user' => $user]);
+        $record = AttendanceRecord::searchById($request->at_record_id);
+        return view('at_records.confirmDestroy', ['record' => $record]);
     }
 
     /** 
      * at_record データの削除
      * @return RedirectResponse
      *  */
-    public function destroy($user_id): RedirectResponse
+    public function destroy($at_record_id): RedirectResponse
     {
         try {
-            return DB::transaction(function () use ($user_id) {
-                $count = User::deletedById($user_id);
-                return redirect()->route('users.delete.result', [ConstParams::USER_ID => $user_id])->with(['count' => $count]);
+            return DB::transaction(function () use ($at_record_id) {
+                $count = AttendanceRecord::deletedById($at_record_id);
+                return redirect()->route('at_records.delete.result', [ConstParams::AT_RECORD_ID => $at_record_id])->with(['count' => $count]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'UserController::destroyでエラー' . $e->getMessage()]);
+            return redirect()->back()->withErrors(['message' => 'AttendanceRecordController::destroyでエラー' . $e->getMessage()]);
         }
     }
 

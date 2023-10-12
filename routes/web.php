@@ -66,11 +66,11 @@ Route::middleware('auth')->group(function () {
     // ユーザー情報操作にかかわるルート
     Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
     Route::get('at_records/{at_record_id}/edit', [AttendanceRecordController::class, 'edit'])->name('at_records.edit');
-    Route::put('at_records/{at_record_id}', [UserController::class, 'update'])->name('at_records.update');
-    Route::delete('at_records/{at_record_id}', [UserController::class, 'destroy'])->name('at_records.delete');
+    Route::put('at_records/{at_record_id}', [AttendanceRecordController::class, 'update'])->name('at_records.update');
+    Route::delete('at_records/{at_record_id}', [AttendanceRecordController::class, 'destroy'])->name('at_records.delete');
 
     // 確認画面や結果画面などのルート
-    Route::get('at_records/{at_record_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('at_records.update.result');
-    Route::post('at_records/{at_record_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
-    Route::get('at_records/{at_record_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('at_records.delete.result');
+    Route::get('at_records/{at_record_id}/edit/result', [AttendanceRecordController::class, 'showUpdateResult'])->name('at_records.update.result');
+    Route::post('at_records/{at_record_id}/delete/confirm', [AttendanceRecordController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
+    Route::get('at_records/{at_record_id}/delete/result', [AttendanceRecordController::class, 'showDestroyResult'])->name('at_records.delete.result');
 });
