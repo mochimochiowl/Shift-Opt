@@ -39,6 +39,26 @@ class UserCondition extends Model
     }
 
     /**
+     * user_condition の日本語表記を取得
+     * @return array
+     */
+    public function getConditionMessageJP(): array
+    {
+        $has_attended_jp = '出勤済';
+        $is_breaking_jp = '休憩中';
+        if (!$this->has_attended) {
+            $has_attended_jp .= 'ではありません';
+        }
+        if (!$this->is_breaking) {
+            $is_breaking_jp .= 'ではありません';
+        }
+        return [
+            'has_attended_jp' => $has_attended_jp,
+            'is_breaking_jp' => $is_breaking_jp,
+        ];
+    }
+
+    /**
      * UserConditionデータの更新
      * 「出勤打刻済みかどうか」(Has_Attended)と「休憩中かどうか」(is_breaking)という2つのbool変数を見て、
      * 処理を行います。
@@ -95,7 +115,6 @@ class UserCondition extends Model
         $this->updated_by = $user->getKanjiFullName();
         $this->save();
     }
-
 
     /**
      * このUserConditionモデルが属するUserモデルを取得

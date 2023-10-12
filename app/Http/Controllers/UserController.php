@@ -93,7 +93,47 @@ class UserController extends Controller
     public function show($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        return view('users.show', ['user' => $user]);
+        $salary = $user->salary;
+        $condition = $user->condition;
+        $condition_jp = $condition->getConditionMessageJP();
+
+        $user_data = [
+            ConstParams::USER_ID => $user->user_id,
+            ConstParams::KANJI_LAST_NAME => $user->kanji_last_name,
+            ConstParams::KANJI_FIRST_NAME => $user->kanji_first_name,
+            ConstParams::KANA_LAST_NAME => $user->kana_last_name,
+            ConstParams::KANA_FIRST_NAME => $user->kana_first_name,
+            ConstParams::EMAIL => $user->email,
+            ConstParams::EMAIL_VERIFIED_AT => $user->email_verified_at,
+            ConstParams::LOGIN_ID => $user->login_id,
+            ConstParams::CREATED_AT => $user->created_at,
+            ConstParams::UPDATED_AT => $user->updated_at,
+            ConstParams::CREATED_BY => $user->created_by,
+            ConstParams::UPDATED_BY => $user->updated_by,
+        ];
+
+        $salary_data = [
+            ConstParams::HOURLY_WAGE => $salary->hourly_wage,
+            ConstParams::CREATED_AT => $salary->created_at,
+            ConstParams::UPDATED_AT => $salary->updated_at,
+            ConstParams::CREATED_BY => $salary->created_by,
+            ConstParams::UPDATED_BY => $salary->updated_by,
+        ];
+
+        $condition_data = [
+            'has_attended_jp' => $condition_jp['has_attended_jp'],
+            'is_breaking_jp' => $condition_jp['is_breaking_jp'],
+            ConstParams::CREATED_AT => $condition->created_at,
+            ConstParams::UPDATED_AT => $condition->updated_at,
+            ConstParams::CREATED_BY => $condition->created_by,
+            ConstParams::UPDATED_BY => $condition->updated_by,
+        ];
+
+        return view('users.show', [
+            'user' => $user_data,
+            'salary' => $salary_data,
+            'condition' => $condition_data,
+        ]);
     }
 
     /**

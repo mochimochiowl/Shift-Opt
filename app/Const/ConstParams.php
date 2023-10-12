@@ -18,6 +18,9 @@ class ConstParams
     const BY_NAME_DEFAULT = 'デフォルト値';
     const HOURLY_WAGE_DEFAULT = 0.;
 
+    //通過単位の設定
+    const CURRENCY_JP = '円';
+
     //at_record_typeの設定
     const AT_RECORD_START_WORK = 'start_work';
     const AT_RECORD_FINISH_WORK = 'finish_work';
