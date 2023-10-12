@@ -16,7 +16,8 @@
                 <ul class="menu">
                     <li><a href="{{route('users.create')}}" class="menuBtn">スタッフ登録画面</a></li>
                     <li><a href="{{route('stamps.index')}}" class="menuBtn">打刻画面</a></li>
-                    <li><a href="{{route('users.search')}}" class="menuBtn">Userテーブル検索画面</a></li>
+                    <li><a href="{{route('users.search')}}" class="menuBtn">{{ConstParams::USER_JP}}検索画面</a></li>
+                    <li><a href="{{route('at_records.search')}}" class="menuBtn">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
                     @if (Auth::check())
                     <li><a href="{{route('logout')}}" class="menuBtn">ログアウトする</a></li>
                     @else

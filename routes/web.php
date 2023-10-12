@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AttendanceRecordController;
 use App\Http\Controllers\StampController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,13 +64,13 @@ Route::middleware('auth')->group(function () {
     Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
 
     // ユーザー情報操作にかかわるルート
-    Route::get('at_records/{user_id}', [UserController::class, 'show'])->name('at_records.show');
-    Route::get('at_records/{user_id}/edit', [UserController::class, 'edit'])->name('at_records.edit');
-    Route::put('at_records/{user_id}', [UserController::class, 'update'])->name('at_records.update');
-    Route::delete('at_records/{user_id}', [UserController::class, 'destroy'])->name('at_records.delete');
+    Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
+    Route::get('at_records/{at_record_id}/edit', [AttendanceRecordController::class, 'edit'])->name('at_records.edit');
+    Route::put('at_records/{at_record_id}', [UserController::class, 'update'])->name('at_records.update');
+    Route::delete('at_records/{at_record_id}', [UserController::class, 'destroy'])->name('at_records.delete');
 
     // 確認画面や結果画面などのルート
-    Route::get('at_records/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('at_records.update.result');
-    Route::post('at_records/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
-    Route::get('at_records/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('at_records.delete.result');
+    Route::get('at_records/{at_record_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('at_records.update.result');
+    Route::post('at_records/{at_record_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
+    Route::get('at_records/{at_record_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('at_records.delete.result');
 });
