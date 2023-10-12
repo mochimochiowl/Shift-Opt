@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', 'Userテーブル検索画面')
+@section('title', ConstParams::USER_JP . '検索画面')
 @section('content')
 @if ($errors->any())
 <div class="alert alert-danger">
@@ -15,6 +15,9 @@
     <h2>検索条件選択・入力</h2>
     <div>
         <label>
+            <input type="radio" name="search_field" value="all" checked> 全件表示
+        </label>
+        <label>
             <input type="radio" name="search_field" value="user_id" required> {{ConstParams::USER_ID_JP}}
         </label>
         <label>
@@ -25,9 +28,6 @@
         </label>
         <label>
             <input type="radio" name="search_field" value="email"> {{ConstParams::EMAIL_JP}}
-        </label>
-        <label>
-            <input type="radio" name="search_field" value="all"> 全件表示
         </label>
     </div>
 
