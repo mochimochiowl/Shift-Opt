@@ -41,9 +41,10 @@ Route::prefix('stamps')->name('stamps.')->group(function () {
 
 // DB閲覧、編集にはログインが必要
 Route::middleware('auth')->group(function () {
+    // users
     // 検索にかかわるルート
-    Route::get('users/search', [SearchController::class, 'showSearchView'])->name('users.search');
-    Route::post('users/search', [SearchController::class, 'showResult'])->name('users.search.result');
+    Route::get('users/search', [SearchController::class, 'showUsersSearchView'])->name('users.search');
+    Route::post('users/search', [SearchController::class, 'showUsersResult'])->name('users.search.result');
 
     // ユーザー情報操作にかかわるルート
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
@@ -55,4 +56,20 @@ Route::middleware('auth')->group(function () {
     Route::get('users/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('users.update.result');
     Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
     Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
+
+    // at_record
+    // 検索にかかわるルート
+    Route::get('at_records/search', [SearchController::class, 'showAtRecordsSearchView'])->name('at_records.search');
+    Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
+
+    // ユーザー情報操作にかかわるルート
+    Route::get('at_records/{user_id}', [UserController::class, 'show'])->name('at_records.show');
+    Route::get('at_records/{user_id}/edit', [UserController::class, 'edit'])->name('at_records.edit');
+    Route::put('at_records/{user_id}', [UserController::class, 'update'])->name('at_records.update');
+    Route::delete('at_records/{user_id}', [UserController::class, 'destroy'])->name('at_records.delete');
+
+    // 確認画面や結果画面などのルート
+    Route::get('at_records/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('at_records.update.result');
+    Route::post('at_records/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
+    Route::get('at_records/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('at_records.delete.result');
 });
