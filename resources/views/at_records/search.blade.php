@@ -14,6 +14,12 @@
     @csrf
     <h2>検索条件選択・入力</h2>
     <div>
+        <label for="start_date">開始日:</label>
+        <input type="date" id="start_date" name="start_date" value="{{$default_dates['start_date']}}">
+        <label for="end_date">終了日:</label>
+        <input type="date" id="end_date" name="end_date" value="{{$default_dates['end_date']}}">
+    </div>
+    <div>
         <label>
             <input type="radio" name="search_field" value="all" checked> 全件表示
         </label>
@@ -29,14 +35,6 @@
     </div>
     <div>
         <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{$keyword ?? ''}}">
-    </div>
-    <div>
-        <label for="start_date">開始日:</label>
-        <input type="date" id="start_date" name="start_date" value="{{$default_dates['start_date']}}">
-        <label for="end_date">終了日:</label>
-        <input type="date" id="end_date" name="end_date" value="{{$default_dates['end_date']}}">
-    </div>
-    <div>
         <input type="submit" value="検索">
     </div>
 
