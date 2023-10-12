@@ -113,6 +113,7 @@ class UserController extends Controller
         ];
 
         $salary_data = [
+            ConstParams::USER_SALARY_ID => $salary->user_salary_id,
             ConstParams::HOURLY_WAGE => $salary->hourly_wage,
             ConstParams::CREATED_AT => $salary->created_at,
             ConstParams::UPDATED_AT => $salary->updated_at,
@@ -121,6 +122,7 @@ class UserController extends Controller
         ];
 
         $condition_data = [
+            ConstParams::USER_CONDITION_ID => $condition->user_condition_id,
             'has_attended_jp' => $condition_jp['has_attended_jp'],
             'is_breaking_jp' => $condition_jp['is_breaking_jp'],
             ConstParams::CREATED_AT => $condition->created_at,

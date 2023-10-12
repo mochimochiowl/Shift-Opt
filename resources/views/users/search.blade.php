@@ -52,7 +52,6 @@
             <th>{{ConstParams::KANJI_LAST_NAME_JP}}</th>
             <th>{{ConstParams::KANJI_FIRST_NAME_JP}}</th>
             <th>詳細</th>
-            <th>編集</th>
         </tr>
     </thead>
     <tbody>
@@ -63,9 +62,6 @@
             <td>{{$result->kanji_first_name}}</td>
             <td>
                 <a href="{{route('users.show', [ConstParams::USER_ID => $result->user_id])}}">詳細</a>
-            </td>
-            <td>
-                <a href="{{route('users.edit', [ConstParams::USER_ID => $result->user_id])}}">編集</a>
             </td>
         </tr>
     @endforeach
