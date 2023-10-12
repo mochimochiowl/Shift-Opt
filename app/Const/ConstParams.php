@@ -68,6 +68,7 @@ class ConstParams
     const UPDATED_AT_JP = '最終更新日時';
 
     //DB userテーブルのカラムの表示名を定義
+    const USER_JP = 'ユーザーデータ';
     const USER_ID_JP = 'ユーザーID';
     const KANJI_FIRST_NAME_JP = '名（漢字）';
     const KANJI_LAST_NAME_JP = '姓（漢字）';
@@ -79,16 +80,19 @@ class ConstParams
     const PASSWORD_JP = 'パスワード';
 
     //DB user_salariesテーブルのカラムの表示名を定義
+    const USER_SALARY_JP = '時給データ';
     const USER_SALARY_ID_JP = '時給ID';
     const HOURLY_WAGE_JP = '時給';
 
     //DB user_conditionsテーブルのカラムの表示名を定義
+    const USER_CONDITION_JP = 'コンディションデータ';
     const USER_CONDITION_ID_JP = 'コンディションID';
     const HAS_ATTENDED_JP = ConstParams::AT_RECORD_START_WORK_JP . '打刻済みか';
     const IS_BREAKING_JP = ConstParams::AT_RECORD_START_BREAK_JP . '打刻済みか';
 
     //DB attendance_recordsテーブルのカラムの表示名を定義
-    const AT_RECORD_ID_JP = 'レコードID';
-    const AT_RECORD_TYPE_JP = 'レコードタイプ';
+    const AT_RECORD_JP = '打刻レコード';
+    const AT_RECORD_ID_JP = '打刻レコードID';
+    const AT_RECORD_TYPE_JP = '打刻レコードタイプ';
     const AT_RECORD_TIME_JP = '打刻時刻';
 }
