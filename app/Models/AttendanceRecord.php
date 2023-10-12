@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Const\ConstParams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttendanceRecord extends Model
 {
@@ -42,5 +43,33 @@ class AttendanceRecord extends Model
         } catch (Exception $e) {
             throw new Exception('AttendanceRecord::createNewRecordでエラー : ' . $e->getMessage());
         }
+    }
+
+    /**
+     * at_record_typeの日本語表記を取得
+     * @return string
+     */
+    public static function getTypeName(string $type): string
+    {
+        switch ($type) {
+            case ConstParams::AT_RECORD_START_WORK:
+                return ConstParams::AT_RECORD_START_WORK_JP;
+            case ConstParams::AT_RECORD_FINISH_WORK:
+                return ConstParams::AT_RECORD_FINISH_WORK_JP;
+            case ConstParams::AT_RECORD_START_BREAK:
+                return ConstParams::AT_RECORD_START_BREAK_JP;
+            case ConstParams::AT_RECORD_FINISH_BREAK:
+                return ConstParams::AT_RECORD_FINISH_BREAK_JP;
+            default:
+                return 'ERROR: タイプの日本語表記取得ができませんでした。';
+        }
+    }
+    /**
+     * このat_recordモデルと紐づくUserモデルを取得
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
