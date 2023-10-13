@@ -16,7 +16,7 @@
     @csrf
     @method('PUT')
     <div>
-        <p>{{ConstParams::CREATED_AT_JP}} : {{$record->at_record_id}}</p>
+        <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$record->at_record_id}}</p>
         <input type="hidden" name="{{ConstParams::AT_RECORD_ID}}" id="{{ConstParams::AT_RECORD_ID}}" value="{{$record->at_record_id}}" readonly>
         <p>{{ConstParams::USER_ID_JP}} : {{$record->user_id}}</p>
         <p>名前 : {{$record->kanji_last_name}} {{$record->kanji_first_name}}</p>
