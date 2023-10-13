@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 use App\Const\ConstParams;
 use App\Models\User;
+use App\Models\UserCondition;
+use App\Models\UserSalary;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AdminUserSeeder extends Seeder
 {
@@ -15,8 +16,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // 管理者ユーザーの作成
-        User::create([
+        $data = [
             ConstParams::KANJI_LAST_NAME => '管理者',
             ConstParams::KANJI_FIRST_NAME => 'ユーザー',
             ConstParams::KANA_LAST_NAME => 'カンリシャ',
@@ -26,6 +26,9 @@ class AdminUserSeeder extends Seeder
             ConstParams::PASSWORD => 'shiftOpt',
             ConstParams::CREATED_BY => '新規登録',
             ConstParams::UPDATED_BY => '新規登録',
-        ]);
+        ];
+        $user = User::createNewUser($data);
+        UserSalary::createForUser($user);
+        UserCondition::createForUser($user);
     }
 }
