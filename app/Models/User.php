@@ -92,24 +92,26 @@ class User extends Authenticatable
      * Userの更新
      * @return array
      */
-    public static function updateInfo($user_id, array $data): array
+    public static function updateInfo(array $data): array
     {
-        $count = self::where(ConstParams::USER_ID, '=', $user_id)->update(
-            [
-                ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
-                ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
-                ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
-                ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
-                ConstParams::EMAIL => $data[ConstParams::EMAIL],
-                ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
-                ConstParams::UPDATED_BY => $data['logged_in_user_name'],
-            ]
-        );
-        $user = self::where(ConstParams::USER_ID, '=', $user_id)->first();
+        $count = self::where(ConstParams::USER_ID, '=', $data[ConstParams::USER_ID])
+            ->update(
+                [
+                    ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
+                    ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
+                    ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
+                    ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
+                    ConstParams::EMAIL => $data[ConstParams::EMAIL],
+                    ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                    ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
+                ]
+            );
+        $updated_data = self::where(ConstParams::USER_ID, '=', $data[ConstParams::USER_ID])
+            ->first()->dataArray();
 
         $result = [
             'count' => $count,
-            'user' => $user,
+            'updated_data' => $updated_data,
         ];
 
         return $result;

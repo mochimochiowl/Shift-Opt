@@ -98,9 +98,9 @@ class UserController extends Controller
         $condition_data = $user->condition->dataArray();
 
         return view('users.show', [
-            'user' => $user_data,
-            'salary' => $salary_data,
-            'condition' => $condition_data,
+            'user_data' => $user_data,
+            'salary_data' => $salary_data,
+            'condition_data' => $condition_data,
         ]);
     }
 
@@ -111,7 +111,8 @@ class UserController extends Controller
     public function edit($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        return view('users.edit', ['user' => $user]);
+        $user_data = $user->dataArray();
+        return view('users.edit', ['user_data' => $user_data]);
     }
 
     /** 
@@ -123,10 +124,26 @@ class UserController extends Controller
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $data = $request->validated();
-                $result = User::updateInfo($user_id, $data);
+                /** @var \App\Models\User $logged_in_user */
+                $logged_in_user = Auth::user();
+
+                $data = [
+                    ConstParams::USER_ID => $user_id,
+                    ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
+                    ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
+                    ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
+                    ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
+                    ConstParams::EMAIL => $data[ConstParams::EMAIL],
+                    ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                    ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
+                ];
+                $result = User::updateInfo($data);
                 return redirect()
-                    ->route('users.update.result', [ConstParams::USER_ID => $result['user']->user_id])
-                    ->with(['user' => $result['user'], 'count' => $result['count']]);
+                    ->route('users.update.result', [ConstParams::USER_ID => $user_id])
+                    ->with([
+                        'user_data' => $result['updated_data'],
+                        'count' => $result['count'],
+                    ]);
             }, 5);
         } catch (Exception $e) {
             return redirect()
@@ -141,7 +158,10 @@ class UserController extends Controller
      */
     public function showUpdateResult(Request $request): View
     {
-        return view('users.editResult', ['user' => session('user'), 'count' => session('count')]);
+        return view('users.editResult', [
+            'user_data' => session('user_data'),
+            'count' => session('count'),
+        ]);
     }
 
     /**
@@ -151,7 +171,8 @@ class UserController extends Controller
     public function confirmDestroy(Request $request): View
     {
         $user = User::where('user_id', $request->user_id)->first();
-        return view('users.confirmDestroy', ['user' => $user]);
+        $user_data = $user->dataArray();
+        return view('users.confirmDestroy', ['user_data' => $user_data]);
     }
 
     /** 
