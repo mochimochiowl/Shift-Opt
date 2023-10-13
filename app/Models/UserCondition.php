@@ -44,13 +44,13 @@ class UserCondition extends Model
      */
     public function getConditionMessageJP(): array
     {
-        $has_attended_jp = '出勤済';
-        $is_breaking_jp = '休憩中';
+        $has_attended_jp = ConstParams::HAS_ATTENDED_TRUE_JP;
+        $is_breaking_jp = ConstParams::IS_BREAKING_TRUE_JP;
         if (!$this->has_attended) {
-            $has_attended_jp .= 'ではありません';
+            $has_attended_jp = ConstParams::HAS_ATTENDED_FALSE_JP;
         }
         if (!$this->is_breaking) {
-            $is_breaking_jp .= 'ではありません';
+            $is_breaking_jp = ConstParams::IS_BREAKING_FALSE_JP;
         }
         return [
             'has_attended_jp' => $has_attended_jp,
@@ -59,14 +59,16 @@ class UserCondition extends Model
     }
 
     /**
-     * UserConditionデータの更新
+     * UserConditionデータの更新を行うかチェックする
      * 「出勤打刻済みかどうか」(Has_Attended)と「休憩中かどうか」(is_breaking)という2つのbool変数を見て、
      * 処理を行います。
      * @return void
      */
-    public function updateInfo(User $user, string $at_record_type): void
+    public function validateConditions(User $user, string $at_record_type): void
     {
         $errorMessage = '';
+        $has_attended = $this->has_attended;
+        $is_breaking = $this->is_breaking;
 
         if ($this->has_attended) {
             switch ($at_record_type) {
@@ -77,21 +79,21 @@ class UserCondition extends Model
                     if ($this->is_breaking) {
                         $errorMessage = 'Error: 既に休憩開始済みです';
                     } else {
-                        $this->is_breaking = true;
+                        $is_breaking = true;
                     }
                     break;
                 case ConstParams::AT_RECORD_FINISH_BREAK:
                     if (!$this->is_breaking) {
                         $errorMessage = 'Error: 先に休憩開始をしてください';
                     } else {
-                        $this->is_breaking = false;
+                        $is_breaking = false;
                     }
                     break;
                 case ConstParams::AT_RECORD_FINISH_WORK:
                     if ($this->is_breaking) {
                         $errorMessage = 'Error: 先に休憩終了をしてください';
                     } else {
-                        $this->has_attended = false;
+                        $has_attended = false;
                     }
                     break;
             }
@@ -109,11 +111,39 @@ class UserCondition extends Model
             if ($errorMessage) {
                 throw new Exception($errorMessage . ' login_id: ' . $user->login_id . ' user_id:' . $user->user_id);
             }
-            $this->has_attended = true;
+            $has_attended = true;
         }
+        self::updateInfo([
+            ConstParams::USER_CONDITION_ID => $this->user_condition_id,
+            ConstParams::HAS_ATTENDED => $has_attended,
+            ConstParams::IS_BREAKING => $is_breaking,
+            ConstParams::UPDATED_BY => $user->getKanjiFullName(),
+        ]);
+    }
 
-        $this->updated_by = $user->getKanjiFullName();
-        $this->save();
+    /**
+     * UserConditionデータの書き換えを実施
+     * @return array
+     */
+    public static function updateInfo(array $data): array
+    {
+        $count = self::where(ConstParams::USER_CONDITION_ID, '=', $data[ConstParams::USER_CONDITION_ID])
+            ->update(
+                [
+                    ConstParams::HAS_ATTENDED => $data[ConstParams::HAS_ATTENDED],
+                    ConstParams::IS_BREAKING => $data[ConstParams::IS_BREAKING],
+                    ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
+                ]
+            );
+        $updated_data = self::where(ConstParams::USER_CONDITION_ID, '=', $data[ConstParams::USER_CONDITION_ID])
+            ->first()->dataArray();
+
+        $result = [
+            'count' => $count,
+            'updated_data' => $updated_data,
+        ];
+
+        return $result;
     }
 
     /** 
@@ -125,6 +155,8 @@ class UserCondition extends Model
         $condition_jp = $this->getConditionMessageJP();
         $data = [
             ConstParams::USER_CONDITION_ID => $this->user_condition_id,
+            ConstParams::HAS_ATTENDED => $this->has_attended,
+            ConstParams::IS_BREAKING => $this->is_breaking,
             'has_attended_jp' => $condition_jp['has_attended_jp'],
             'is_breaking_jp' => $condition_jp['is_breaking_jp'],
             ConstParams::CREATED_AT => $this->created_at,

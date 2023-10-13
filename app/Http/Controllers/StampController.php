@@ -101,7 +101,7 @@ class StampController extends Controller
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($modified_data);
-                $user_condition->updateInfo($target_user, $modified_data['at_record_type']);
+                $user_condition->validateConditions($target_user, $modified_data['at_record_type']);
 
                 $param = [
                     'user' => $target_user,
