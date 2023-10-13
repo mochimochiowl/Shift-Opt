@@ -22,7 +22,7 @@ class UserSalary extends Model
     ];
 
     /** 
-     * UserSalaryデータの新規作成
+     * UserSalaryの新規作成
      * @return void
      *  */
     public static function createForUser(User $user): void
@@ -37,6 +37,29 @@ class UserSalary extends Model
         } catch (Exception $e) {
             throw new Exception('UserSalary::createForUserでエラー : ' . $e->getMessage());
         }
+    }
+
+    /**
+     * UserSalaryの更新
+     * @return array
+     */
+    public static function updateInfo(array $data): array
+    {
+        $count = self::where(ConstParams::USER_SALARY_ID, '=', $data[ConstParams::USER_SALARY_ID])
+            ->update(
+                [
+                    ConstParams::HOURLY_WAGE => $data[ConstParams::HOURLY_WAGE],
+                    ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
+                ]
+            );
+        $updated_data = self::where(ConstParams::USER_SALARY_ID, '=', $data[ConstParams::USER_SALARY_ID])->first();
+
+        $result = [
+            'count' => $count,
+            'updated_data' => $updated_data,
+        ];
+
+        return $result;
     }
 
     /** 

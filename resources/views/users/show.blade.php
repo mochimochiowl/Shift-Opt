@@ -63,7 +63,7 @@
         </tbody>
     </table>
     <h2>{{ConstParams::USER_SALARY_JP}}</h2>
-    <a href="{{route('salaries.edit', [ConstParams::USER_SALARY_ID => $salary[ConstParams::USER_SALARY_ID]])}}">編集</a>
+    <a href="{{route('users.salaries.edit', [ConstParams::USER_ID => $user[ConstParams::USER_ID]])}}">編集</a>
     <table border="1">
         <thead>
             <tr>
@@ -95,7 +95,7 @@
         </tbody>
     </table>
     <h2>{{ConstParams::USER_CONDITION_JP}}</h2>
-    <a href="{{route('conditions.edit', [ConstParams::USER_CONDITION_ID => $condition[ConstParams::USER_CONDITION_ID]])}}">編集</a>
+    <a href="{{route('users.conditions.edit', [ConstParams::USER_ID => $user[ConstParams::USER_ID]])}}">編集</a>
     <table border="1">
         <thead>
             <tr>

@@ -4,6 +4,8 @@ use App\Http\Controllers\AttendanceRecordController;
 use App\Http\Controllers\StampController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSalaryController;
+use App\Models\UserCondition;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,10 +55,18 @@ Route::middleware('auth')->group(function () {
     Route::put('users/{user_id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user_id}', [UserController::class, 'destroy'])->name('users.delete');
 
+    Route::get('users/{user_id}/salaries/edit', [UserSalaryController::class, 'edit'])->name('users.salaries.edit');
+    Route::put('users/{user_id}/salaries', [UserSalaryController::class, 'update'])->name('users.salaries.update');
+    Route::get('users/{user_id}/conditions/edit', [UserCondition::class, 'edit'])->name('users.conditions.edit');
+    Route::put('users/{user_id}/conditions', [UserCondition::class, 'update'])->name('users.conditions.update');
+
     // 確認画面や結果画面などのルート
     Route::get('users/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('users.update.result');
     Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
     Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
+
+    Route::get('users/{user_id}/salaries/result', [UserSalaryController::class, 'showUpdateResult'])->name('users.salaries.update.result');
+    Route::get('users/{user_id}/conditions/result', [UserCondition::class, 'showUpdateResult'])->name('users.conditions.update.result');
 
     // at_record
     // 検索にかかわるルート
