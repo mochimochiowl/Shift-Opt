@@ -116,6 +116,26 @@ class UserCondition extends Model
         $this->save();
     }
 
+    /** 
+     * UserConditionデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
+     * @return array
+     *  */
+    public function dataArray(): array
+    {
+        $condition_jp = $this->getConditionMessageJP();
+        $data = [
+            ConstParams::USER_CONDITION_ID => $this->user_condition_id,
+            'has_attended_jp' => $condition_jp['has_attended_jp'],
+            'is_breaking_jp' => $condition_jp['is_breaking_jp'],
+            ConstParams::CREATED_AT => $this->created_at,
+            ConstParams::UPDATED_AT => $this->updated_at,
+            ConstParams::CREATED_BY => $this->created_by,
+            ConstParams::UPDATED_BY => $this->updated_by,
+        ];
+
+        return $data;
+    }
+
     /**
      * このUserConditionモデルが属するUserモデルを取得
      * @return BelongsTo

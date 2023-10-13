@@ -163,6 +163,29 @@ class User extends Authenticatable
         return self::where($field, 'LIKE', '%' . $keyword . '%')->get();
     }
 
+    /** 
+     * Userデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
+     * @return array
+     *  */
+    public function dataArray(): array
+    {
+        $data = [
+            ConstParams::USER_ID => $this->user_id,
+            ConstParams::KANJI_LAST_NAME => $this->kanji_last_name,
+            ConstParams::KANJI_FIRST_NAME => $this->kanji_first_name,
+            ConstParams::KANA_LAST_NAME => $this->kana_last_name,
+            ConstParams::KANA_FIRST_NAME => $this->kana_first_name,
+            ConstParams::EMAIL => $this->email,
+            ConstParams::EMAIL_VERIFIED_AT => $this->email_verified_at,
+            ConstParams::LOGIN_ID => $this->login_id,
+            ConstParams::CREATED_AT => $this->created_at,
+            ConstParams::UPDATED_AT => $this->updated_at,
+            ConstParams::CREATED_BY => $this->created_by,
+            ConstParams::UPDATED_BY => $this->updated_by,
+        ];
+
+        return $data;
+    }
 
     /**
      * このUserモデルと紐づくUserSalaryモデルを取得

@@ -39,6 +39,24 @@ class UserSalary extends Model
         }
     }
 
+    /** 
+     * UserSalaryデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
+     * @return array
+     *  */
+    public function dataArray(): array
+    {
+        $data = [
+            ConstParams::USER_SALARY_ID => $this->user_salary_id,
+            ConstParams::HOURLY_WAGE => $this->hourly_wage,
+            ConstParams::CREATED_AT => $this->created_at,
+            ConstParams::UPDATED_AT => $this->updated_at,
+            ConstParams::CREATED_BY => $this->created_by,
+            ConstParams::UPDATED_BY => $this->updated_by,
+        ];
+
+        return $data;
+    }
+
     /**
      * このUserSalaryモデルが属するUserモデルを取得
      * @return BelongsTo
