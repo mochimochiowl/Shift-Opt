@@ -20,8 +20,8 @@ class AttendanceRecordController extends Controller
      */
     public function show($at_record_id): View
     {
-        $record = AttendanceRecord::searchById($at_record_id);
-        return view('at_records.show', ['record' => $record]);
+        $data = AttendanceRecord::searchById($at_record_id)->dataArray();
+        return view('at_records.show', ['data' => $data]);
     }
 
     /**
@@ -43,9 +43,10 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($request) {
                 $data = [
                     'target_user_id' => User::findUserByLoginId($request->target_login_id)->user_id,
-                    'at_record_type' => $request->at_record_type,
-                    'at_record_time' => $request->at_record_time_date . ' ' . $request->at_record_time_time,
-                    'created_by' => User::findUserByUserId($request->created_by_user_id)->getKanjiFullName(),
+                    'at_record_type' => $request->input(ConstParams::AT_RECORD_TYPE),
+                    'at_record_date' => $request->input(ConstParams::AT_RECORD_DATE),
+                    'at_record_time' => $request->input(ConstParams::AT_RECORD_TIME),
+                    'created_by' => User::findUserByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($data);

@@ -161,6 +161,31 @@ class AttendanceRecord extends Model
         return $record;
     }
 
+    /** 
+     * at_recordデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
+     * @return array
+     *  */
+    public function dataArray(): array
+    {
+        $data = [
+            ConstParams::AT_RECORD_ID => $this->at_record_id,
+            ConstParams::USER_ID => $this->user_id,
+            ConstParams::AT_RECORD_TYPE => $this->at_record_type,
+            ConstParams::AT_RECORD_DATE => $this->at_record_date,
+            ConstParams::AT_RECORD_TIME => $this->at_record_time,
+            ConstParams::CREATED_AT => $this->created_at,
+            ConstParams::UPDATED_AT => $this->updated_at,
+            ConstParams::CREATED_BY => $this->created_by,
+            ConstParams::UPDATED_BY => $this->updated_by,
+            ConstParams::KANJI_LAST_NAME => $this->kanji_last_name,
+            ConstParams::KANJI_FIRST_NAME => $this->kanji_first_name,
+            ConstParams::KANA_LAST_NAME => $this->kana_last_name,
+            ConstParams::KANA_FIRST_NAME => $this->kana_first_name,
+        ];
+
+        return $data;
+    }
+
     /**
      * このat_recordモデルと紐づくUserモデルを取得
      * @return BelongsTo
