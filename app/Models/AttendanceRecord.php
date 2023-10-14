@@ -34,10 +34,11 @@ class AttendanceRecord extends Model
             $newRecord = self::query()->create(
                 [
                     ConstParams::USER_ID => $data['target_user_id'],
-                    ConstParams::AT_RECORD_TYPE => $data['at_record_type'],
-                    ConstParams::AT_RECORD_TIME => $data['at_record_time'],
-                    ConstParams::CREATED_BY => $data['created_by'],
-                    ConstParams::UPDATED_BY => $data['created_by'],
+                    ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
+                    ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
+                    ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
+                    ConstParams::CREATED_BY => $data[ConstParams::CREATED_BY],
+                    ConstParams::UPDATED_BY => $data[ConstParams::CREATED_BY],
                 ]
             );
 

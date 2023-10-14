@@ -39,12 +39,12 @@
             </select>
         </div>
         <div>
-            <label for="at_record_time_date">日付 : </label>
-            <input type="date" name="at_record_time_date" id="at_record_time_date" value="{{old('at_record_time_date')}}">
+            <label for="{{ConstParams::AT_RECORD_DATE}}">日付 : </label>
+            <input type="date" name="{{ConstParams::AT_RECORD_DATE}}" id="{{ConstParams::AT_RECORD_DATE}}" value="{{old(ConstParams::AT_RECORD_DATE)}}">
         </div>
         <div>
-            <label for="at_record_time_time">時刻 : </label>
-            <input type="time" name="at_record_time_time" id="at_record_time_time" value="{{old('at_record_time_time')}}">
+            <label for="{{ConstParams::AT_RECORD_TIME}}">時刻 : </label>
+            <input type="time" name="{{ConstParams::AT_RECORD_TIME}}" id="{{ConstParams::AT_RECORD_TIME}}" value="{{old(ConstParams::AT_RECORD_TIME)}}">
         </div>
         <input type="hidden" name="created_by_user_id" value="{{Auth::user()->user_id}}">
         <input type="hidden" name="is_admin" value="true">

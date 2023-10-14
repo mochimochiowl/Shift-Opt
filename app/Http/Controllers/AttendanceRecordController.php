@@ -43,10 +43,10 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($request) {
                 $data = [
                     'target_user_id' => User::findUserByLoginId($request->target_login_id)->user_id,
-                    'at_record_type' => $request->input(ConstParams::AT_RECORD_TYPE),
-                    'at_record_date' => $request->input(ConstParams::AT_RECORD_DATE),
-                    'at_record_time' => $request->input(ConstParams::AT_RECORD_TIME),
-                    'created_by' => User::findUserByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
+                    ConstParams::AT_RECORD_TYPE => $request->input(ConstParams::AT_RECORD_TYPE),
+                    ConstParams::AT_RECORD_DATE => $request->input(ConstParams::AT_RECORD_DATE),
+                    ConstParams::AT_RECORD_TIME => $request->input(ConstParams::AT_RECORD_TIME),
+                    ConstParams::CREATED_BY => User::findUserByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($data);
