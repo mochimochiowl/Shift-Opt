@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
-use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\StampRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
@@ -85,7 +84,6 @@ class StampController extends Controller
     {
         try {
             return DB::transaction(function () use ($data) {
-
                 $target_user = User::findUserByLoginId($data['target_login_id']);
 
                 $user_condition = UserCondition::where('user_id', $target_user->user_id)->first();
@@ -95,23 +93,26 @@ class StampController extends Controller
 
                 $modified_data = [
                     'target_user_id' => $target_user->user_id,
-                    'at_record_type' => $data['at_record_type'],
-                    'at_record_time' => getCurrentTime(),
-                    'created_by' => $target_user->getKanjiFullName(),
+                    ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
+                    ConstParams::AT_RECORD_DATE => getToday(),
+                    ConstParams::AT_RECORD_TIME => getCurrentTime(),
+                    ConstParams::CREATED_BY => $target_user->getKanjiFullName(),
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($modified_data);
-                $user_condition->validateConditions($target_user, $modified_data['at_record_type']);
+                $user_condition->validateConditions($target_user, $modified_data[ConstParams::AT_RECORD_TYPE]);
 
                 $param = [
-                    'user' => $target_user,
-                    'type' => getAtRecordTypeNameJP($modified_data['at_record_type']),
+                    'login_id' => $target_user->login_id,
+                    'name' => $target_user->getKanjiFullName(),
+                    'type' => getAtRecordTypeNameJP($modified_data[ConstParams::AT_RECORD_TYPE]),
+                    'date' => $new_record->at_record_date,
                     'time' => $new_record->at_record_time,
                 ];
                 return redirect()->route('stamps.result')->with(['param' => $param]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->route('stamps.index')->withErrors(['message' => 'There was an error.' . $e->getMessage()])->withInput();
+            return redirect()->route('stamps.index')->withErrors(['message' => 'StampController::createRecordでエラー' . $e->getMessage()])->withInput();
         }
     }
 
