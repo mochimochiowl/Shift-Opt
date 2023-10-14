@@ -150,20 +150,24 @@ class User extends Authenticatable
      */
     public static function searchByKeyword(string $field, string $keyword): Collection
     {
+        $query = self::query();
+
         if ($field === 'name') {
-            return self::where(ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+            $query->where(ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere(ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere(ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere(ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->get();
+                ->orWhere(ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%');
+        } elseif ($field === 'all') {
+            // 何も追加しない（すべてのレコードを取得）
+        } else {
+            $query->where($field, 'LIKE', '%' . $keyword . '%');
         }
 
-        if ($field === 'all') {
-            return self::all();
-        }
-
-        return self::where($field, 'LIKE', '%' . $keyword . '%')->get();
+        //ユーザーIDで昇順並べ替え
+        $results = $query->orderBy(ConstParams::USER_ID, 'asc')->get();
+        return $results;
     }
+
 
     /** 
      * Userデータの表示や更新処理のために必要な文字列データをまとめた配列を返す

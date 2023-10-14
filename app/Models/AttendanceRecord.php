@@ -79,34 +79,34 @@ class AttendanceRecord extends Model
         $end_date = $data['end_date'];
 
         if ($search_field === 'all') {
-            $records = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
+            $query = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
                 ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
-                ->get();
+                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
         } else if ($search_field === 'name') {
-            $records = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
+            $query = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
                 ->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
-                ->get();
+                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
         } else {
             // user_id か login_id の場合
-            $records = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
+            $query = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
                 ->where('attendance_records.' . $search_field, $keyword)
                 ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
-                ->get();
+                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
         }
 
+        //時刻で昇順並べ替え
+        $results = $query->orderBy(ConstParams::AT_RECORD_TIME, 'asc')->get();
         //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
-        $modified_records = $records->map(function ($record) {
-            $record->at_record_type_jp = AttendanceRecord::getTypeName($record->at_record_type);
-            return $record;
+        $modified_results = $results->map(function ($result) {
+            $result->at_record_type_jp = AttendanceRecord::getTypeName($result->at_record_type);
+            return $result;
         });
-        return $modified_records;
+
+        return $modified_results;
     }
 
     /**
