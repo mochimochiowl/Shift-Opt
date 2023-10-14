@@ -9,6 +9,7 @@ use App\Models\AttendanceRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
 class SearchController extends Controller
@@ -88,6 +89,55 @@ class SearchController extends Controller
             'search_requirements' => $search_requirements,
             'default_dates' => $default_dates,
         ]);
+    }
+
+    /**
+     * 検索条件に基づく at_recordsテーブル 検索結果 をCSV出力する
+     */
+    public function exportAtRecordCsv(SearchAtRecordsRequest $request)
+    {
+        //検索
+        $data = $request->validated();
+        $results = $this->searchAtRecords($data);
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="AtRecords_' . $data['start_date'] . '_' . $data['end_date']  . '.csv"',
+        ];
+
+        // 出力データの作成
+        $output = fopen('php://temp', 'r+');
+        fputcsv($output, [
+            ConstParams::AT_RECORD_ID_JP,
+            ConstParams::USER_ID_JP,
+            ConstParams::AT_RECORD_TYPE_JP,
+            ConstParams::AT_RECORD_TYPE_JP . '(日本語)',
+            ConstParams::AT_RECORD_TIME_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+        ]);
+
+        foreach ($results as $result) {
+            fputcsv($output, [
+                $result->at_record_id,
+                $result->user_id,
+                $result->at_record_type,
+                $result->at_record_type_jp,
+                $result->at_record_time,
+                $result->created_by,
+                $result->updated_by,
+                $result->created_at,
+                $result->updated_at,
+            ]);
+        }
+
+        rewind($output);
+        $csv = stream_get_contents($output);
+        fclose($output);
+
+        return Response::make($csv, 200, $headers);
     }
 
     /**

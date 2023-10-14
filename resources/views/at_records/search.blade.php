@@ -30,21 +30,22 @@
     </div>
     <div>
         <label>
-            <input type="radio" name="search_field" value="all" checked> 全件表示
+            <input type="radio" name="search_field" value="all" @if(old('search_field', 'all') == 'all') checked @endif required> 全件表示
         </label>
         <label>
-            <input type="radio" name="search_field" value="user_id" required> {{ConstParams::USER_ID_JP}}
+            <input type="radio" name="search_field" value="user_id" @if(old('search_field') == 'user_id') checked @endif required> {{ConstParams::USER_ID_JP}}
         </label>
         <label>
-            <input type="radio" name="search_field" value="login_id" required> {{ConstParams::LOGIN_ID_JP}}
+            <input type="radio" name="search_field" value="login_id" @if(old('search_field') == 'login_id') checked @endif required> {{ConstParams::LOGIN_ID_JP}}
         </label>
         <label>
-            <input type="radio" name="search_field" value="name"> 名前（漢字・かな）
+            <input type="radio" name="search_field" value="name" @if(old('search_field') == 'name') checked @endif required> 名前（漢字・かな）
         </label>
     </div>
     <div>
-        <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{$keyword ?? ''}}">
+        <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{old('keyword', $keyword ?? '')}}">
         <input type="submit" value="検索">
+        <input type="submit" value="CSV出力" formaction="{{route('at_records.exportCsv')}}" formmethod="POST">
     </div>
 </form>
 
@@ -100,4 +101,3 @@
 @section('footer')
     copyright 2023 CoderOwlWing
 @endsection
-

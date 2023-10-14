@@ -15,6 +15,16 @@ function getCurrentTime(): string
 }
 
 /**
+ * 今日の日付を取得する
+ * @return string
+ */
+function getToday(): string
+{
+    date_default_timezone_set('Asia/Tokyo');
+    return date("Y/m/d");
+}
+
+/**
  * AT_RECORD_TYPEの日本語表記を取得する
  * @return string
  */

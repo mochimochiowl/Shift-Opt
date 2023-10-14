@@ -3,10 +3,10 @@
 use App\Http\Controllers\AttendanceRecordController;
 use App\Http\Controllers\StampController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TopController;
 use App\Http\Controllers\UserConditionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaryController;
-use App\Models\UserCondition;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // トップページのルート
-Route::view('/', 'top')->name('top');
+Route::get('/', [TopController::class, 'get'])->name('top');
+Route::post('/', [TopController::class, 'post'])->name('top.post');
 
 // ユーザー登録・ログイン・ログアウトにかかわるルート
 Route::get('users/create', [UserController::class, 'create'])->name('users.create');
@@ -73,6 +74,9 @@ Route::middleware('auth')->group(function () {
     // 検索にかかわるルート
     Route::get('at_records/search', [SearchController::class, 'showAtRecordsSearchView'])->name('at_records.search');
     Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
+
+    // CSV出力
+    Route::post('at_records/export-csv', [SearchController::class, 'exportAtRecordCsv'])->name('at_records.exportCsv');
 
     // 情報操作にかかわるルート
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
