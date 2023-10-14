@@ -70,9 +70,9 @@ class AttendanceRecord extends Model
 
     /**
      * 条件を満たすat_recordオブジェクトの配列を取得
-     * @return  Collection
+     * @return  array
      */
-    public static function search(array $data): Collection
+    public static function search(array $data): array
     {
         $search_field = $data['search_field'];
         $keyword = $data['keyword'];
@@ -80,31 +80,68 @@ class AttendanceRecord extends Model
         $end_date = $data['end_date'];
 
         if ($search_field === 'all') {
-            $query = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
-                ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
+            $query = self::join(
+                'users',
+                'users.' . ConstParams::USER_ID,
+                '=',
+                'attendance_records.' . ConstParams::USER_ID
+            )->whereBetween(
+                'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                [$start_date, $end_date]
+            )->select(
+                'attendance_records.*',
+                'users.' . ConstParams::KANJI_LAST_NAME,
+                'users.' . ConstParams::KANJI_FIRST_NAME,
+                'users.' . ConstParams::KANA_LAST_NAME,
+                'users.' . ConstParams::KANA_FIRST_NAME,
+            );
         } else if ($search_field === 'name') {
-            $query = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
-                ->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+            $query = self::join(
+                'users',
+                'users.' . $search_field,
+                '=',
+                'attendance_records.' . $search_field
+            )->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
+                ->whereBetween(
+                    'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                    [$start_date, $end_date]
+                )->select(
+                    'attendance_records.*',
+                    'users.' . ConstParams::KANJI_LAST_NAME,
+                    'users.' . ConstParams::KANJI_FIRST_NAME,
+                    'users.' . ConstParams::KANA_LAST_NAME,
+                    'users.' . ConstParams::KANA_FIRST_NAME,
+                );
         } else {
             // user_id か login_id の場合
-            $query = self::join('users', 'users.' . $search_field, '=', 'attendance_records.' . $search_field)
-                ->where('attendance_records.' . $search_field, $keyword)
-                ->whereBetween('attendance_records.at_record_time', [$start_date, $end_date])
-                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',);
+            $query = self::join(
+                'users',
+                'users.' . $search_field,
+                '=',
+                'attendance_records.' . $search_field
+            )->where('attendance_records.' . $search_field, $keyword)
+                ->whereBetween(
+                    'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                    [$start_date, $end_date]
+                )->select(
+                    'attendance_records.*',
+                    'users.' . ConstParams::KANJI_LAST_NAME,
+                    'users.' . ConstParams::KANJI_FIRST_NAME,
+                    'users.' . ConstParams::KANA_LAST_NAME,
+                    'users.' . ConstParams::KANA_FIRST_NAME,
+                );
         }
 
-        //時刻で昇順並べ替え
-        $results = $query->orderBy(ConstParams::AT_RECORD_TIME, 'asc')->get();
-        //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
+        //日時、時刻で昇順並べ替え
+        $results = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
+            ->orderBy(ConstParams::AT_RECORD_TIME, 'asc')
+            ->get();
+        //resultsの中にあるat_record一つ一つに対して、dataArray()を呼びたい
         $modified_results = $results->map(function ($result) {
-            $result->at_record_type_jp = AttendanceRecord::getTypeName($result->at_record_type);
-            return $result;
+            return $result->dataArray();
         });
 
         return $modified_results;
@@ -116,22 +153,21 @@ class AttendanceRecord extends Model
      */
     public static function updateInfo($at_record_id, array $data): array
     {
-        $at_record_time = $data['at_record_time_date'] . ' ' . $data['at_record_time_time'];
         $count = self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->update(
             [
                 ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
-                ConstParams::AT_RECORD_TIME => $at_record_time,
+                ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
+                ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
                 ConstParams::UPDATED_BY => $data['logged_in_user_name'],
             ]
         );
 
         $updated_record = self::searchById($at_record_id);
-        //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
-        $updated_record->at_record_type_jp = AttendanceRecord::getTypeName($updated_record->at_record_type);
+        $data = $updated_record->dataArray();
 
         $result = [
             'count' => $count,
-            'record' => $updated_record,
+            'record' => $data,
         ];
 
         return $result;
@@ -172,6 +208,7 @@ class AttendanceRecord extends Model
             ConstParams::AT_RECORD_ID => $this->at_record_id,
             ConstParams::USER_ID => $this->user_id,
             ConstParams::AT_RECORD_TYPE => $this->at_record_type,
+            ConstParams::AT_RECORD_TYPE_TRANSLATED => AttendanceRecord::getTypeName($this->at_record_type),
             ConstParams::AT_RECORD_DATE => $this->at_record_date,
             ConstParams::AT_RECORD_TIME => $this->at_record_time,
             ConstParams::CREATED_AT => $this->created_at,

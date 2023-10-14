@@ -33,10 +33,10 @@
             <input type="radio" name="search_field" value="all" @if(old('search_field', 'all') == 'all') checked @endif required> 全件表示
         </label>
         <label>
-            <input type="radio" name="search_field" value="user_id" @if(old('search_field') == 'user_id') checked @endif required> {{ConstParams::USER_ID_JP}}
+            <input type="radio" name="search_field" value="{{ConstParams::USER_ID}}" @if(old('search_field') == ConstParams::USER_ID) checked @endif required> {{ConstParams::USER_ID_JP}}
         </label>
         <label>
-            <input type="radio" name="search_field" value="login_id" @if(old('search_field') == 'login_id') checked @endif required> {{ConstParams::LOGIN_ID_JP}}
+            <input type="radio" name="search_field" value="{{ConstParams::LOGIN_ID}}" @if(old('search_field') == ConstParams::LOGIN_ID) checked @endif required> {{ConstParams::LOGIN_ID_JP}}
         </label>
         <label>
             <input type="radio" name="search_field" value="name" @if(old('search_field') == 'name') checked @endif required> 名前（漢字・かな）
@@ -71,6 +71,7 @@
             <th>名前</th>
             <th>なまえ</th>
             <th>{{ConstParams::AT_RECORD_TYPE_JP}}</th>
+            <th>{{ConstParams::AT_RECORD_DATE_JP}}</th>
             <th>{{ConstParams::AT_RECORD_TIME_JP}}</th>
             <th>詳細</th>
             <th>編集</th>
@@ -79,12 +80,13 @@
     <tbody>
     @foreach ($results as $result)
         <tr>
-            <td>{{$result['at_record_id']}}</td>
-            <td>{{$result['user_id']}}</td>
-            <td>{{$result['kanji_last_name']}} {{$result['kanji_first_name']}}</td>
-            <td>{{$result['kana_last_name']}} {{$result['kana_first_name']}}</td>
-            <td>{{$result['at_record_type_jp']}}</td>
-            <td>{{$result['at_record_time']}}</td>
+            <td>{{$result[ConstParams::AT_RECORD_ID]}}</td>
+            <td>{{$result[ConstParams::USER_ID]}}</td>
+            <td>{{$result[ConstParams::KANJI_LAST_NAME]}} {{$result[ConstParams::KANJI_FIRST_NAME]}}</td>
+            <td>{{$result[ConstParams::KANA_LAST_NAME]}} {{$result[ConstParams::KANA_FIRST_NAME]}}</td>
+            <td>{{$result[ConstParams::AT_RECORD_TYPE_TRANSLATED]}}</td>
+            <td>{{$result[ConstParams::AT_RECORD_DATE]}}</td>
+            <td>{{$result[ConstParams::AT_RECORD_TIME]}}</td>
             <td>
                 <a href="{{route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">詳細</a>
             </td>

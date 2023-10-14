@@ -63,6 +63,7 @@ class ConstParams
     const AT_RECORD_ID = 'at_record_id';
     const AT_SESSION_ID = 'at_session_id';
     const AT_RECORD_TYPE = 'at_record_type';
+    const AT_RECORD_TYPE_TRANSLATED = 'at_record_type_translated';
     const AT_RECORD_DATE = 'at_record_date';
     const AT_RECORD_TIME = 'at_record_time';
 
@@ -104,6 +105,7 @@ class ConstParams
     const AT_SESSION_ID_JP = 'セッションID';
     const AT_RECORD_ID_JP = '打刻レコードID';
     const AT_RECORD_TYPE_JP = '打刻レコードタイプ';
+    const AT_RECORD_TYPE_TRANSLATED_JP = '打刻レコードタイプ(日本語)';
     const AT_RECORD_DATE_JP = '日付';
     const AT_RECORD_TIME_JP = '時刻';
 }

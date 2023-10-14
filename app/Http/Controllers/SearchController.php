@@ -72,13 +72,12 @@ class SearchController extends Controller
      */
     public function showAtRecordsResult(SearchAtRecordsRequest $request): View
     {
-        $data = $request->validated();
+        $search_requirements = $request->validated();
 
-        $results = $this->searchAtRecords($data);
+        $results = $this->searchAtRecords($search_requirements);
 
         $messages = $request->messages ?? null;
 
-        $search_requirements = $data;
         $search_requirements['search_field'] = $this->getFieldNameJP($search_requirements['search_field']);
 
         $default_dates = $this->defaultDates();
@@ -111,7 +110,8 @@ class SearchController extends Controller
             ConstParams::AT_RECORD_ID_JP,
             ConstParams::USER_ID_JP,
             ConstParams::AT_RECORD_TYPE_JP,
-            ConstParams::AT_RECORD_TYPE_JP . '(日本語)',
+            ConstParams::AT_RECORD_TYPE_TRANSLATED_JP,
+            ConstParams::AT_RECORD_DATE_JP,
             ConstParams::AT_RECORD_TIME_JP,
             ConstParams::CREATED_BY_JP,
             ConstParams::UPDATED_BY_JP,
@@ -121,15 +121,16 @@ class SearchController extends Controller
 
         foreach ($results as $result) {
             fputcsv($output, [
-                $result->at_record_id,
-                $result->user_id,
-                $result->at_record_type,
-                $result->at_record_type_jp,
-                $result->at_record_time,
-                $result->created_by,
-                $result->updated_by,
-                $result->created_at,
-                $result->updated_at,
+                $result[ConstParams::AT_RECORD_ID],
+                $result[ConstParams::USER_ID],
+                $result[ConstParams::AT_RECORD_TYPE],
+                $result[ConstParams::AT_RECORD_TYPE_TRANSLATED],
+                $result[ConstParams::AT_RECORD_DATE],
+                $result[ConstParams::AT_RECORD_TIME],
+                $result[ConstParams::CREATED_BY],
+                $result[ConstParams::UPDATED_BY],
+                $result[ConstParams::CREATED_AT],
+                $result[ConstParams::UPDATED_AT],
             ]);
         }
 
@@ -142,9 +143,9 @@ class SearchController extends Controller
 
     /**
      * at_recordsテーブル内を検索する
-     * @return Collection
+     * @return array
      */
-    private function searchAtRecords(array $data): Collection
+    private function searchAtRecords(array $data): array
     {
         return AttendanceRecord::search($data);
     }

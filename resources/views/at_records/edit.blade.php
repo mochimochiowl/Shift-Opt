@@ -10,53 +10,52 @@
     </ul>
 </div>
 @endif
-@if ($record)
-<p>{{$record->kanji_last_name}} {{$record->kanji_first_name}}さん の {{$record->at_record_type_jp}}データ</p>
-<form action="{{route('at_records.update', [ConstParams::AT_RECORD_ID => $record->at_record_id])}}" method="POST">
+@if ($data)
+<form action="{{route('at_records.update', [ConstParams::AT_RECORD_ID => $data[ConstParams::AT_RECORD_ID]])}}" method="POST">
     @csrf
     @method('PUT')
     <div>
-        <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$record->at_record_id}}</p>
-        <input type="hidden" name="{{ConstParams::AT_RECORD_ID}}" id="{{ConstParams::AT_RECORD_ID}}" value="{{$record->at_record_id}}" readonly>
-        <p>{{ConstParams::USER_ID_JP}} : {{$record->user_id}}</p>
-        <p>名前 : {{$record->kanji_last_name}} {{$record->kanji_first_name}}</p>
-        <p>なまえ : {{$record->kana_last_name}} {{$record->kana_first_name}}</p>
+        <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$data[ConstParams::AT_RECORD_ID]}}</p>
+        <input type="hidden" name="{{ConstParams::AT_RECORD_ID}}" id="{{ConstParams::AT_RECORD_ID}}" value="{{$data[ConstParams::AT_RECORD_ID]}}" readonly>
+        <p>{{ConstParams::USER_ID_JP}} : {{$data[ConstParams::USER_ID]}}</p>
+        <p>名前 : {{$data[ConstParams::KANJI_LAST_NAME]}} {{$data[ConstParams::KANJI_FIRST_NAME]}}</p>
+        <p>なまえ : {{$data[ConstParams::KANA_LAST_NAME]}} {{$data[ConstParams::KANA_FIRST_NAME]}}</p>
         <div>
             <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
             <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
                 <option value="{{ConstParams::AT_RECORD_START_WORK}}" 
-                        {{ ($record->at_record_type == ConstParams::AT_RECORD_START_WORK) ? 'selected' : '' }}>
+                        {{ ($data->at_record_type == ConstParams::AT_RECORD_START_WORK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_START_WORK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_FINISH_WORK}}" 
-                        {{ ($record->at_record_type == ConstParams::AT_RECORD_FINISH_WORK) ? 'selected' : '' }}>
+                        {{ ($data->at_record_type == ConstParams::AT_RECORD_FINISH_WORK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_FINISH_WORK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_START_BREAK}}" 
-                        {{ ($record->at_record_type == ConstParams::AT_RECORD_START_BREAK) ? 'selected' : '' }}>
+                        {{ ($data->at_record_type == ConstParams::AT_RECORD_START_BREAK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_START_BREAK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_FINISH_BREAK}}" 
-                        {{ ($record->at_record_type == ConstParams::AT_RECORD_FINISH_BREAK) ? 'selected' : '' }}>
+                        {{ ($data->at_record_type == ConstParams::AT_RECORD_FINISH_BREAK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_FINISH_BREAK_JP}}
                 </option>
             </select>
         </div>
         <div>
-            <label for="at_record_time_date">日付 : </label>
-            <input type="date" name="at_record_time_date" id="at_record_time_date" value="{{ explode(' ', $record->at_record_time)[0] }}">
+            <label for="{{ConstParams::AT_RECORD_DATE}}">{{ConstParams::AT_RECORD_DATE_JP}} : </label>
+            <input type="date" name="{{ConstParams::AT_RECORD_DATE}}" id="{{ConstParams::AT_RECORD_DATE}}" value="{{$data[ConstParams::AT_RECORD_DATE]}}">
         </div>
         <div>
-            <label for="at_record_time_time">時刻 : </label>
-            <input type="time" name="at_record_time_time" id="at_record_time_time" value="{{ explode(' ', $record->at_record_time)[1] }}">
+            <label for="{{ConstParams::AT_RECORD_TIME}}">{{ConstParams::AT_RECORD_TIME_JP}} : </label>
+            <input type="time" name="{{ConstParams::AT_RECORD_TIME}}" id="{{ConstParams::AT_RECORD_TIME}}" value="{{$data[ConstParams::AT_RECORD_TIME]}}">
         </div>
-        <p>{{ConstParams::CREATED_AT_JP}} : {{$record->created_at}}</p>
-        <p>{{ConstParams::UPDATED_AT_JP}} : {{$record->updated_at}}</p>
-        <p>{{ConstParams::CREATED_BY_JP}} : {{$record->created_by}}</p>
-        <p>{{ConstParams::UPDATED_BY_JP}} : {{$record->updated_by}}</p>
+        <p>{{ConstParams::CREATED_AT_JP}} : {{$data[ConstParams::CREATED_AT]}}</p>
+        <p>{{ConstParams::UPDATED_AT_JP}} : {{$data[ConstParams::UPDATED_AT]}}</p>
+        <p>{{ConstParams::CREATED_BY_JP}} : {{$data[ConstParams::CREATED_BY]}}</p>
+        <p>{{ConstParams::UPDATED_BY_JP}} : {{$data[ConstParams::UPDATED_BY]}}</p>
     </div>
     <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
     <div><input type="submit" value="更新"></div>
@@ -66,8 +65,8 @@
 @endif
 <hr>
 <div>
-    @if ($record)
-    <form action="{{route('at_records.delete.confirm', [ConstParams::AT_RECORD_ID => $record->at_record_id])}}" method="POST">
+    @if ($data)
+    <form action="{{route('at_records.delete.confirm', [ConstParams::AT_RECORD_ID => $data[ConstParams::AT_RECORD_ID]])}}" method="POST">
         @csrf
         <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
         <button type="submit">この{{ConstParams::AT_RECORD_JP}}を削除する</button>

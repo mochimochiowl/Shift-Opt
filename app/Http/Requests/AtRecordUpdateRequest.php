@@ -24,8 +24,8 @@ class AtRecordUpdateRequest extends FormRequest
     {
         return [
             ConstParams::AT_RECORD_TYPE => 'required',
-            'at_record_time_date' => 'required',
-            'at_record_time_time' => 'required',
+            ConstParams::AT_RECORD_DATE => 'required',
+            ConstParams::AT_RECORD_TIME => 'required',
             'logged_in_user_name' => 'required',
         ];
     }
@@ -50,8 +50,8 @@ class AtRecordUpdateRequest extends FormRequest
     {
         return [
             ConstParams::AT_RECORD_TYPE => ConstParams::AT_RECORD_TYPE_JP,
-            'at_record_time_date' => '日付',
-            'at_record_time_time' => '時刻',
+            ConstParams::AT_RECORD_DATE => ConstParams::AT_RECORD_DATE_JP,
+            ConstParams::AT_RECORD_TIME => ConstParams::AT_RECORD_TIME_JP,
             'logged_in_user_name' => 'ログインユーザー名が空欄です',
         ];
     }

@@ -70,8 +70,8 @@ class AttendanceRecordController extends Controller
      */
     public function edit($at_record_id): View
     {
-        $record = AttendanceRecord::searchById($at_record_id);
-        return view('at_records.edit', ['record' => $record]);
+        $data = AttendanceRecord::searchById($at_record_id)->dataArray();
+        return view('at_records.edit', ['data' => $data]);
     }
 
     /** 
@@ -85,8 +85,8 @@ class AttendanceRecordController extends Controller
                 $data = $request->validated();
                 $result = AttendanceRecord::updateInfo($at_record_id, $data);
                 return redirect()
-                    ->route('at_records.update.result', [ConstParams::AT_RECORD_ID => $result['record']->at_record_id])
-                    ->with(['record' => $result['record'], 'count' => $result['count']]);
+                    ->route('at_records.update.result', [ConstParams::AT_RECORD_ID => $result['data'][ConstParams::AT_RECORD_ID]])
+                    ->with(['data' => $result['data'], 'count' => $result['count']]);
             }, 5);
         } catch (Exception $e) {
             return redirect()
@@ -101,7 +101,7 @@ class AttendanceRecordController extends Controller
      */
     public function showUpdateResult(Request $request): View
     {
-        return view('at_records.editResult', ['record' => session('record'), 'count' => session('count')]);
+        return view('at_records.editResult', ['data' => session('data'), 'count' => session('count')]);
     }
 
     /**
@@ -110,8 +110,8 @@ class AttendanceRecordController extends Controller
      */
     public function confirmDestroy(Request $request): View
     {
-        $record = AttendanceRecord::searchById($request->at_record_id);
-        return view('at_records.confirmDestroy', ['record' => $record]);
+        $data = AttendanceRecord::searchById($request->at_record_id)->dataArray();
+        return view('at_records.confirmDestroy', ['data' => $data]);
     }
 
     /** 
