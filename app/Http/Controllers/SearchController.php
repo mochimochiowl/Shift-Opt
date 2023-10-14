@@ -126,7 +126,7 @@ class SearchController extends Controller
     private function defaultDates(): array
     {
         $start_date = date('Y-m-d', strtotime('-1 week'));
-        $end_date = date('Y-m-d', strtotime('-1 day'));
+        $end_date = date('Y-m-d', strtotime('+1 day'));
         return [
             'start_date' => $start_date,
             'end_date' => $end_date,
