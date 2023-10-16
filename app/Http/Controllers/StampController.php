@@ -91,6 +91,7 @@ class StampController extends Controller
                 if (!$user_condition) {
                     throw new Exception('ユーザーコンディションデータが見つかりません login_id: ' . $target_user->login_id . ' user_id:' . $target_user->user_id);
                 }
+                $user_condition->validateConditions($target_user, $data[ConstParams::AT_RECORD_TYPE]);
 
                 if ($data[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_START_WORK) {
                     $session_id = Str::uuid()->toString();
@@ -108,7 +109,6 @@ class StampController extends Controller
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($modified_data);
-                $user_condition->validateConditions($target_user, $modified_data[ConstParams::AT_RECORD_TYPE]);
 
                 $param = [
                     'login_id' => $target_user->login_id,

@@ -74,19 +74,19 @@ class AttendanceRecord extends Model
 
     /**
      * 退勤していないセッションIDを見つけ、返す
-     * @return  array
+     * @return  string
      */
-    public static function findSessionId($user_id): array
+    public static function findSessionId($user_id): string
     {
-        $startRecords = self::where('user_id', $user_id)
-            ->where('type', ConstParams::AT_RECORD_START_WORK)
-            ->pluck('session_id')
+        $startRecords = self::where(ConstParams::USER_ID, $user_id)
+            ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_START_WORK)
+            ->pluck(ConstParams::AT_SESSION_ID)
             ->toArray();
 
-        $endRecords = self::where('user_id', $user_id)
-            ->where('type', ConstParams::AT_RECORD_FINISH_WORK)
-            ->whereIn('session_id', $startRecords)
-            ->pluck('session_id')
+        $endRecords = self::where(ConstParams::USER_ID, $user_id)
+            ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_FINISH_WORK)
+            ->whereIn(ConstParams::AT_SESSION_ID, $startRecords)
+            ->pluck(ConstParams::AT_SESSION_ID)
             ->toArray();
 
         $notEndedSessions = array_diff($startRecords, $endRecords);
@@ -94,7 +94,7 @@ class AttendanceRecord extends Model
         if (count($notEndedSessions) > 1) {
             throw new Error('Error: AttendanceRecord::findSessionIdでエラー：退勤していないセッションIDが' . count($notEndedSessions) . '件見つかりました。');
         }
-        return $notEndedSessions ? $notEndedSessions[0] : null;
+        return $notEndedSessions ? reset($notEndedSessions) : null;
     }
 
     /**
@@ -171,7 +171,7 @@ class AttendanceRecord extends Model
         //resultsの中にあるat_record一つ一つに対して、dataArray()を呼びたい
         $modified_results = $results->map(function ($result) {
             return $result->dataArray();
-        });
+        })->toArray();
 
         return $modified_results;
     }
@@ -235,6 +235,7 @@ class AttendanceRecord extends Model
     {
         $data = [
             ConstParams::AT_RECORD_ID => $this->at_record_id,
+            ConstParams::AT_SESSION_ID => $this->at_session_id,
             ConstParams::USER_ID => $this->user_id,
             ConstParams::AT_RECORD_TYPE => $this->at_record_type,
             ConstParams::AT_RECORD_TYPE_TRANSLATED => AttendanceRecord::getTypeName($this->at_record_type),

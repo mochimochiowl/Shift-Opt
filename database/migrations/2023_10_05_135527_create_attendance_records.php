@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('attendance_records', function (Blueprint $table) {
             $table->id(ConstParams::AT_RECORD_ID);
-            $table->string(ConstParams::AT_SESSION_ID)->unique();
+            $table->string(ConstParams::AT_SESSION_ID);
             $table->foreignId(ConstParams::USER_ID)->constrained(
                 table: 'users',
                 column: ConstParams::USER_ID,

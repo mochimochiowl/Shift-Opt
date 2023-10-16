@@ -60,7 +60,7 @@
     <p>検索ワード : {{$search_requirements['keyword']}}</p>
     <p>開始日　　 : {{$search_requirements['start_date']}}</p>
     <p>終了日　　 : {{$search_requirements['end_date']}}</p>
-    <p>ヒット件数 : {{$results->count()}}</p>
+    <p>ヒット件数 : {{count($results)}}</p>
 </div>
 <h2>検索結果</h2>
 <table>
