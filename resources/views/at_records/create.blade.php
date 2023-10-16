@@ -19,6 +19,12 @@
             </div>
         </div>
         <div>
+            <div>
+                <label for="{{ConstParams::AT_SESSION_ID}}">{{ConstParams::AT_SESSION_ID_JP}}</label>
+                <input type="text" name="{{ConstParams::AT_SESSION_ID}}" id="{{ConstParams::AT_SESSION_ID}}" value="{{old(ConstParams::AT_SESSION_ID)}}">
+            </div>
+        </div>
+        <div>
             <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
             <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
                 <option value="{{ConstParams::AT_RECORD_START_WORK}}">

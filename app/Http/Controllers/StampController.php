@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class StampController extends Controller
@@ -91,8 +92,15 @@ class StampController extends Controller
                     throw new Exception('ユーザーコンディションデータが見つかりません login_id: ' . $target_user->login_id . ' user_id:' . $target_user->user_id);
                 }
 
+                if ($data[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_START_WORK) {
+                    $session_id = Str::uuid()->toString();
+                } else {
+                    $session_id = AttendanceRecord::findSessionId($target_user->user_id);
+                }
+
                 $modified_data = [
                     'target_user_id' => $target_user->user_id,
+                    ConstParams::AT_SESSION_ID => $session_id,
                     ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
                     ConstParams::AT_RECORD_DATE => getToday(),
                     ConstParams::AT_RECORD_TIME => getCurrentTime(),

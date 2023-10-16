@@ -16,6 +16,7 @@
     @method('PUT')
     <div>
         <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$data[ConstParams::AT_RECORD_ID]}}</p>
+        <p>{{ConstParams::AT_SESSION_ID_JP}} : {{$data[ConstParams::AT_SESSION_ID]}}</p>
         <input type="hidden" name="{{ConstParams::AT_RECORD_ID}}" id="{{ConstParams::AT_RECORD_ID}}" value="{{$data[ConstParams::AT_RECORD_ID]}}" readonly>
         <p>{{ConstParams::USER_ID_JP}} : {{$data[ConstParams::USER_ID]}}</p>
         <p>名前 : {{$data[ConstParams::KANJI_LAST_NAME]}} {{$data[ConstParams::KANJI_FIRST_NAME]}}</p>

@@ -1,5 +1,6 @@
 <div>
     <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$data[ConstParams::AT_RECORD_ID]}}</p>
+    <p>{{ConstParams::AT_SESSION_ID_JP}} : {{$data[ConstParams::AT_SESSION_ID]}}</p>
     <p>{{ConstParams::USER_ID_JP}} : {{$data[ConstParams::USER_ID]}}</p>
     <p>名前 : {{$data[ConstParams::KANJI_LAST_NAME]}} {{$data[ConstParams::KANJI_FIRST_NAME]}}</p>
     <p>なまえ : {{$data[ConstParams::KANA_LAST_NAME]}} {{$data[ConstParams::KANA_FIRST_NAME]}}</p>

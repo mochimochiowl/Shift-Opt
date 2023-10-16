@@ -67,6 +67,7 @@
     <thead>
         <tr>
             <th>{{ConstParams::AT_RECORD_ID_JP}}</th>
+            <th>{{ConstParams::AT_SESSION_ID_JP}}</th>
             <th>{{ConstParams::USER_ID_JP}}</th>
             <th>名前</th>
             <th>なまえ</th>
@@ -81,6 +82,7 @@
     @foreach ($results as $result)
         <tr>
             <td>{{$result[ConstParams::AT_RECORD_ID]}}</td>
+            <td>{{$result[ConstParams::AT_SESSION_ID]}}</td>
             <td>{{$result[ConstParams::USER_ID]}}</td>
             <td>{{$result[ConstParams::KANJI_LAST_NAME]}} {{$result[ConstParams::KANJI_FIRST_NAME]}}</td>
             <td>{{$result[ConstParams::KANA_LAST_NAME]}} {{$result[ConstParams::KANA_FIRST_NAME]}}</td>

@@ -43,6 +43,7 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($request) {
                 $data = [
                     'target_user_id' => User::findUserByLoginId($request->target_login_id)->user_id,
+                    ConstParams::AT_SESSION_ID => $request->input(ConstParams::AT_SESSION_ID),
                     ConstParams::AT_RECORD_TYPE => $request->input(ConstParams::AT_RECORD_TYPE),
                     ConstParams::AT_RECORD_DATE => $request->input(ConstParams::AT_RECORD_DATE),
                     ConstParams::AT_RECORD_TIME => $request->input(ConstParams::AT_RECORD_TIME),

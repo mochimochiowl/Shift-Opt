@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Const\ConstParams;
+use Error;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,9 @@ class AttendanceRecord extends Model
     protected $primaryKey = ConstParams::AT_RECORD_ID;
     protected $fillable = [
         ConstParams::USER_ID,
+        ConstParams::AT_SESSION_ID,
         ConstParams::AT_RECORD_TYPE,
+        ConstParams::AT_RECORD_DATE,
         ConstParams::AT_RECORD_TIME,
         ConstParams::CREATED_BY,
         ConstParams::UPDATED_BY,
@@ -34,6 +37,7 @@ class AttendanceRecord extends Model
             $newRecord = self::query()->create(
                 [
                     ConstParams::USER_ID => $data['target_user_id'],
+                    ConstParams::AT_SESSION_ID => $data[ConstParams::AT_SESSION_ID],
                     ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
                     ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
                     ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
@@ -66,6 +70,31 @@ class AttendanceRecord extends Model
             default:
                 return 'ERROR: タイプの日本語表記取得ができませんでした。';
         }
+    }
+
+    /**
+     * 退勤していないセッションIDを見つけ、返す
+     * @return  array
+     */
+    public static function findSessionId($user_id): array
+    {
+        $startRecords = self::where('user_id', $user_id)
+            ->where('type', ConstParams::AT_RECORD_START_WORK)
+            ->pluck('session_id')
+            ->toArray();
+
+        $endRecords = self::where('user_id', $user_id)
+            ->where('type', ConstParams::AT_RECORD_FINISH_WORK)
+            ->whereIn('session_id', $startRecords)
+            ->pluck('session_id')
+            ->toArray();
+
+        $notEndedSessions = array_diff($startRecords, $endRecords);
+
+        if (count($notEndedSessions) > 1) {
+            throw new Error('Error: AttendanceRecord::findSessionIdでエラー：退勤していないセッションIDが' . count($notEndedSessions) . '件見つかりました。');
+        }
+        return $notEndedSessions ? $notEndedSessions[0] : null;
     }
 
     /**

@@ -24,6 +24,7 @@ class AtRecordStoreRequest extends FormRequest
     {
         return [
             'target_login_id' => 'required|exists:users,login_id',
+            ConstParams::AT_SESSION_ID => 'required',
             ConstParams::AT_RECORD_TYPE => 'required',
             ConstParams::AT_RECORD_DATE => 'required',
             ConstParams::AT_RECORD_TIME => 'required',
@@ -40,6 +41,7 @@ class AtRecordStoreRequest extends FormRequest
         return [
             'target_login_id' . '.required' => ConstParams::LOGIN_ID_JP . 'を入力して下さい。',
             'target_login_id' . '.exists' => ConstParams::LOGIN_ID_JP . 'が存在しません。',
+            ConstParams::AT_SESSION_ID . '.required' => ConstParams::AT_SESSION_ID_JP . 'を入力して下さい。',
             ConstParams::AT_RECORD_TYPE . '.required' => ConstParams::AT_RECORD_TYPE_JP . 'を入力して下さい。',
             ConstParams::AT_RECORD_DATE . '.required' => ConstParams::AT_RECORD_DATE_JP . 'を入力して下さい。',
             ConstParams::AT_RECORD_TIME . '.required' => ConstParams::AT_RECORD_TIME_JP . 'を入力して下さい。',
