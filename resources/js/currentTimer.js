@@ -6,6 +6,3 @@ export default function showClock() {
     let msg = nowHour + ":" + nowMin + ":" + nowSec;
     document.querySelector('#realTimer').innerHTML = msg;
 }
-if (document.querySelector('#realTimer')) {
-    setInterval(showClock, 1000);
-}
