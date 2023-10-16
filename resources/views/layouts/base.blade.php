@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{asset('/css/style.css')}}">
+    <script src="{{asset('/dist/assets/bundle.js')}}"></script>
     </head>
     <body>
         @section('header')

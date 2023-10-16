@@ -14,6 +14,9 @@ export default defineConfig({
         outDir: 'public/dist', // 出力ディレクトリを指定
         rollupOptions: {
             input: 'resources/js/main.js', // エントリポイントとなるJSファイルを指定
+            output: {
+                entryFileNames: `assets/bundle.js`,
+            }
         }
     }
 });

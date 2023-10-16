@@ -10,6 +10,9 @@
     </ul>
 </div>
 @endif
+<div>
+    <span id="realTimer">{{getCurrentTime()}}</span>
+</div>
 <form action="" method="post">
     @csrf
     <div>
