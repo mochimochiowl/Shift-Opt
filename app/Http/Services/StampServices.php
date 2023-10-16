@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Services;
 
 use App\Const\ConstParams;
 use App\Http\Requests\StampRequest;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class StampController extends Controller
+class StampServices
 {
     /**
      * 打刻画面を返す
@@ -120,7 +120,7 @@ class StampController extends Controller
                 return redirect()->route('stamps.result')->with(['param' => $param]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->route('stamps.index')->withErrors(['message' => 'StampController::createRecordでエラー' . $e->getMessage()])->withInput();
+            return redirect()->route('stamps.index')->withErrors(['message' => 'StampServices::createRecordでエラー' . $e->getMessage()])->withInput();
         }
     }
 
