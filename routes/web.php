@@ -6,7 +6,7 @@ use App\Http\Controllers\TopController;
 use App\Http\Controllers\UserConditionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaryController;
-use App\Http\Services\StampServices;
+use App\Http\Services\StampService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,12 +36,12 @@ Route::post('login', [UserController::class, 'login'])->name('login.store');
 
 // 勤怠にかかわるルート
 Route::prefix('stamps')->name('stamps.')->group(function () {
-    Route::get('/', [StampServices::class, 'index'])->name('index');
-    Route::post('start-work', [StampServices::class, 'startWork'])->name('startWork');
-    Route::post('finish-work', [StampServices::class, 'finishWork'])->name('finishWork');
-    Route::post('start-break', [StampServices::class, 'startBreak'])->name('startBreak');
-    Route::post('finish-break', [StampServices::class, 'finishBreak'])->name('finishBreak');
-    Route::get('result', [StampServices::class, 'showResult'])->name('result');
+    Route::get('/', [StampService::class, 'index'])->name('index');
+    Route::post('start-work', [StampService::class, 'startWork'])->name('startWork');
+    Route::post('finish-work', [StampService::class, 'finishWork'])->name('finishWork');
+    Route::post('start-break', [StampService::class, 'startBreak'])->name('startBreak');
+    Route::post('finish-break', [StampService::class, 'finishBreak'])->name('finishBreak');
+    Route::get('result', [StampService::class, 'showResult'])->name('result');
 });
 
 // DB閲覧、編集にはログインが必要

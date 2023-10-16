@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class StampServices
+class StampService
 {
     /**
      * 打刻画面を返す
