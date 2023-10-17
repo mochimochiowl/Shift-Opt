@@ -23,12 +23,12 @@ class UserSalary extends Model
 
     /** 
      * UserSalaryの新規作成
-     * @return void
+     * @return UserSalary
      *  */
-    public static function createForUser(User $user): void
+    public static function createForUser(User $user): UserSalary
     {
         try {
-            $user->salary()->create([
+            return $user->salary()->create([
                 ConstParams::USER_ID => $user->user_id,
                 ConstParams::HOURLY_WAGE => ConstParams::HOURLY_WAGE_DEFAULT,
                 ConstParams::CREATED_BY => $user->created_by,

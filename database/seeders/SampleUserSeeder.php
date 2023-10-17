@@ -17,11 +17,11 @@ class SampleUserSeeder extends Seeder
     public function run(): void
     {
         $infos = [
-            [ConstParams::KANJI_LAST_NAME => '佐藤', ConstParams::KANJI_FIRST_NAME => '太郎', ConstParams::KANA_LAST_NAME => 'サトウ', ConstParams::KANA_FIRST_NAME => 'タロウ', ConstParams::LOGIN_ID => 'SatoTaro'],
-            [ConstParams::KANJI_LAST_NAME => '鈴木', ConstParams::KANJI_FIRST_NAME => '花子', ConstParams::KANA_LAST_NAME => 'スズキ', ConstParams::KANA_FIRST_NAME => 'ハナコ', ConstParams::LOGIN_ID => 'SuzukiHanako'],
-            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '一郎', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'イチロウ', ConstParams::LOGIN_ID => 'TakahashiIchiro'],
-            [ConstParams::KANJI_LAST_NAME => '田中', ConstParams::KANJI_FIRST_NAME => '明日香', ConstParams::KANA_LAST_NAME => 'タナカ', ConstParams::KANA_FIRST_NAME => 'アスカ', ConstParams::LOGIN_ID => 'TanakaAsuka'],
-            [ConstParams::KANJI_LAST_NAME => '山田', ConstParams::KANJI_FIRST_NAME => '直樹', ConstParams::KANA_LAST_NAME => 'ヤマダ', ConstParams::KANA_FIRST_NAME => 'ナオキ', ConstParams::LOGIN_ID => 'YamadaNaoki'],
+            [ConstParams::KANJI_LAST_NAME => '佐藤', ConstParams::KANJI_FIRST_NAME => '太郎', ConstParams::KANA_LAST_NAME => 'サトウ', ConstParams::KANA_FIRST_NAME => 'タロウ', ConstParams::LOGIN_ID => 'SatoTaro', ConstParams::HOURLY_WAGE => 1000.],
+            [ConstParams::KANJI_LAST_NAME => '鈴木', ConstParams::KANJI_FIRST_NAME => '花子', ConstParams::KANA_LAST_NAME => 'スズキ', ConstParams::KANA_FIRST_NAME => 'ハナコ', ConstParams::LOGIN_ID => 'SuzukiHanako', ConstParams::HOURLY_WAGE => 950.],
+            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '一郎', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'イチロウ', ConstParams::LOGIN_ID => 'TakahashiIchiro', ConstParams::HOURLY_WAGE => 1030.],
+            [ConstParams::KANJI_LAST_NAME => '田中', ConstParams::KANJI_FIRST_NAME => '明日香', ConstParams::KANA_LAST_NAME => 'タナカ', ConstParams::KANA_FIRST_NAME => 'アスカ', ConstParams::LOGIN_ID => 'TanakaAsuka', ConstParams::HOURLY_WAGE => 1200.],
+            [ConstParams::KANJI_LAST_NAME => '山田', ConstParams::KANJI_FIRST_NAME => '直樹', ConstParams::KANA_LAST_NAME => 'ヤマダ', ConstParams::KANA_FIRST_NAME => 'ナオキ', ConstParams::LOGIN_ID => 'YamadaNaoki', ConstParams::HOURLY_WAGE => 980.],
         ];
 
         foreach ($infos as $info) {
@@ -36,7 +36,7 @@ class SampleUserSeeder extends Seeder
                 ConstParams::CREATED_BY => 'サンプルデータとして初期登録',
                 ConstParams::UPDATED_BY => 'サンプルデータとして初期登録',
             ];
-            $this->create($data);
+            $this->create($data, $info[ConstParams::HOURLY_WAGE]);
         }
     }
 
@@ -44,10 +44,12 @@ class SampleUserSeeder extends Seeder
      * ユーザー＋関連レコードの作成
      * @return void
      */
-    private function create($data): void
+    private function create(array $data, float $hourly_wage): void
     {
         $user = User::createNewUser($data);
-        UserSalary::createForUser($user);
+        $salary = UserSalary::createForUser($user);
+        $salary->hourly_wage = $hourly_wage;
+        $salary->save();
         UserCondition::createForUser($user);
     }
 }
