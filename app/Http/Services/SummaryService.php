@@ -130,12 +130,12 @@ class SummaryService
             );
 
             $row = [
-                'name' => $finish_work_record[ConstParams::KANA_LAST_NAME] . $finish_work_record[ConstParams::KANJI_FIRST_NAME],
+                'name' => $finish_work_record[ConstParams::KANJI_LAST_NAME] . $finish_work_record[ConstParams::KANJI_FIRST_NAME],
                 'start_work_time' => $start_work_record[ConstParams::AT_RECORD_TIME],
                 'finish_work_time' => $finish_work_record[ConstParams::AT_RECORD_TIME],
                 'working_hours' => $working_time['hour'] . '時間' . $working_time['minute'] . '分',
                 'breaking_hours' => $breaking_time['hour'] . '時間' . $breaking_time['minute'] . '分',
-                'cost_of_labor' => $cost_of_labor,
+                'cost_of_labor' => $cost_of_labor . ConstParams::CURRENCY_JP,
             ];
             array_push($rows, $row);
 
@@ -150,7 +150,7 @@ class SummaryService
         $sums = [
             'working_hours' => $total_working_time['hour'] . '時間' . $total_working_time['minute'] . '分',
             'breaking_hours' => $total_breaking_time['hour'] . '時間' . $total_breaking_time['minute'] . '分',
-            'cost_of_labor' => $total_cost_of_labor,
+            'cost_of_labor' => $total_cost_of_labor . ConstParams::CURRENCY_JP,
         ];
 
         return [
