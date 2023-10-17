@@ -6,13 +6,16 @@ use App\Const\ConstParams;
 use App\Models\User;
 use App\Models\UserCondition;
 use App\Models\UserSalary;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * 管理者ユーザーとして、userデータ(user_salaryやuser_conditionを含む)をシーディング
+ */
 class AdminUserSeeder extends Seeder
 {
     /**
-     * 管理者ユーザーを作成
+     * シーディング実行
+     * @return void
      */
     public function run(): void
     {

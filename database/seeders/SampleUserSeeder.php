@@ -6,13 +6,16 @@ use App\Const\ConstParams;
 use App\Models\User;
 use App\Models\UserCondition;
 use App\Models\UserSalary;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * サンプルuserデータ(user_salaryやuser_conditionを含む)をシーディング
+ */
 class SampleUserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * シーディング実行
+     * @return void
      */
     public function run(): void
     {

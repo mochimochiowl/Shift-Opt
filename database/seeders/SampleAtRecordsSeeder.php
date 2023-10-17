@@ -7,45 +7,163 @@ use App\Models\AttendanceRecord;
 use App\Models\User;
 use DateInterval;
 use DateTime;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
+/**
+ * 23年9月1日～シーディング実行前日までのサンプルat_recordデータをシーディング
+ */
 class SampleAtRecordsSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * シーディング実行
+     * @return void
      */
     public function run(): void
     {
-        // $date_from = '2023/09/01';
-        // $date_to = '2023/09/30';
-        // $start_time_from = '09:30:00';
-        // $start_time_to = '12:30:00';
-        // $dataPerDay = 4;
-        // $working_hours_from = 6.00;
-        // $working_hours_to = 10.00;
-        $this->create('2', '2023-09-01', '09:30:48');
-        $this->create('3', '2023-09-01', '11:16:25');
-        $this->create('4', '2023-09-01', '10:00:44');
-        $this->create('5', '2023-09-01', '09:58:01');
-        $this->create('6', '2023-09-01', '12:20:13');
+        // ここでどういうデータを入れたいか定義
+        $start_date = new DateTime('2023/09/01');
+        $end_date = new DateTime(getToday());
+        $data_per_day_max = 4;
+        $data_per_day_min = 2;
+        $working_minutes_sum_max = 540;
+        $working_minutes_sum_min = 240;
+
+        //以降はいじらない
+        $interval = $start_date->diff($end_date);
+        $period = $interval->days + 1;
+
+        $datetime = clone $start_date;
+        $datetime->setTime(0, 0, 0);
+
+        //毎回名前のためにUserテーブル検索させないために配列でしまっとく
+        $name_list = [
+            '2' => User::findUserByUserId('2')->getKanjiFullName(),
+            '3' => User::findUserByUserId('3')->getKanjiFullName(),
+            '4' => User::findUserByUserId('4')->getKanjiFullName(),
+            '5' => User::findUserByUserId('5')->getKanjiFullName(),
+            '6' => User::findUserByUserId('6')->getKanjiFullName(),
+        ];
+
+        //日数分だけ繰り返す
+        for ($day = 0; $day < $period; $day++) {
+            $user_ids = ['2', '3', '4', '5', '6'];
+            shuffle($user_ids);
+
+            $data_per_day = rand($data_per_day_min, $data_per_day_max);
+
+            //1日当たりの生成データ数だけ繰り返す
+            for ($i = 0; $i < $data_per_day; $i++) {
+
+                $user_id = array_shift($user_ids);
+                $date = $datetime->format('Y-m-d');
+                $time = $this->getRandTime();
+
+                //労働時間や休憩時間を用意
+                $working_minutes = rand($working_minutes_sum_min, $working_minutes_sum_max);
+                $minutes_separated = $this->getMinutesSeparated($working_minutes);
+                $working_minutes_separated = [];
+                $breaking_minutes_separated = [];
+                if ($minutes_separated['work_1'] > 0) {
+                    array_push($working_minutes_separated, $minutes_separated['work_1']);
+                    array_push($breaking_minutes_separated, $minutes_separated['break_1']);
+                }
+                if ($minutes_separated['work_2'] > 0) {
+                    array_push($working_minutes_separated, $minutes_separated['work_2']);
+                    array_push($breaking_minutes_separated, $minutes_separated['break_2']);
+                }
+
+                $this->create(
+                    $user_id,
+                    $name_list,
+                    $date,
+                    $time,
+                    $working_minutes,
+                    $working_minutes_separated,
+                    $breaking_minutes_separated,
+                );
+            }
+
+            $datetime->modify('+1 day');
+        }
     }
 
-    private function create(string $user_id, string $date, string $time): void
+    /**
+     * データを提供する ($working_minutes_separated, $breaking_minutes_separated用)
+     * @return array
+     */
+    function getMinutesSeparated(int $working_minutes): array
     {
-        $dateTime = new DateTime($date . ' ' . $time);
-        $working_minutes = 540;
-        $working_minutes_separated = [
-            210, // 1回目の休憩前の労働時間
-            180, // 2回目の休憩前の労働時間
-        ];
-        $breaking_minutes_separated = [
-            20, // 1回目の休憩時間
-            40, // 2回目の休憩時間
-        ];
+        if ($working_minutes < 300) {
+            return [
+                'work_1' => 0,
+                'work_2' => 0,
+                'break_1' => 0,
+                'break_2' => 0,
+            ];
+        } elseif ($working_minutes < 480) {
+            return [
+                'work_1' => rand($working_minutes / 3, $working_minutes * 2 / 3),
+                'work_2' => 0,
+                'break_1' => 30,
+                'break_2' => 0,
+            ];
+        } else {
+            $randomNumber = random_int(0, 99);
 
-        $name = User::findUserByUserId($user_id)->getKanjiFullName();
+            if ($randomNumber < 60) {
+                return [
+                    'work_1' => rand($working_minutes / 3, $working_minutes * 2 / 3),
+                    'work_2' => 0,
+                    'break_1' => 60,
+                    'break_2' => 0,
+                ];
+            } else {
+                $break_1 = rand(20, 40);
+                return [
+                    'work_1' => rand($working_minutes / 3, $working_minutes / 2),
+                    'work_2' => rand($working_minutes / 4, $working_minutes / 3),
+                    'break_1' => $break_1,
+                    'break_2' => 60 - $break_1,
+                ];
+            }
+        }
+    }
+
+    /**
+     * 出勤時刻用のランダムな時刻を提供する (08:00:00~10:29:59の間)
+     * @return string
+     */
+    private function getRandTime(): string
+    {
+        $startHour = rand(8, 10);
+
+        $startMinute = ($startHour == 10) ? rand(0, 29) : rand(0, 59);
+
+        $startSecond = rand(0, 59);
+
+        $dateTime = new DateTime();
+        $dateTime->setTime($startHour, $startMinute, $startSecond);
+
+        return $dateTime->format('H:i:s');
+    }
+
+    /**
+     * 出勤から退勤まで1セッションのレコード群を作成する
+     * @return void
+     */
+    private function create(
+        string $user_id,
+        array $name_list,
+        string $date,
+        string $time,
+        int $working_minutes,
+        array $working_minutes_separated,
+        array $breaking_minutes_separated,
+    ): void {
+        $dateTime = new DateTime($date . ' ' . $time);
+
+        $name = $name_list[$user_id];
         $session_id = Str::uuid()->toString();
 
         $data =  [
@@ -88,6 +206,10 @@ class SampleAtRecordsSeeder extends Seeder
         $this->createNewRecord($data, $dateTime, ConstParams::AT_RECORD_FINISH_WORK);
     }
 
+    /**
+     * at_recordを1つ作成する
+     * @return array
+     */
     private function createNewRecord(array $data, DateTime $dateTime, string $at_record_type): void
     {
         $data =  [
@@ -108,6 +230,10 @@ class SampleAtRecordsSeeder extends Seeder
         $new_record->save();
     }
 
+    /**
+     * DateTimeの時刻を進めるためにつかうDateIntervalを作成する
+     * @return DateInterval
+     */
     private function getInterval(int $minutesToAdd): DateInterval
     {
         $hours = floor($minutesToAdd / 60);
