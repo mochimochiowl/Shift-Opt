@@ -15,8 +15,6 @@
     @else
     <p>ログインしていません</p>
     @endif
-    @component('components.dailySummary', ['data'=> ['date' => $date]])
-    @endcomponent
 @endsection
 
 @section('footer')
