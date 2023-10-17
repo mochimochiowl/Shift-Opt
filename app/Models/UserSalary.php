@@ -31,8 +31,8 @@ class UserSalary extends Model
             $user->salary()->create([
                 ConstParams::USER_ID => $user->user_id,
                 ConstParams::HOURLY_WAGE => ConstParams::HOURLY_WAGE_DEFAULT,
-                ConstParams::CREATED_BY => '新規登録',
-                ConstParams::UPDATED_BY => '新規登録',
+                ConstParams::CREATED_BY => $user->created_by,
+                ConstParams::UPDATED_BY => $user->updated_by,
             ]);
         } catch (Exception $e) {
             throw new Exception('UserSalary::createForUserでエラー : ' . $e->getMessage());

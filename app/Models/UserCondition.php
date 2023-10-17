@@ -33,8 +33,8 @@ class UserCondition extends Model
             ConstParams::USER_ID => $user->user_id,
             ConstParams::HAS_ATTENDED => false,
             ConstParams::IS_BREAKING => false,
-            ConstParams::CREATED_BY => '新規登録',
-            ConstParams::UPDATED_BY => '新規登録',
+            ConstParams::CREATED_BY => $user->created_by,
+            ConstParams::UPDATED_BY => $user->updated_by,
         ]);
     }
 

@@ -77,8 +77,8 @@ class User extends Authenticatable
                     ConstParams::EMAIL => $data[ConstParams::EMAIL],
                     ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
                     ConstParams::PASSWORD => Hash::make($data[ConstParams::PASSWORD]),
-                    ConstParams::CREATED_BY => '新規登録',
-                    ConstParams::UPDATED_BY => '新規登録',
+                    ConstParams::CREATED_BY => $data[ConstParams::CREATED_BY] ?? '新規登録',
+                    ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY] ?? '新規登録',
                 ]
             );
 

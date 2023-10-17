@@ -42,8 +42,8 @@ class AttendanceRecord extends Model
                     ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
                     ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
                     ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
-                    ConstParams::CREATED_BY => $data[ConstParams::CREATED_BY],
-                    ConstParams::UPDATED_BY => $data[ConstParams::CREATED_BY],
+                    ConstParams::CREATED_BY => $data[ConstParams::CREATED_BY] ?? '新規登録',
+                    ConstParams::UPDATED_BY => $data[ConstParams::CREATED_BY] ?? '新規登録',
                 ]
             );
 
