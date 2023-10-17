@@ -7,6 +7,7 @@ use App\Http\Controllers\UserConditionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaryController;
 use App\Http\Services\StampService;
+use App\Http\Services\SummaryService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -90,4 +91,9 @@ Route::middleware('auth')->group(function () {
     Route::get('at_records/{at_record_id}/edit/result', [AttendanceRecordController::class, 'showUpdateResult'])->name('at_records.update.result');
     Route::post('at_records/{at_record_id}/delete/confirm', [AttendanceRecordController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
     Route::get('at_records/{at_record_id}/delete/result', [AttendanceRecordController::class, 'showDestroyResult'])->name('at_records.delete.result');
+
+    // 集計画面にかかわるルート
+    Route::get('summary/index', [SummaryService::class, 'index'])->name('summary.index');
+    Route::post('summary/post', [SummaryService::class, 'post'])->name('summary.post');
+    Route::get('summary/show', [SummaryService::class, 'showSummary'])->name('summary.show');
 });

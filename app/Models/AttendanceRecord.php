@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Const\ConstParams;
+use DateTime;
 use Error;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -168,12 +169,105 @@ class AttendanceRecord extends Model
         $results = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
             ->orderBy(ConstParams::AT_RECORD_TIME, 'asc')
             ->get();
-        //resultsの中にあるat_record一つ一つに対して、dataArray()を呼びたい
+        //resultsの中にあるat_record一つ一つに対して、dataArray()を呼ぶ
         $modified_results = $results->map(function ($result) {
             return $result->dataArray();
         })->toArray();
 
         return $modified_results;
+    }
+
+    /**
+     * summaryに使用するat_recordのデータ配列を取得
+     * @return  array
+     */
+    public static function getDataForSummary(DateTime $date): array
+    {
+        /* at_session_idを取得
+            条件：at_record_dateが$dateの日
+            　　　＆at_record_typeがConstParams::AT_RECORD_START_WORK
+        */
+        $start_date = $date->format('Y-m-d'); // 年月日のみのフォーマットに変換
+        $end_date = $date->format('Y-m-d');
+
+        $query = self::whereBetween(
+            'attendance_records.' . ConstParams::AT_RECORD_DATE,
+            [$start_date, $end_date]
+        )->where(
+            'attendance_records.' . ConstParams::AT_RECORD_TYPE,
+            '=',
+            ConstParams::AT_RECORD_START_WORK
+        )->select(
+            'attendance_records.' . ConstParams::AT_SESSION_ID,
+        )->get();
+
+        $session_ids = $query->map(function ($record) {
+            return $record->at_session_id;
+        })->toArray();
+
+        $dailyAtRecordSets = [];
+
+        foreach ($session_ids as $session_id) {
+            //session_idを持つレコードをすべて取得
+            $query = self::join(
+                'users',
+                'users.' . ConstParams::USER_ID,
+                '=',
+                'attendance_records.' . ConstParams::USER_ID
+            )->where(
+                'attendance_records.' . ConstParams::AT_SESSION_ID,
+                $session_id
+            )->select(
+                'attendance_records.*',
+                'users.' . ConstParams::KANJI_LAST_NAME,
+                'users.' . ConstParams::KANJI_FIRST_NAME,
+                'users.' . ConstParams::KANA_LAST_NAME,
+                'users.' . ConstParams::KANA_FIRST_NAME,
+            );
+
+            //日付・時刻で昇順に並べ替えることで、休憩始と休憩終のレコードが正しく紐づくようにする
+            $records = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
+                ->orderBy(ConstParams::AT_RECORD_TIME, 'asc')
+                ->get();
+
+            //resultsの中にあるat_record一つ一つに対して、dataArray()を呼ぶ
+            $modified_records = $records->map(function ($record) {
+                return $record->dataArray();
+            })->toArray();
+
+            $start_work_record = null;
+            $finish_work_record = null;
+            $start_break_records = [];
+            $finish_break_records = [];
+
+            //at_record_typeで出勤、休憩開始、休憩終了、退勤に仕分け
+            foreach ($modified_records as $record) {
+                if ($record[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_START_BREAK) {
+                    array_push($start_break_records, $record);
+                } else if ($record[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_FINISH_BREAK) {
+                    array_push($finish_break_records, $record);
+                } else if ($record[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_START_WORK) {
+                    $start_work_record = $record;
+                } else {
+                    $finish_work_record = $record;
+                }
+            }
+
+            //退勤していないセッションがある場合、例外を投げる
+            if (!$finish_work_record) {
+                throw new Exception('退勤処理がされていないユーザーがいます。 user_id：' . $start_work_record[ConstParams::USER_ID] ?? '出勤レコードもないです');
+            }
+
+            $dailyAtRecordSet = [
+                'start_work_record' => $start_work_record,
+                'finish_work_record' => $finish_work_record,
+                'start_break_records' => $start_break_records,
+                'finish_break_records' => $finish_break_records,
+            ];
+
+            array_push($dailyAtRecordSets, $dailyAtRecordSet);
+        }
+        return $dailyAtRecordSets;
     }
 
     /**
