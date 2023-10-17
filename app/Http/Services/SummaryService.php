@@ -64,7 +64,7 @@ class SummaryService
 
             return redirect()->route('summary.show')->with(['data' => $data]);
         } catch (\Exception $e) {
-            return redirect()->route('top')->withErrors(['message' => 'SummaryService::generateSummaryでエラー' . $e->getMessage()])->withInput();
+            return redirect()->route('summary.show')->withErrors(['message' => 'SummaryService::generateSummaryでエラー' . $e->getMessage()])->withInput();
         }
     }
 
@@ -160,27 +160,6 @@ class SummaryService
     }
 
     /**
-     * 休憩開始と終了のレコード配列をat_record_dateとat_record_timeで昇順ソートし、開始と終了が対応するように並べる
-     * @return Integer
-     */
-    // private function sortBreakRecords(array $start_break_records, array $finish_break_records): void
-    // {
-    //     usort($start_break_records, function ($a, $b) {
-    //         if ($a['at_record_date'] === $b['at_record_date']) {
-    //             return $a['at_record_time'] <=> $b['at_record_time'];
-    //         }
-    //         return $a['at_record_date'] <=> $b['at_record_date'];
-    //     });
-
-    //     usort($finish_break_records, function ($a, $b) {
-    //         if ($a['at_record_date'] === $b['at_record_date']) {
-    //             return $a['at_record_time'] <=> $b['at_record_time'];
-    //         }
-    //         return $a['at_record_date'] <=> $b['at_record_date'];
-    //     });
-    // }
-
-    /**
      * 休憩時間を返す
      * @return int
      */
@@ -237,12 +216,13 @@ class SummaryService
     }
 
     /**
-     * 秒の時間を時間と分に変換する
+     * 人件費を算出する(小数点以下切り捨て)
      * @return float
      */
     private function calcCostOfLabor(string $user_id, array $working_time): float
     {
         $hourly_wage = User::findUserByUserId($user_id)->salary->hourly_wage;
-        return $hourly_wage * $working_time['hour'] + $hourly_wage * ($working_time['minute'] / 60);
+        $cost = $hourly_wage * $working_time['hour'] + $hourly_wage * ($working_time['minute'] / 60);
+        return floor($cost);
     }
 }

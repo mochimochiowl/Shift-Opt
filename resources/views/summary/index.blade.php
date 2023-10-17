@@ -14,7 +14,7 @@
     @csrf
     <div>
         <label for="date">日付 : </label>
-        <input type="date" name="date" id="date" value="{{old('date', getToday())}}">
+        <input type="date" name="date" id="date" value="{{$data['date'] ?? getToday()}}">
         <input type="submit" value="更新">
     </div>
 </form>
