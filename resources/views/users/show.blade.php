@@ -2,6 +2,7 @@
 @section('title', ConstParams::USER_JP . '情報詳細画面')
 @section('content')
 <div>
+    <button type="button" onclick="movePreviousPage()">戻る</button>
     <h2>{{ConstParams::USER_JP}}</h2>
     <a href="{{route('users.edit', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}">編集</a>
     @component('components.userInfo', ['user_data'=> $user_data])

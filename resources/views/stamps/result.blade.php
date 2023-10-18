@@ -2,6 +2,7 @@
 @section('title', '打刻処理成功画面')
 @section('content')
 <div>
+    <button type="button" onclick="movePreviousPage()">戻る</button>
     <p>処理に成功しました。</p>
     <p>入力されたデータ</p>
     <p>{{ConstParams::LOGIN_ID_JP}} : {{$login_id}}</p>
