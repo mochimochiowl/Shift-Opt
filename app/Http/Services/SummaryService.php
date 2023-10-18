@@ -20,7 +20,7 @@ class SummaryService
      */
     public function index(): RedirectResponse
     {
-        return $this->generateSummary('2023-10-16');
+        return $this->generateSummary(str_replace('/', '-', getToday()));
     }
 
     /**
@@ -52,7 +52,6 @@ class SummaryService
     {
         try {
             $inputDate = DateTime::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0);
-            $this->validateDate($inputDate);
 
             $recordSets = AttendanceRecord::getDataForSummary($inputDate);
             $rowsSums = $this->makeRowsSums($recordSets);
@@ -65,22 +64,6 @@ class SummaryService
             return redirect()->route('summary.show')->with(['data' => $data]);
         } catch (\Exception $e) {
             return redirect()->route('summary.show')->withErrors(['message' => 'SummaryService::generateSummaryでエラー' . $e->getMessage()])->withInput();
-        }
-    }
-
-    /**
-     * 入力された日付が今日を含め未来の日だった場合、例外を投げる
-     * @return void
-     */
-    private function validateDate(DateTime $inputDate): void
-    {
-        $today = new DateTime();
-        $today->setTime(0, 0, 0);
-
-        if ($inputDate >= $today) {
-            $yesterday = clone $today;
-            $yesterday->modify('-1 day');
-            throw new Exception($yesterday->format('Y-m-d') . '以前の日付を選択してください。');
         }
     }
 

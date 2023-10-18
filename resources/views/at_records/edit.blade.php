@@ -25,22 +25,22 @@
             <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
             <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
                 <option value="{{ConstParams::AT_RECORD_START_WORK}}" 
-                        {{ ($data->at_record_type == ConstParams::AT_RECORD_START_WORK) ? 'selected' : '' }}>
+                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_WORK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_START_WORK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_FINISH_WORK}}" 
-                        {{ ($data->at_record_type == ConstParams::AT_RECORD_FINISH_WORK) ? 'selected' : '' }}>
+                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_WORK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_FINISH_WORK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_START_BREAK}}" 
-                        {{ ($data->at_record_type == ConstParams::AT_RECORD_START_BREAK) ? 'selected' : '' }}>
+                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_BREAK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_START_BREAK_JP}}
                 </option>
         
                 <option value="{{ConstParams::AT_RECORD_FINISH_BREAK}}" 
-                        {{ ($data->at_record_type == ConstParams::AT_RECORD_FINISH_BREAK) ? 'selected' : '' }}>
+                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_BREAK) ? 'selected' : '' }}>
                     {{ConstParams::AT_RECORD_FINISH_BREAK_JP}}
                 </option>
             </select>

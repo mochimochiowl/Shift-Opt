@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Const\ConstParams;
 use DateTime;
 use Error;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -302,7 +303,7 @@ class AttendanceRecord extends Model
 
         $result = [
             'count' => $count,
-            'record' => $data,
+            'data' => $data,
         ];
 
         return $result;
