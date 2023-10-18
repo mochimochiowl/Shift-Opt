@@ -23,10 +23,16 @@
     @csrf
     <h2>検索条件選択・入力</h2>
     <div>
-        <label for="start_date">開始日:</label>
-        <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
-        <label for="end_date">終了日:</label>
-        <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
+        <div>
+            <label for="start_date">開始日:</label>
+            <button type="button" onclick="setStartOfMonth()">今月初</button>
+            <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
+        </div>
+        <div>
+            <label for="end_date">終了日:</label>
+            <button type="button" onclick="setEndOfMonth()">今月末</button>
+            <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
+        </div>
     </div>
     <div>
         <label>

@@ -13,8 +13,9 @@
 <form action="{{route('summary.post')}}" method="POST">
     @csrf
     <div>
-        <label for="date">日付 : </label>
+        <button type="button" onclick="setPreviousDay()">前日</button>
         <input type="date" name="date" id="date" value="{{$data['date'] ?? getToday()}}">
+        <button type="button" onclick="setNextDay()">翌日</button>
         <input type="submit" value="更新">
     </div>
 </form>
