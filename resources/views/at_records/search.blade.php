@@ -73,10 +73,56 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                 ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
             </th>
-            <th>{{ConstParams::AT_SESSION_ID_JP}}</th>
-            <th>{{ConstParams::USER_ID_JP}}</th>
-            <th>名前</th>
-            <th>なまえ</th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::USER_ID, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::USER_ID_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::KANJI_LAST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::KANJI_FIRST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::KANA_LAST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::KANA_FIRST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
+            </th>
             <th>
                 <a href="{{route('at_records.search.reorder', [
                 'start_date' => $search_requirements['start_date'],
@@ -115,10 +161,11 @@
     @foreach ($results as $result)
         <tr>
             <td>{{$result[ConstParams::AT_RECORD_ID]}}</td>
-            <td>{{$result[ConstParams::AT_SESSION_ID]}}</td>
             <td>{{$result[ConstParams::USER_ID]}}</td>
-            <td>{{$result[ConstParams::KANJI_LAST_NAME]}} {{$result[ConstParams::KANJI_FIRST_NAME]}}</td>
-            <td>{{$result[ConstParams::KANA_LAST_NAME]}} {{$result[ConstParams::KANA_FIRST_NAME]}}</td>
+            <td>{{$result[ConstParams::KANJI_LAST_NAME]}}</td>
+            <td>{{$result[ConstParams::KANJI_FIRST_NAME]}}</td>
+            <td>{{$result[ConstParams::KANA_LAST_NAME]}}</td>
+            <td>{{$result[ConstParams::KANA_FIRST_NAME]}}</td>
             <td>{{$result[ConstParams::AT_RECORD_TYPE_TRANSLATED]}}</td>
             <td>{{$result[ConstParams::AT_RECORD_DATE]}}</td>
             <td>{{$result[ConstParams::AT_RECORD_TIME]}}</td>
