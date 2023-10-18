@@ -98,19 +98,56 @@ class SearchController extends Controller
      */
     public function showAtRecordsResult(SearchAtRecordsRequest $request): View
     {
-        $search_requirements = $request->validated();
+        $search_field = $request->input('search_field');
+        $keyword = $request->input('keyword') ?? 'empty';
+        if ($search_field === 'all') {
+            $keyword = 'all';
+        }
+        $search_requirements = [
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'search_field' => $search_field,
+            'keyword' => $keyword,
+            'column' => 'datetime',
+            'order' => 'asc',
+        ];
 
         $results = $this->searchAtRecords($search_requirements, true);
 
-        $messages = $request->messages ?? null;
-
-        $search_requirements['search_field'] = $this->getFieldNameJP($search_requirements['search_field']);
+        $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
 
         $default_dates = $this->defaultDates();
 
         return view('at_records/search', [
             'results' => $results,
-            'messages' => $messages,
+            'search_requirements' => $search_requirements,
+            'default_dates' => $default_dates,
+        ]);
+    }
+
+    /**
+     * at_recordsテーブル 指定のカラムで昇順降順の並べ替えを実施した検索画面を返す
+     * @return View
+     */
+    public function showReorderedAtRecordsResult($start_date, $end_date, $search_field, $keyword, $column, $order): View
+    {
+        $search_requirements = [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'search_field' => $search_field,
+            'keyword' => $keyword,
+            'column' => $column,
+            'order' => $order,
+        ];
+
+        $results = $this->searchAtRecords($search_requirements, true);
+
+        $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
+
+        $default_dates = $this->defaultDates();
+
+        return view('at_records/search', [
+            'results' => $results,
             'search_requirements' => $search_requirements,
             'default_dates' => $default_dates,
         ]);
@@ -122,7 +159,14 @@ class SearchController extends Controller
     public function exportAtRecordCsv(SearchAtRecordsRequest $request)
     {
         //検索
-        $data = $request->validated();
+        $data = [
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'search_field' => $request->input('search_field'),
+            'keyword' => $request->input('keyword'),
+            'column' => 'datetime',
+            'order' => 'asc',
+        ];
         $results = $this->searchAtRecords($data, true);
 
         $headers = [

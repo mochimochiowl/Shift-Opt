@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     // 検索にかかわるルート
     Route::get('at_records/search', [SearchController::class, 'showAtRecordsSearchView'])->name('at_records.search');
     Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
+    Route::get('at_records/search/{start_date}/{end_date}/{search_field}/{keyword}/{column}/{order}', [SearchController::class, 'showReorderedAtRecordsResult'])->name('at_records.search.reorder');
 
     // CSV出力
     Route::post('at_records/export-csv', [SearchController::class, 'exportAtRecordCsv'])->name('at_records.exportCsv');

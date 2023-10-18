@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AttendanceRecord extends Model
 {
@@ -100,14 +101,16 @@ class AttendanceRecord extends Model
 
     /**
      * 条件を満たすat_recordオブジェクトの配列を取得
-     * @return  array
+     * @return  LengthAwarePaginator|array
      */
-    public static function search(array $data): array
+    public static function search(array $data, bool $asArray): LengthAwarePaginator | array
     {
-        $search_field = $data['search_field'];
-        $keyword = $data['keyword'];
         $start_date = $data['start_date'];
         $end_date = $data['end_date'];
+        $search_field = $data['search_field'];
+        $keyword = $data['keyword'];
+        $column = $data['column'];
+        $order = $data['order'];
 
         if ($search_field === 'all') {
             $query = self::join(
@@ -165,16 +168,25 @@ class AttendanceRecord extends Model
                 );
         }
 
-        //日時、時刻で昇順並べ替え
-        $results = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
-            ->orderBy(ConstParams::AT_RECORD_TIME, 'asc')
-            ->get();
-        //resultsの中にあるat_record一つ一つに対して、dataArray()を呼ぶ
-        $modified_results = $results->map(function ($result) {
-            return $result->dataArray();
-        })->toArray();
+        //日時、時刻で昇順並べ替え (指定があればその指定に従う)
+        if ($column === 'datetime') {
+            $ordered_query = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
+                ->orderBy(ConstParams::AT_RECORD_TIME, 'asc');
+        } else {
+            $ordered_query = $query->orderBy($column, $order);
+        }
 
-        return $modified_results;
+
+        if ($asArray) {
+            $results = $ordered_query->get();
+            //resultsの中にあるat_record一つ一つに対して、dataArray()を呼ぶ
+            $array = $results->map(function ($result) {
+                return $result->dataArray();
+            })->toArray();
+            return $array;
+        }
+
+        return $ordered_query->paginate(25);
     }
 
     /**

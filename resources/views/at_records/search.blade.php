@@ -1,15 +1,6 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '検索画面')
 @section('content')
-@if ($messages)
-<div class="alert alert-success">
-    <ul>
-        @foreach ($messages->all() as $message)
-            <li>{{$message->type}} : {{$message->text}}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 @if ($errors->any())
 <div class="alert alert-danger">
     <ul>
@@ -62,7 +53,7 @@
 @if ($results)
 <h2>検索ワード</h2>
 <div>
-    <p>検索種類   : {{$search_requirements['search_field']}}</p>
+    <p>検索種類   : {{$search_requirements['search_field_jp']}}</p>
     <p>検索ワード : {{$search_requirements['keyword']}}</p>
     <p>開始日　　 : {{$search_requirements['start_date']}}</p>
     <p>終了日　　 : {{$search_requirements['end_date']}}</p>
@@ -72,14 +63,50 @@
 <table>
     <thead>
         <tr>
-            <th>{{ConstParams::AT_RECORD_ID_JP}}</th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::AT_RECORD_ID, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
+            </th>
             <th>{{ConstParams::AT_SESSION_ID_JP}}</th>
             <th>{{ConstParams::USER_ID_JP}}</th>
             <th>名前</th>
             <th>なまえ</th>
-            <th>{{ConstParams::AT_RECORD_TYPE_JP}}</th>
-            <th>{{ConstParams::AT_RECORD_DATE_JP}}</th>
-            <th>{{ConstParams::AT_RECORD_TIME_JP}}</th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::AT_RECORD_TYPE, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::AT_RECORD_DATE, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('at_records.search.reorder', [
+                'start_date' => $search_requirements['start_date'],
+                'end_date' => $search_requirements['end_date'],
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
+                'column' => ConstParams::AT_RECORD_TIME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
+            </th>
             <th>詳細</th>
             <th>編集</th>
         </tr>
