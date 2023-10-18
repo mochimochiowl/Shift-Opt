@@ -48,9 +48,46 @@
 <table>
     <thead>
         <tr>
-            <th>{{ConstParams::USER_ID_JP}}</th>
-            <th>{{ConstParams::KANJI_LAST_NAME_JP}}</th>
-            <th>{{ConstParams::KANJI_FIRST_NAME_JP}}</th>
+            <th>
+                <a href="{{route('users.search.reorder', [
+                'search_field' => $search_field, 
+                'keyword' => $keyword, 
+                'column' => ConstParams::USER_ID, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
+                ])}}">{{ConstParams::USER_ID_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('users.search.reorder', [
+                'search_field' => $search_field, 
+                'keyword' => $keyword, 
+                'column' => ConstParams::KANJI_LAST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
+                ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('users.search.reorder', [
+                'search_field' => $search_field, 
+                'keyword' => $keyword, 
+                'column' => ConstParams::KANJI_FIRST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
+                ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('users.search.reorder', [
+                'search_field' => $search_field, 
+                'keyword' => $keyword, 
+                'column' => ConstParams::KANA_LAST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
+                ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
+            </th>
+            <th>
+                <a href="{{route('users.search.reorder', [
+                'search_field' => $search_field, 
+                'keyword' => $keyword, 
+                'column' => ConstParams::KANA_FIRST_NAME, 
+                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
+                ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
+            </th>
             <th>詳細</th>
         </tr>
     </thead>
@@ -60,6 +97,8 @@
             <td>{{$result->user_id}}</td>
             <td>{{$result->kanji_last_name}}</td>
             <td>{{$result->kanji_first_name}}</td>
+            <td>{{$result->kana_last_name}}</td>
+            <td>{{$result->kana_first_name}}</td>
             <td>
                 <a href="{{route('users.show', [ConstParams::USER_ID => $result->user_id])}}">詳細</a>
             </td>

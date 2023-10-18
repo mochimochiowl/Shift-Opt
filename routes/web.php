@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     // 検索にかかわるルート
     Route::get('users/search', [SearchController::class, 'showUsersSearchView'])->name('users.search');
     Route::post('users/search', [SearchController::class, 'showUsersResult'])->name('users.search.result');
+    Route::get('users/search/{search_field}/{keyword}/{column}/{order}', [SearchController::class, 'showReorderedUsersResult'])->name('users.search.reorder');
 
     // 情報操作にかかわるルート
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');

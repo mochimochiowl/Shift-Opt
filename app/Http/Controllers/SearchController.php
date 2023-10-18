@@ -9,6 +9,7 @@ use App\Models\AttendanceRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
@@ -23,6 +24,8 @@ class SearchController extends Controller
         $results = null;
         return view('users/search', [
             'results' => $results,
+            'search_field' => '',
+            'keyword' => '',
         ]);
     }
 
@@ -32,11 +35,35 @@ class SearchController extends Controller
      */
     public function showUsersResult(SearchUserRequest $request): View
     {
-        $results = $this->searchUsers($request);
+        $search_field = $request->input('search_field');
+        $keyword = $request->input('keyword') ?? 'empty';
+        if ($search_field === 'all') {
+            $keyword = 'all';
+        }
+        $results = $this->searchUsers(
+            $search_field,
+            $keyword,
+            ConstParams::USER_ID,
+            'asc',
+        );
+        return view('users/search', [
+            'search_field' => $search_field,
+            'keyword' => $keyword,
+            'results' => $results,
+        ]);
+    }
+
+    /**
+     * Userテーブル 指定のカラムで昇順降順の並べ替えを実施した検索画面を返す
+     * @return View
+     */
+    public function showReorderedUsersResult($search_field, $keyword, $column, $order): View
+    {
+        $results = $this->searchUsers($search_field, $keyword, $column, $order);
         return view('users/search', [
             'results' => $results,
-            'search_field' => $this->getFieldNameJP($request->search_field),
-            'keyword' => $request->keyword,
+            'search_field' => $search_field,
+            'keyword' => $keyword,
         ]);
     }
 
@@ -44,10 +71,9 @@ class SearchController extends Controller
      * Userテーブル内を検索する
      * @return Collection
      */
-    private function searchUsers(Request $request): Collection
+    private function searchUsers($search_field, $keyword, $column, $order): Collection
     {
-        $keyword = $request->keyword ?? '';
-        return User::searchByKeyword($request->search_field, $keyword);
+        return User::searchByKeyword($search_field, $keyword, $column, $order);
     }
 
     /**
@@ -74,7 +100,7 @@ class SearchController extends Controller
     {
         $search_requirements = $request->validated();
 
-        $results = $this->searchAtRecords($search_requirements);
+        $results = $this->searchAtRecords($search_requirements, true);
 
         $messages = $request->messages ?? null;
 
@@ -97,7 +123,7 @@ class SearchController extends Controller
     {
         //検索
         $data = $request->validated();
-        $results = $this->searchAtRecords($data);
+        $results = $this->searchAtRecords($data, true);
 
         $headers = [
             'Content-Type' => 'text/csv',
@@ -143,11 +169,11 @@ class SearchController extends Controller
 
     /**
      * at_recordsテーブル内を検索する
-     * @return array
+     * @return LengthAwarePaginator|array
      */
-    private function searchAtRecords(array $data): array
+    private function searchAtRecords(array $data, bool $asArray): LengthAwarePaginator | array
     {
-        return AttendanceRecord::search($data);
+        return AttendanceRecord::search($data, $asArray);
     }
 
     /**

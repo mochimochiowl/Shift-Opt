@@ -148,7 +148,7 @@ class User extends Authenticatable
      * 条件を満たすUserオブジェクトの配列を取得
      * @return  Collection
      */
-    public static function searchByKeyword(string $field, string $keyword): Collection
+    public static function searchByKeyword(string $field, string $keyword, string $column, string $order): Collection
     {
         $query = self::query();
 
@@ -164,7 +164,7 @@ class User extends Authenticatable
         }
 
         //ユーザーIDで昇順並べ替え
-        $results = $query->orderBy(ConstParams::USER_ID, 'asc')->get();
+        $results = $query->orderBy($column, $order)->get();
         return $results;
     }
 
