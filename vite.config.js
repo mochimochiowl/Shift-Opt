@@ -26,5 +26,14 @@ export default defineConfig({
                 assetFileNames: `[name].[ext]`
             },
         }
+    },
+    server: {
+        host: true,
+        hmr: {
+            host: 'localhost'
+        },
+        watch: {
+            usePolling: true
+        }
     }
 });

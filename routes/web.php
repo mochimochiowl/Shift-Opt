@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//デバッグ用
+Route::view('debug/css', 'debug.index')->name('css.debug');
+
 // トップページのルート
 Route::get('/', [TopController::class, 'get'])->name('top');
 Route::post('/', [TopController::class, 'post'])->name('top.post');
