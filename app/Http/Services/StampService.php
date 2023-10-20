@@ -86,10 +86,9 @@ class StampService
         try {
             return DB::transaction(function () use ($data) {
                 $target_user = User::findUserByLoginId($data['target_login_id']);
-
                 $user_condition = UserCondition::where('user_id', $target_user->user_id)->first();
                 if (!$user_condition) {
-                    throw new Exception('ユーザーコンディションデータが見つかりません login_id: ' . $target_user->login_id . ' user_id:' . $target_user->user_id);
+                    throw new Exception('データが見つかりません。[UserCondition]');
                 }
                 $user_condition->validateConditions($target_user, $data[ConstParams::AT_RECORD_TYPE]);
 

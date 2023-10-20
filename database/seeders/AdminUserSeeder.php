@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UserCondition;
 use App\Models\UserSalary;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 /**
  * 管理者ユーザーとして、userデータ(user_salaryやuser_conditionを含む)をシーディング

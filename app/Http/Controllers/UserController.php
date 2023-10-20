@@ -173,13 +173,20 @@ class UserController extends Controller
 
     /**
      * ユーザー削除処理の前の確認画面を返す
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function confirmDestroy(Request $request): View
+    public function confirmDestroy(Request $request): View | RedirectResponse
     {
-        $user = User::where('user_id', $request->user_id)->first();
-        $user_data = $user->dataArray();
-        return view('users.confirmDestroy', ['user_data' => $user_data]);
+        try {
+            $user = User::where('user_id', $request->user_id)->first();
+            $user_data = $user->dataArray();
+            if ($user_data[ConstParams::IS_ADMIN]) {
+                throw new Exception(ConstParams::ADMIN_JP . 'を削除することはできません。');
+            }
+            return view('users.confirmDestroy', ['user_data' => $user_data]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
