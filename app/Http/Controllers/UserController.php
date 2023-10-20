@@ -141,6 +141,7 @@ class UserController extends Controller
                     ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
                     ConstParams::EMAIL => $data[ConstParams::EMAIL],
                     ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                    ConstParams::IS_ADMIN => $data[ConstParams::IS_ADMIN],
                     ConstParams::UPDATED_BY => $updated_by,
                 ];
                 $result = User::updateInfo($data);

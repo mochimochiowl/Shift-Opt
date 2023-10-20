@@ -29,6 +29,7 @@ class UserUpdateRequest extends FormRequest
             ConstParams::KANA_FIRST_NAME => 'required',
             ConstParams::EMAIL => 'required|email',
             ConstParams::LOGIN_ID => 'required',
+            ConstParams::IS_ADMIN => 'required',
         ];
     }
 
@@ -57,6 +58,7 @@ class UserUpdateRequest extends FormRequest
             ConstParams::KANA_FIRST_NAME => ConstParams::KANA_FIRST_NAME_JP,
             ConstParams::EMAIL => ConstParams::EMAIL_JP,
             ConstParams::LOGIN_ID => ConstParams::LOGIN_ID_JP,
+            ConstParams::IS_ADMIN => ConstParams::IS_ADMIN_JP,
         ];
     }
 }

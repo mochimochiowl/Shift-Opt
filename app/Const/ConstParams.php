@@ -52,6 +52,7 @@ class ConstParams
     const EMAIL_VERIFIED_AT = 'email_verified_at';
     const LOGIN_ID = 'login_id';
     const PASSWORD = 'password';
+    const IS_ADMIN = 'is_admin';
     const REMEMBER_TOKEN = 'remember_token';
 
     //DB user_salariesテーブルのカラムの項目名を定義
@@ -88,6 +89,9 @@ class ConstParams
     const EMAIL_VERIFIED_AT_JP = 'メールアドレス最終認証日時';
     const LOGIN_ID_JP = 'ログインID';
     const PASSWORD_JP = 'パスワード';
+    const IS_ADMIN_JP = '管理者かどうか';
+    const ADMIN_JP = '管理者';
+    const NOT_ADMIN_JP = 'スタッフ';
 
     //DB user_salariesテーブルのカラムの表示名を定義
     const USER_SALARY_JP = '時給データ';

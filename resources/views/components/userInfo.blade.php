@@ -39,6 +39,10 @@
             <td>{{$user_data[ConstParams::LOGIN_ID]}}</td>
         </tr>
         <tr>
+            <td>{{ConstParams::IS_ADMIN_JP}}</td>
+            <td>{{$user_data[ConstParams::IS_ADMIN] ? ConstParams::ADMIN_JP : ConstParams::NOT_ADMIN_JP}}</td>
+        </tr>
+        <tr>
             <td>{{ConstParams::CREATED_AT_JP}}</td>
             <td>{{$user_data[ConstParams::CREATED_AT]}}</td>
         </tr>

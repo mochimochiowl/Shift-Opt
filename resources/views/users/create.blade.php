@@ -69,6 +69,14 @@
             </div>
         </div>
         <div>
+            <label>
+                <input type="radio" name="{{ConstParams::IS_ADMIN}}" value="true">{{ConstParams::ADMIN_JP}}
+            </label>
+            <label>
+                <input type="radio" name="{{ConstParams::IS_ADMIN}}" value="false" checked>{{ConstParams::NOT_ADMIN_JP}}
+            </label>
+        </div>
+        <div>
             <button type="submit">送信</button>
         </div>
     </form>

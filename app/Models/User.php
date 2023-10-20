@@ -33,6 +33,7 @@ class User extends Authenticatable
         ConstParams::EMAIL,
         ConstParams::LOGIN_ID,
         ConstParams::PASSWORD,
+        ConstParams::IS_ADMIN,
         ConstParams::CREATED_AT,
         ConstParams::UPDATED_AT,
         ConstParams::CREATED_BY,
@@ -68,6 +69,7 @@ class User extends Authenticatable
      */
     public static function createNewUser(array $data): User
     {
+        $is_admin = $data[ConstParams::IS_ADMIN] === "true" ? true : false;
         try {
             $user = self::query()->create(
                 [
@@ -78,6 +80,7 @@ class User extends Authenticatable
                     ConstParams::EMAIL => $data[ConstParams::EMAIL],
                     ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
                     ConstParams::PASSWORD => Hash::make($data[ConstParams::PASSWORD]),
+                    ConstParams::IS_ADMIN => $is_admin,
                     ConstParams::CREATED_BY => $data[ConstParams::CREATED_BY] ?? '新規登録',
                     ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY] ?? '新規登録',
                 ]
@@ -104,6 +107,7 @@ class User extends Authenticatable
                     ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
                     ConstParams::EMAIL => $data[ConstParams::EMAIL],
                     ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+                    ConstParams::IS_ADMIN => $data[ConstParams::IS_ADMIN],
                     ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
                 ]
             );
@@ -185,6 +189,7 @@ class User extends Authenticatable
             ConstParams::EMAIL => $this->email,
             ConstParams::EMAIL_VERIFIED_AT => $this->email_verified_at,
             ConstParams::LOGIN_ID => $this->login_id,
+            ConstParams::IS_ADMIN => $this->is_admin,
             ConstParams::CREATED_AT => $this->created_at,
             ConstParams::UPDATED_AT => $this->updated_at,
             ConstParams::CREATED_BY => $this->created_by,
@@ -237,5 +242,10 @@ class User extends Authenticatable
     public function getKanaFullName(): string
     {
         return $this->kana_last_name . ' ' . $this->kana_first_name;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
     }
 }

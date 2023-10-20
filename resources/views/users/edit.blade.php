@@ -48,6 +48,14 @@
         <span>{{ConstParams::PASSWORD_JP}}はここでは変更できません。</span>
     </div>
     <div>
+        <label>
+            <input type="radio" name="{{ConstParams::IS_ADMIN}}" value="true" {{ $user_data[ConstParams::IS_ADMIN] ? 'checked' : '' }}> {{ConstParams::ADMIN_JP}}
+        </label>
+        <label>
+            <input type="radio" name="{{ConstParams::IS_ADMIN}}" value="false" {{ $user_data[ConstParams::IS_ADMIN] ? '' : 'checked' }}> {{ConstParams::NOT_ADMIN_JP}}
+        </label>
+    </div>
+    <div>
         <span>{{ConstParams::CREATED_AT_JP}} : {{$user_data[ConstParams::CREATED_AT]}}</span>
     </div>
     <div>

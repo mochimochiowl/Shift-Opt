@@ -20,9 +20,9 @@ class SampleUserSeeder extends Seeder
     public function run(): void
     {
         $infos = [
-            [ConstParams::KANJI_LAST_NAME => '佐藤', ConstParams::KANJI_FIRST_NAME => '太郎', ConstParams::KANA_LAST_NAME => 'サトウ', ConstParams::KANA_FIRST_NAME => 'タロウ', ConstParams::LOGIN_ID => 'SatoTaro', ConstParams::HOURLY_WAGE => 1000.],
+            [ConstParams::KANJI_LAST_NAME => '河合', ConstParams::KANJI_FIRST_NAME => '有栖', ConstParams::KANA_LAST_NAME => 'カワイ', ConstParams::KANA_FIRST_NAME => 'アリス', ConstParams::LOGIN_ID => 'KawaiArisu', ConstParams::HOURLY_WAGE => 1000.],
             [ConstParams::KANJI_LAST_NAME => '鈴木', ConstParams::KANJI_FIRST_NAME => '花子', ConstParams::KANA_LAST_NAME => 'スズキ', ConstParams::KANA_FIRST_NAME => 'ハナコ', ConstParams::LOGIN_ID => 'SuzukiHanako', ConstParams::HOURLY_WAGE => 950.],
-            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '一郎', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'イチロウ', ConstParams::LOGIN_ID => 'TakahashiIchiro', ConstParams::HOURLY_WAGE => 1030.],
+            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '洋平', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'ヨウヘイ', ConstParams::LOGIN_ID => 'TakahashiYohei', ConstParams::HOURLY_WAGE => 1030.],
             [ConstParams::KANJI_LAST_NAME => '田中', ConstParams::KANJI_FIRST_NAME => '明日香', ConstParams::KANA_LAST_NAME => 'タナカ', ConstParams::KANA_FIRST_NAME => 'アスカ', ConstParams::LOGIN_ID => 'TanakaAsuka', ConstParams::HOURLY_WAGE => 1200.],
             [ConstParams::KANJI_LAST_NAME => '山田', ConstParams::KANJI_FIRST_NAME => '直樹', ConstParams::KANA_LAST_NAME => 'ヤマダ', ConstParams::KANA_FIRST_NAME => 'ナオキ', ConstParams::LOGIN_ID => 'YamadaNaoki', ConstParams::HOURLY_WAGE => 980.],
         ];
@@ -36,6 +36,7 @@ class SampleUserSeeder extends Seeder
                 ConstParams::EMAIL => $info[ConstParams::LOGIN_ID] . '@fakeEmailAddress.jp',
                 ConstParams::LOGIN_ID => $info[ConstParams::LOGIN_ID],
                 ConstParams::PASSWORD => 'samplePassword',
+                ConstParams::IS_ADMIN => false,
                 ConstParams::CREATED_BY => 'サンプルデータとして初期登録',
                 ConstParams::UPDATED_BY => 'サンプルデータとして初期登録',
             ];

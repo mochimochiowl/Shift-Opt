@@ -33,6 +33,7 @@ class UserStoreRequest extends FormRequest
             ConstParams::EMAIL => 'required|email',
             ConstParams::LOGIN_ID => 'required',
             ConstParams::PASSWORD => 'required',
+            ConstParams::IS_ADMIN => 'required',
         ];
     }
 
@@ -62,6 +63,7 @@ class UserStoreRequest extends FormRequest
             ConstParams::EMAIL => ConstParams::EMAIL_JP,
             ConstParams::LOGIN_ID => ConstParams::LOGIN_ID_JP,
             ConstParams::PASSWORD => ConstParams::PASSWORD_JP,
+            ConstParams::IS_ADMIN => ConstParams::IS_ADMIN_JP,
         ];
     }
 }

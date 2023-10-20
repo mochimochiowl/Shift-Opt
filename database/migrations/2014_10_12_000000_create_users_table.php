@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp(ConstParams::EMAIL_VERIFIED_AT)->nullable();
             $table->string(ConstParams::LOGIN_ID, ConstParams::LOGIN_ID_CHAR_LIMIT)->unique();
             $table->string(ConstParams::PASSWORD);
+            $table->boolean(ConstParams::IS_ADMIN);
             $table->rememberToken();
             $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
