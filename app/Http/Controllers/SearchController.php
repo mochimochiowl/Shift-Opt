@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\SearchAtRecordsRequest;
-use App\Http\Requests\SearchUserRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,60 +18,47 @@ class SearchController extends Controller
      * Userテーブル 検索画面を返す
      * @return View
      */
-    public function showUsersSearchView(Request $request): View
+    public function showUsers(Request $request): View
     {
-        $results = null;
-        return view('users/search', [
-            'results' => $results,
-            'search_field' => '',
-            'keyword' => '',
-        ]);
-    }
-
-    /**
-     * Userテーブル 検索結果を含んだ検索画面を返す
-     * @return View
-     */
-    public function showUsersResult(SearchUserRequest $request): View
-    {
-        $search_field = $request->input('search_field');
-        $keyword = $request->input('keyword') ?? 'empty';
-        if ($search_field === 'all') {
-            $keyword = 'all';
+        if (!$request->input('column')) { //検索画面を開いたとき
+            $results = null;
+            $search_requirements = [
+                'search_field' => null,
+                'keyword' => null,
+                'column' => null,
+                'order' => null,
+                'search_field_jp' => null,
+            ];
+        } else { //検索を実行したとき
+            $search_field = $request->input('search_field');
+            $keyword = $request->input('keyword');
+            $search_requirements = [
+                'search_field' => $search_field,
+                'keyword' => $keyword,
+                'column' => $request->input('column') ?? ConstParams::USER_ID,
+                'order' => $request->input('order') ?? 'asc',
+                'search_field_jp' => $this->getFieldNameJP($search_field),
+            ];
+            $results = $this->searchUsers($search_requirements);
         }
-        $results = $this->searchUsers(
-            $search_field,
-            $keyword,
-            ConstParams::USER_ID,
-            'asc',
-        );
-        return view('users/search', [
-            'search_field' => $search_field,
-            'keyword' => $keyword,
-            'results' => $results,
-        ]);
-    }
 
-    /**
-     * Userテーブル 指定のカラムで昇順降順の並べ替えを実施した検索画面を返す
-     * @return View
-     */
-    public function showReorderedUsersResult($search_field, $keyword, $column, $order): View
-    {
-        $results = $this->searchUsers($search_field, $keyword, $column, $order);
         return view('users/search', [
             'results' => $results,
-            'search_field' => $search_field,
-            'keyword' => $keyword,
+            'search_requirements' => $search_requirements,
         ]);
     }
 
     /**
      * Userテーブル内を検索する
-     * @return Collection
+     * @return LengthAwarePaginator
      */
-    private function searchUsers($search_field, $keyword, $column, $order): Collection
+    private function searchUsers(array $search_requirements): LengthAwarePaginator
     {
+        $search_field = $search_requirements['search_field'];
+        $keyword = $search_requirements['keyword'] ?? '_';
+        $column = $search_requirements['column'];
+        $order = $search_requirements['order'];
+
         return User::searchByKeyword($search_field, $keyword, $column, $order);
     }
 
@@ -80,72 +66,40 @@ class SearchController extends Controller
      * at_recordsテーブル 検索画面を返す
      * @return View
      */
-    public function showAtRecordsSearchView(Request $request): View
+    public function showAtRecords(Request $request): View
     {
-        $results = null;
-        $messages = $request->messages ?? null;
-        $default_dates = $this->defaultDates();
-        return view('at_records/search', [
-            'results' => $results,
-            'messages' => $messages,
-            'default_dates' => $default_dates,
-        ]);
-    }
+        if (!$request->input('column')) { //検索画面を開いたとき
+            $results = null;
+            $search_requirements = [
+                'start_date' => null,
+                'end_date' => null,
+                'search_field' => null,
+                'keyword' => null,
+                'column' => null,
+                'order' => null,
+                'search_field_jp' => null,
+            ];
+        } else { //検索を実行したとき
+            $search_field = $request->input('search_field') ?? 'all';
+            $keyword = $request->input('keyword') ?? 'empty';
+            if ($search_field === 'all') {
+                $keyword = 'all';
+            }
+            $search_requirements = [
+                'start_date' => $request->input('start_date'),
+                'end_date' => $request->input('end_date'),
+                'search_field' => $search_field,
+                'keyword' => $keyword,
+                'column' => $request->input('column'),
+                'order' => $request->input('order'),
+            ];
 
-    /**
-     * at_recordsテーブル 検索結果を含んだ検索画面を返す
-     * @return View
-     */
-    public function showAtRecordsResult(SearchAtRecordsRequest $request): View
-    {
-        $search_field = $request->input('search_field');
-        $keyword = $request->input('keyword') ?? 'empty';
-        if ($search_field === 'all') {
-            $keyword = 'all';
+            $results = $this->searchAtRecords($search_requirements, false);
+
+            $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
         }
-        $search_requirements = [
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'search_field' => $search_field,
-            'keyword' => $keyword,
-            'column' => 'datetime',
-            'order' => 'asc',
-        ];
-
-        $results = $this->searchAtRecords($search_requirements, true);
-
-        $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
 
         $default_dates = $this->defaultDates();
-
-        return view('at_records/search', [
-            'results' => $results,
-            'search_requirements' => $search_requirements,
-            'default_dates' => $default_dates,
-        ]);
-    }
-
-    /**
-     * at_recordsテーブル 指定のカラムで昇順降順の並べ替えを実施した検索画面を返す
-     * @return View
-     */
-    public function showReorderedAtRecordsResult($start_date, $end_date, $search_field, $keyword, $column, $order): View
-    {
-        $search_requirements = [
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'search_field' => $search_field,
-            'keyword' => $keyword,
-            'column' => $column,
-            'order' => $order,
-        ];
-
-        $results = $this->searchAtRecords($search_requirements, true);
-
-        $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
-
-        $default_dates = $this->defaultDates();
-
         return view('at_records/search', [
             'results' => $results,
             'search_requirements' => $search_requirements,
@@ -156,7 +110,7 @@ class SearchController extends Controller
     /**
      * 検索条件に基づく at_recordsテーブル 検索結果 をCSV出力する
      */
-    public function exportAtRecordCsv(SearchAtRecordsRequest $request)
+    public function exportAtRecordCsv(Request $request)
     {
         //検索
         $data = [
@@ -164,8 +118,8 @@ class SearchController extends Controller
             'end_date' => $request->input('end_date'),
             'search_field' => $request->input('search_field'),
             'keyword' => $request->input('keyword'),
-            'column' => 'datetime',
-            'order' => 'asc',
+            'column' => $request->input('column'),
+            'order' => $request->input('order'),
         ];
         $results = $this->searchAtRecords($data, true);
 

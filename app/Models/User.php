@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
@@ -146,9 +147,9 @@ class User extends Authenticatable
 
     /**
      * 条件を満たすUserオブジェクトの配列を取得
-     * @return  Collection
+     * @return  LengthAwarePaginator
      */
-    public static function searchByKeyword(string $field, string $keyword, string $column, string $order): Collection
+    public static function searchByKeyword(string $field, string $keyword, string $column, string $order): LengthAwarePaginator
     {
         $query = self::query();
 
@@ -164,7 +165,7 @@ class User extends Authenticatable
         }
 
         //ユーザーIDで昇順並べ替え
-        $results = $query->orderBy($column, $order)->get();
+        $results = $query->orderBy($column, $order)->paginate(ConstParams::USERS_PAGINATION_LIMIT);
         return $results;
     }
 

@@ -10,18 +10,17 @@
     </ul>
 </div>
 @endif
-<form action="{{route('users.search.result')}}" method="post">
-    @csrf
-    <h2>検索条件選択・入力</h2>
+<form action="{{route('users.search')}}" method="get">
+    <h2>検索条件</h2>
     <div>
         <label>
             <input type="radio" name="search_field" value="all" checked> 全件表示
         </label>
         <label>
-            <input type="radio" name="search_field" value="user_id" required> {{ConstParams::USER_ID_JP}}
+            <input type="radio" name="search_field" value="user_id"> {{ConstParams::USER_ID_JP}}
         </label>
         <label>
-            <input type="radio" name="search_field" value="login_id" required> {{ConstParams::LOGIN_ID_JP}}
+            <input type="radio" name="search_field" value="login_id"> {{ConstParams::LOGIN_ID_JP}}
         </label>
         <label>
             <input type="radio" name="search_field" value="name"> 名前（漢字・かな）
@@ -30,7 +29,10 @@
             <input type="radio" name="search_field" value="email"> {{ConstParams::EMAIL_JP}}
         </label>
     </div>
-
+    <div>
+        <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">
+        <input type="hidden" name="order" value="asc">
+    </div>
     <div>
         <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{$keyword ?? ''}}">
         <input type="submit" value="検索">
@@ -38,52 +40,54 @@
 </form>
 
 @if ($results)
+@if ($search_requirements)
 <h2>検索ワード</h2>
 <div>
-    <p>検索種類   : {{$search_field}}</p>
-    <p>検索ワード : {{$keyword}}</p>
-    <p>ヒット件数 : {{$results->count()}}</p>
+    <p>検索種類   : {{$search_requirements['search_field_jp'] ?? ''}}</p>
+    <p>検索ワード : {{$search_requirements['keyword'] ?? ''}}</p>
+    <p>ヒット件数 : {{count($results)}}</p>
 </div>
+@endif
 <h2>検索結果</h2>
 <table>
     <thead>
         <tr>
             <th>
-                <a href="{{route('users.search.reorder', [
-                'search_field' => $search_field, 
-                'keyword' => $keyword, 
+                <a href="{{route('users.search', [
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
                 'column' => ConstParams::USER_ID, 
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::USER_ID_JP}}</a>
             </th>
             <th>
-                <a href="{{route('users.search.reorder', [
-                'search_field' => $search_field, 
-                'keyword' => $keyword, 
+                <a href="{{route('users.search', [
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
                 'column' => ConstParams::KANJI_LAST_NAME, 
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('users.search.reorder', [
-                'search_field' => $search_field, 
-                'keyword' => $keyword, 
+                <a href="{{route('users.search', [
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
                 'column' => ConstParams::KANJI_FIRST_NAME, 
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('users.search.reorder', [
-                'search_field' => $search_field, 
-                'keyword' => $keyword, 
+                <a href="{{route('users.search', [
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
                 'column' => ConstParams::KANA_LAST_NAME, 
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('users.search.reorder', [
-                'search_field' => $search_field, 
-                'keyword' => $keyword, 
+                <a href="{{route('users.search', [
+                'search_field' => $search_requirements['search_field'],
+                'keyword' => $search_requirements['keyword'],
                 'column' => ConstParams::KANA_FIRST_NAME, 
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
@@ -106,6 +110,7 @@
     @endforeach
     </tbody>
 </table>
+{{ $results->appends(request()->except('page'))->links() }}
 @endif
 @endsection
 

@@ -10,9 +10,8 @@
     </ul>
 </div>
 @endif
-<form action="{{route('at_records.search.result')}}" method="post">
-    @csrf
-    <h2>検索条件選択・入力</h2>
+<form action="{{route('at_records.search')}}" method="get">
+    <h2>検索条件</h2>
     <div>
         <div>
             <label for="start_date">開始日:</label>
@@ -40,9 +39,13 @@
         </label>
     </div>
     <div>
+        <input type="hidden" name="column" value="datetime">
+        <input type="hidden" name="order" value="asc">
+    </div>
+    <div>
         <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{old('keyword', $keyword ?? '')}}">
-        <input type="submit" value="検索">
-        <input type="submit" value="CSV出力" formaction="{{route('at_records.exportCsv')}}" formmethod="POST">
+        <input type="submit" value="検索" formaction="{{route('at_records.search')}}">
+        <input type="submit" value="CSV出力" formaction="{{route('at_records.export')}}">
     </div>
 </form>
 
@@ -51,6 +54,7 @@
 <hr>
 
 @if ($results)
+@if (($search_requirements['search_field_jp'])&&($search_requirements['keyword'])&&($search_requirements['start_date'])&&($search_requirements['end_date']))
 <h2>検索ワード</h2>
 <div>
     <p>検索種類   : {{$search_requirements['search_field_jp']}}</p>
@@ -59,12 +63,13 @@
     <p>終了日　　 : {{$search_requirements['end_date']}}</p>
     <p>ヒット件数 : {{count($results)}}</p>
 </div>
+@endif
 <h2>検索結果</h2>
 <table>
     <thead>
         <tr>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -74,7 +79,7 @@
                 ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -84,7 +89,7 @@
                 ])}}">{{ConstParams::USER_ID_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -94,7 +99,7 @@
                 ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -104,7 +109,7 @@
                 ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -114,7 +119,7 @@
                 ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -124,7 +129,7 @@
                 ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -134,7 +139,7 @@
                 ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -144,7 +149,7 @@
                 ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
             </th>
             <th>
-                <a href="{{route('at_records.search.reorder', [
+                <a href="{{route('at_records.search', [
                 'start_date' => $search_requirements['start_date'],
                 'end_date' => $search_requirements['end_date'],
                 'search_field' => $search_requirements['search_field'],
@@ -179,6 +184,7 @@
     @endforeach
     </tbody>
 </table>
+{{ $results->appends(request()->except('page'))->links() }}
 @endif
 @endsection
 

@@ -8,6 +8,10 @@ namespace App\Const;
 
 class ConstParams
 {
+    // ペジネーション
+    const USERS_PAGINATION_LIMIT = 25;
+    const AT_RECORDS_PAGINATION_LIMIT = 50;
+
     // 文字数上限の設定
     const EMAIL_CHAR_LIMIT = 200;
     const NAME_CHAR_LIMIT = 15;

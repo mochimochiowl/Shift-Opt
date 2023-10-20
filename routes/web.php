@@ -49,9 +49,7 @@ Route::prefix('stamps')->name('stamps.')->group(function () {
 Route::middleware('auth')->group(function () {
     // users
     // 検索にかかわるルート
-    Route::get('users/search', [SearchController::class, 'showUsersSearchView'])->name('users.search');
-    Route::post('users/search', [SearchController::class, 'showUsersResult'])->name('users.search.result');
-    Route::get('users/search/{search_field}/{keyword}/{column}/{order}', [SearchController::class, 'showReorderedUsersResult'])->name('users.search.reorder');
+    Route::get('users/search', [SearchController::class, 'showUsers'])->name('users.search');
 
     // 情報操作にかかわるルート
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
@@ -74,12 +72,10 @@ Route::middleware('auth')->group(function () {
 
     // at_record
     // 検索にかかわるルート
-    Route::get('at_records/search', [SearchController::class, 'showAtRecordsSearchView'])->name('at_records.search');
-    Route::post('at_records/search', [SearchController::class, 'showAtRecordsResult'])->name('at_records.search.result');
-    Route::get('at_records/search/{start_date}/{end_date}/{search_field}/{keyword}/{column}/{order}', [SearchController::class, 'showReorderedAtRecordsResult'])->name('at_records.search.reorder');
+    Route::get('at_records/search', [SearchController::class, 'showAtRecords'])->name('at_records.search');
 
     // CSV出力
-    Route::post('at_records/export-csv', [SearchController::class, 'exportAtRecordCsv'])->name('at_records.exportCsv');
+    Route::get('at_records/export-csv', [SearchController::class, 'exportAtRecordCsv'])->name('at_records.export');
 
     // 情報操作にかかわるルート
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
