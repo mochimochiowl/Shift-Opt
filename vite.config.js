@@ -4,7 +4,10 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js'
+            ],
             refresh: true,
         }),
     ],
@@ -13,10 +16,15 @@ export default defineConfig({
     build: {
         outDir: 'public/dist', // 出力ディレクトリを指定
         rollupOptions: {
-            input: 'resources/js/main.js', // エントリポイントとなるJSファイルを指定
+            input: {
+                main: 'resources/js/main.js', // エントリポイントとなるJSファイルを指定
+                css: 'resources/css/app.css', // エントリポイントとなるCSSファイルを指定
+            },
             output: {
-                entryFileNames: `assets/bundle.js`,
-            }
+                entryFileNames: `[name].js`,
+                chunkFileNames: `[name].js`,
+                assetFileNames: `[name].[ext]`
+            },
         }
     }
 });
