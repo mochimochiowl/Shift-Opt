@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //デバッグ用
-Route::view('debug/css', 'debug.index')->name('css.debug');
+Route::view('debug', 'debug.index')->name('debug');
+Route::view('debug/loginForm', 'debug.css.loginForm')->name('debug.loginForm');
+Route::view('debug/table', 'debug.css.table')->name('debug.table');
 
 // トップページのルート
 Route::get('/', [TopController::class, 'get'])->name('top');

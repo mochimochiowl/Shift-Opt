@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
-    <script src="{{asset('/dist/assets/bundle.js')}}"></script>
+    <script src="{{asset('/dist/main.js')}}"></script>
     @vite('resources/css/app.css')
     </head>
     <body>
@@ -20,7 +20,7 @@
                     <li><a href="{{route('users.search')}}" class="menuBtn">{{ConstParams::USER_JP}}検索画面</a></li>
                     <li><a href="{{route('at_records.search')}}" class="menuBtn">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
                     <li><a href="{{route('summary.index')}}" class="menuBtn">サマリー画面</a></li>
-                    <li><a href="{{route('css.debug')}}" class="menuBtn">CSS確認</a></li>
+                    <li><a href="{{route('debug')}}" class="menuBtn">CSS確認</a></li>
                     @if (Auth::check())
                     <li><a href="{{route('logout')}}" class="menuBtn">ログアウトする</a></li>
                     @else
