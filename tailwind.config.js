@@ -8,6 +8,9 @@ export default {
   theme: {
     extend: {},
   },
+  variants: {
+    visibility: ['responsive', 'hover', 'focus', 'group-hover'],
+  },
   plugins: [],
 }
 

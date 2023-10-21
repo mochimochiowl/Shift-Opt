@@ -2,6 +2,7 @@
 import showClock from './currentTimer.js';
 import { setNextDay, setPreviousDay, setStartOfMonth, setEndOfMonth, } from './calendarButton.js';
 import { movePreviousPage, } from './sceneMoveAssist.js';
+import { toggleMenu, } from './toggler.js';
 
 document.addEventListener("DOMContentLoaded", function () {
     if (document.querySelector('#realTimer')) {
@@ -14,3 +15,4 @@ window.setPreviousDay = setPreviousDay;
 window.setStartOfMonth = setStartOfMonth;
 window.setEndOfMonth = setEndOfMonth;
 window.movePreviousPage = movePreviousPage;
+window.toggleMenu = toggleMenu;

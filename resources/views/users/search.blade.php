@@ -49,10 +49,10 @@
 </div>
 @endif
 <h2>検索結果</h2>
-<table>
+<table class="border-collapse w-9/12 my-5">
     <thead>
         <tr>
-            <th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.search', [
                 'search_field' => $search_requirements['search_field'],
                 'keyword' => $search_requirements['keyword'],
@@ -60,7 +60,7 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::USER_ID_JP}}</a>
             </th>
-            <th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.search', [
                 'search_field' => $search_requirements['search_field'],
                 'keyword' => $search_requirements['keyword'],
@@ -68,7 +68,7 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
             </th>
-            <th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.search', [
                 'search_field' => $search_requirements['search_field'],
                 'keyword' => $search_requirements['keyword'],
@@ -76,7 +76,7 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
             </th>
-            <th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.search', [
                 'search_field' => $search_requirements['search_field'],
                 'keyword' => $search_requirements['keyword'],
@@ -84,7 +84,7 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
             </th>
-            <th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.search', [
                 'search_field' => $search_requirements['search_field'],
                 'keyword' => $search_requirements['keyword'],
@@ -92,18 +92,30 @@
                 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                 ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
             </th>
-            <th>詳細</th>
+            <th class="bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                詳細
+            </th>
         </tr>
     </thead>
     <tbody>
     @foreach ($results as $result)
         <tr>
-            <td>{{$result->user_id}}</td>
-            <td>{{$result->kanji_last_name}}</td>
-            <td>{{$result->kanji_first_name}}</td>
-            <td>{{$result->kana_last_name}}</td>
-            <td>{{$result->kana_first_name}}</td>
-            <td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                {{$result->user_id}}
+            </td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                {{$result->kanji_last_name}}
+            </td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                {{$result->kanji_first_name}}
+            </td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                {{$result->kana_last_name}}
+            </td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                {{$result->kana_first_name}}
+            </td>
+            <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                 <a href="{{route('users.show', [ConstParams::USER_ID => $result->user_id])}}">詳細</a>
             </td>
         </tr>
