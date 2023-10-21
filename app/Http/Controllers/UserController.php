@@ -155,7 +155,9 @@ class UserController extends Controller
                 return redirect()
                     ->route('users.update.result', [ConstParams::USER_ID => $user_id])
                     ->with([
-                        'user_data' => $result['updated_data'],
+                        'user_id' => $result['user_id'],
+                        'user_labels' => $result['user_labels'],
+                        'user_data' => $result['user_data'],
                         'count' => $result['count'],
                     ]);
             }, 5);
@@ -173,6 +175,8 @@ class UserController extends Controller
     public function showUpdateResult(Request $request): View
     {
         return view('users.editResult', [
+            'user_id' => session('user_id'),
+            'user_labels' => session('user_labels'),
             'user_data' => session('user_data'),
             'count' => session('count'),
         ]);

@@ -52,11 +52,14 @@ class UserSalary extends Model
                     ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
                 ]
             );
-        $updated_data = self::where(ConstParams::USER_SALARY_ID, '=', $data[ConstParams::USER_SALARY_ID])->first();
+        $salary = self::where(ConstParams::USER_SALARY_ID, '=', $data[ConstParams::USER_SALARY_ID])->first();
+        $salary_labels = $salary->labels();
+        $salary_data = $salary->data();
 
         $result = [
+            'salary_labels' => $salary_labels,
+            'salary_data' => $salary_data,
             'count' => $count,
-            'updated_data' => $updated_data,
         ];
 
         return $result;

@@ -5,50 +5,23 @@
     @if ($count === 0)
     <p>データが更新できませんでした。</p>
     @else
-    <p>データを更新しました。</p>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>項目</th>
-                <th>登録内容</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ConstParams::USER_ID_JP}}</td>
-                <td>{{$user_data[ConstParams::USER_ID]}}</td>
-            </tr>
-            <tr>
-                <td>名前</td>
-                <td>{{$user_data[ConstParams::KANJI_LAST_NAME]}} {{$user_data[ConstParams::KANJI_FIRST_NAME]}}</td>
-            </tr>
-            <tr>
-                <td>なまえ</td>
-                <td>{{$user_data[ConstParams::KANA_LAST_NAME]}} {{$user_data[ConstParams::KANA_FIRST_NAME]}}</td>
-            </tr>
-    
-            <tr>
-                <td>{{ConstParams::HOURLY_WAGE_JP}}</td>
-                <td>{{$salary_data[ConstParams::HOURLY_WAGE]}}{{ConstParams::CURRENCY_JP}}</td>
-            </tr>
-            <tr>
-                <td>{{ConstParams::CREATED_AT_JP}}</td>
-                <td>{{$salary_data[ConstParams::CREATED_AT]}}</td>
-            </tr>
-            <tr>
-                <td>{{ConstParams::UPDATED_AT_JP}}</td>
-                <td>{{$salary_data[ConstParams::UPDATED_AT]}}</td>
-            </tr>
-            <tr>
-                <td>{{ConstParams::CREATED_BY_JP}}</td>
-                <td>{{$salary_data[ConstParams::CREATED_BY]}}</td>
-            </tr>
-            <tr>
-                <td>{{ConstParams::UPDATED_BY_JP}}</td>
-                <td>{{$salary_data[ConstParams::UPDATED_BY]}}</td>
-            </tr>
-        </tbody>
-    </table>
+    @component('components.h2',['title' => ConstParams::USER_SALARY_JP])
+    @endcomponent
+    @component('components.link', [
+        'href'=> route('users.salaries.edit', [ConstParams::USER_ID => $user_id]),
+        'label'=> '再度編集する',
+    ])
+    @endcomponent
+    @component('components.link', [
+        'href'=> route('users.search'),
+        'label'=> '検索に戻る',
+    ])
+    @endcomponent
+    @component('components.infoTable', [
+        'labels'=> $salary_labels,
+        'data'=> $salary_data,
+    ])
+    @endcomponent
     @endif
 </div>
 @endsection

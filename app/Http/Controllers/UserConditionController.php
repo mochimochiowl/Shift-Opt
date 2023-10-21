@@ -39,7 +39,6 @@ class UserConditionController extends Controller
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-                $user_data = $user->dataArray();
                 $condition_data = $user->condition->dataArray();
                 /** @var \App\Models\User $logged_in_user */
                 $logged_in_user = Auth::user();
@@ -54,8 +53,9 @@ class UserConditionController extends Controller
                 return redirect()
                     ->route('users.conditions.update.result', [ConstParams::USER_ID => $user_id])
                     ->with([
-                        'user_data' => $user_data,
-                        'condition_data' => $result['updated_data'],
+                        'user_id' => $user->user_id,
+                        'condition_labels' => $result['condition_labels'],
+                        'condition_data' => $result['condition_data'],
                         'count' => $result['count'],
                     ]);
             }, 5);
@@ -73,7 +73,8 @@ class UserConditionController extends Controller
     public function showUpdateResult(Request $request): View
     {
         return view('users.conditions.editResult', [
-            'user_data' => session('user_data'),
+            'user_id' => session('user_id'),
+            'condition_labels' => session('condition_labels'),
             'condition_data' => session('condition_data'),
             'count' => session('count'),
         ]);

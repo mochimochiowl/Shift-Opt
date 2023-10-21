@@ -11,16 +11,20 @@
                 'type' => 'text',
                 'name'=> ConstParams::LOGIN_ID,
                 'name_jp'=> ConstParams::LOGIN_ID_JP,
+                'value' => old(ConstParams::LOGIN_ID) ?? '',
                 'placeholder' => '',
                 'autocomplete'=> 'off',
+                'valied'=> true,
                 ])
             @endcomponent
             @component('components.inputText', [
                 'type' => 'password',
                 'name'=> ConstParams::PASSWORD,
                 'name_jp'=> ConstParams::PASSWORD_JP,
+                'value' => '',
                 'placeholder' => '',
                 'autocomplete'=> 'off',
+                'valied'=> true,
                 ])
             @endcomponent
             <div class="pt-4">

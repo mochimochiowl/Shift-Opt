@@ -45,9 +45,10 @@
             'type' => 'text',
             'name'=> 'keyword',
             'name_jp'=> 'キーワード',
-            'value' => $keyword ?? '',
+            'value' => old('keyword') ?? '',
             'placeholder' => 'キーワードを入力してください',
             'autocomplete'=> 'off',
+            'valied'=> true,
             ])
           @endcomponent
         <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">

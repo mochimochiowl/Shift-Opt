@@ -135,12 +135,15 @@ class UserCondition extends Model
                     ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
                 ]
             );
-        $updated_data = self::where(ConstParams::USER_CONDITION_ID, '=', $data[ConstParams::USER_CONDITION_ID])
-            ->first()->dataArray();
+        $condition = self::where(ConstParams::USER_CONDITION_ID, '=', $data[ConstParams::USER_CONDITION_ID])
+            ->first();
+        $condition_labels = $condition->labels();
+        $condition_data = $condition->data();
 
         $result = [
+            'condition_labels' => $condition_labels,
+            'condition_data' => $condition_data,
             'count' => $count,
-            'updated_data' => $updated_data,
         ];
 
         return $result;

@@ -12,6 +12,7 @@
         'name_jp'=> ConstParams::LOGIN_ID_JP,
         'placeholder' => '',
         'autocomplete'=> 'off',
+        'valied'=> true,
         ])
     @endcomponent
     <div class="pt-4">

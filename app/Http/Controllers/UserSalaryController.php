@@ -39,7 +39,6 @@ class UserSalaryController extends Controller
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-                $user_data = $user->dataArray();
                 $salary_data = $user->salary->dataArray();
                 /** @var \App\Models\User $logged_in_user */
                 $logged_in_user = Auth::user();
@@ -53,8 +52,9 @@ class UserSalaryController extends Controller
                 return redirect()
                     ->route('users.salaries.update.result', [ConstParams::USER_ID => $user_id])
                     ->with([
-                        'user_data' => $user_data,
-                        'salary_data' => $result['updated_data'],
+                        'user_id' => $user->user_id,
+                        'salary_labels' => $result['salary_labels'],
+                        'salary_data' => $result['salary_data'],
                         'count' => $result['count'],
                     ]);
             }, 5);
@@ -72,7 +72,8 @@ class UserSalaryController extends Controller
     public function showUpdateResult(Request $request): View
     {
         return view('users.salaries.editResult', [
-            'user_data' => session('user_data'),
+            'user_id' => session('user_id'),
+            'salary_labels' => session('salary_labels'),
             'salary_data' => session('salary_data'),
             'count' => session('count'),
         ]);

@@ -111,12 +111,16 @@ class User extends Authenticatable
                     ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
                 ]
             );
-        $updated_data = self::where(ConstParams::USER_ID, '=', $data[ConstParams::USER_ID])
-            ->first()->dataArray();
+        $user = self::where(ConstParams::USER_ID, '=', $data[ConstParams::USER_ID])
+            ->first();
+        $user_labels = $user->labels();
+        $user_data = $user->data();
 
         $result = [
+            'user_id' => $user->user_id,
+            'user_labels' => $user_labels,
+            'user_data' => $user_data,
             'count' => $count,
-            'updated_data' => $updated_data,
         ];
 
         return $result;
