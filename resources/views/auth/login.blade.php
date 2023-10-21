@@ -11,6 +11,7 @@
                 'type' => 'text',
                 'name'=> ConstParams::LOGIN_ID,
                 'name_jp'=> ConstParams::LOGIN_ID_JP,
+                'placeholder' => '',
                 'autocomplete'=> 'off',
                 ])
             @endcomponent
@@ -18,6 +19,7 @@
                 'type' => 'password',
                 'name'=> ConstParams::PASSWORD,
                 'name_jp'=> ConstParams::PASSWORD_JP,
+                'placeholder' => '',
                 'autocomplete'=> 'off',
                 ])
             @endcomponent

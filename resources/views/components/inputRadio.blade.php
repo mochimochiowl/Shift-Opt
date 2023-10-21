@@ -3,20 +3,23 @@
         <span class="block text-black font-semibold">{{$label}}</span>
     </div>
     @foreach ($items as $item)
+    <div class="inline-block mb-5">
         <input 
-            type="radio" 
-            name="{{$item['name']}}" 
-            id="{{$item['name']}}_{{$item['value']}}" 
-            class="hidden" 
-            value="{{$item['value']}}" 
-            {{ $item['checked'] ? 'checked' : '' }}
-        >
-        <label 
-            for="{{$item['name']}}_{{$item['value']}}" 
-            class="text-black font-semibold border border-black rounded-xl px-3 py-2 mr-2 bg-blue-200"
-        >
-            {{$item['name_jp']}}
-        </label>    
+        type="radio" 
+        name="{{$item['name']}}" 
+        id="{{$item['name']}}_{{$item['value']}}" 
+        class="hidden" 
+        value="{{$item['value']}}" 
+        {{ $item['checked'] ? 'checked' : '' }}
+    >
+    <label 
+        for="{{$item['name']}}_{{$item['value']}}" 
+        class="text-black font-semibold border border-black rounded-xl px-3 py-2 mr-2 bg-blue-200"
+    >
+        {{$item['name_jp']}}
+    </label>    
+    </div>
+        
     @endforeach
 </div>
 

@@ -1,7 +1,8 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '情報詳細画面')
+@section('title', 'ユーザー情報詳細画面')
 @section('content')
-    <h2 class="text-3xl font-semibold mb-4">{{ConstParams::USER_JP}}</h2>
+    @component('components.h2',['title' => ConstParams::USER_JP])
+    @endcomponent
     @component('components.link', [
         'href'=> route('users.edit', [ConstParams::USER_ID => $user_id]),
         'label'=> '編集',
@@ -12,7 +13,8 @@
         'data'=> $user_data,
     ])
     @endcomponent
-    <h2 class="text-3xl font-semibold mb-4">{{ConstParams::USER_SALARY_JP}}</h2>
+    @component('components.h2',['title' => ConstParams::USER_SALARY_JP])
+    @endcomponent
     @component('components.link', [
         'href'=> route('users.salaries.edit', [ConstParams::USER_ID => $user_id]),
         'label'=> '編集',
@@ -23,7 +25,8 @@
         'data'=> $salary_data,
     ])
     @endcomponent
-    <h2 class="text-3xl font-semibold mb-4">{{ConstParams::USER_CONDITION_JP}}</h2>
+    @component('components.h2',['title' => ConstParams::USER_CONDITION_JP])
+    @endcomponent
     @component('components.link', [
         'href'=> route('users.conditions.edit', [ConstParams::USER_ID => $user_id]),
         'label'=> '編集',

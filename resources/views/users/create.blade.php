@@ -7,6 +7,7 @@
       'type' => 'text',
       'name'=> ConstParams::KANJI_LAST_NAME,
       'name_jp'=> ConstParams::KANJI_LAST_NAME_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -14,6 +15,7 @@
       'type' => 'text',
       'name'=> ConstParams::KANJI_FIRST_NAME,
       'name_jp'=> ConstParams::KANJI_FIRST_NAME_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -21,6 +23,7 @@
       'type' => 'text',
       'name'=> ConstParams::KANA_LAST_NAME,
       'name_jp'=> ConstParams::KANA_LAST_NAME_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -28,6 +31,7 @@
       'type' => 'text',
       'name'=> ConstParams::KANA_FIRST_NAME,
       'name_jp'=> ConstParams::KANA_FIRST_NAME_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -35,6 +39,7 @@
       'type' => 'email',
       'name'=> ConstParams::EMAIL,
       'name_jp'=> ConstParams::EMAIL_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -42,6 +47,7 @@
       'type' => 'text',
       'name'=> ConstParams::LOGIN_ID,
       'name_jp'=> ConstParams::LOGIN_ID_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -49,6 +55,7 @@
       'type' => 'password',
       'name'=> ConstParams::PASSWORD,
       'name_jp'=> ConstParams::PASSWORD_JP,
+      'placeholder' => '',
       'autocomplete'=> 'off',
       ])
     @endcomponent
@@ -77,7 +84,7 @@
           'value' => '',
           'onclick' => '',
           ])
-        @endcomponent
+      @endcomponent
     </div>
   </form>
 @endsection

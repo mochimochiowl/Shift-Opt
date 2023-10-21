@@ -1,25 +1,20 @@
 @extends('layouts.base')
 @section('title', '打刻画面')
 @section('content')
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
+<div class="px-2 py-2 text-4xl font-bold text-center text-black rounded-xl bg-blue-100">
+    <span id="realTimer" class="">{{getCurrentTime()}}</span>
 </div>
-@endif
-<div>
-    <span id="realTimer">{{getCurrentTime()}}</span>
-</div>
-<form action="" method="post">
+<form action="" method="post" class="px-2 py-2 mt-4 text-4xl font-bold text-center text-black rounded-xl bg-blue-100">
     @csrf
-    <div>
-        <label for="target_login_id">{{ConstParams::LOGIN_ID_JP}}</label>
-        <input type="text" name="target_login_id" id="target_login_id" value="{{old('target_login_id')}}">
-    </div>
-    <div>
+    @component('components.inputText', [
+        'type' => 'text',
+        'name'=> 'target_login_id',
+        'name_jp'=> ConstParams::LOGIN_ID_JP,
+        'placeholder' => '',
+        'autocomplete'=> 'off',
+        ])
+    @endcomponent
+    <div class="pt-4">
         <input type="submit" value="{{ConstParams::AT_RECORD_START_WORK_JP}}" formaction="{{route('stamps.startWork')}}" formmethod="POST">
         <input type="submit" value="{{ConstParams::AT_RECORD_FINISH_WORK_JP}}" formaction="{{route('stamps.finishWork')}}" formmethod="POST">
         <input type="submit" value="{{ConstParams::AT_RECORD_START_BREAK_JP}}" formaction="{{route('stamps.startBreak')}}" formmethod="POST">
