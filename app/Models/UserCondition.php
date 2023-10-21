@@ -147,6 +147,45 @@ class UserCondition extends Model
     }
 
     /** 
+     * UserConditionデータの項目名の配列を返す
+     * @return array
+     *  */
+    public function labels(): array
+    {
+        $labels = [
+            ConstParams::USER_CONDITION_ID_JP,
+            ConstParams::HAS_ATTENDED_JP,
+            ConstParams::IS_BREAKING_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+        ];
+
+        return $labels;
+    }
+
+    /** 
+     * UserConditionデータの配列を返す
+     * @return array
+     *  */
+    public function data(): array
+    {
+        $condition_jp = $this->getConditionMessageJP();
+        $data = [
+            $this->user_condition_id,
+            $condition_jp['has_attended_jp'],
+            $condition_jp['is_breaking_jp'],
+            $this->created_at,
+            $this->updated_at,
+            $this->created_by,
+            $this->updated_by,
+        ];
+
+        return $data;
+    }
+
+    /** 
      * UserConditionデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
      * @return array
      *  */

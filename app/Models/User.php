@@ -173,9 +173,58 @@ class User extends Authenticatable
         return $results;
     }
 
+    /** 
+     * Userデータの項目名の配列を返す
+     * @return array
+     *  */
+    public function labels(): array
+    {
+        $labels = [
+            ConstParams::USER_ID_JP,
+            ConstParams::KANJI_LAST_NAME_JP,
+            ConstParams::KANJI_FIRST_NAME_JP,
+            ConstParams::KANA_LAST_NAME_JP,
+            ConstParams::KANA_FIRST_NAME_JP,
+            ConstParams::EMAIL_JP,
+            ConstParams::EMAIL_VERIFIED_AT_JP,
+            ConstParams::LOGIN_ID_JP,
+            ConstParams::IS_ADMIN_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+        ];
+
+        return $labels;
+    }
 
     /** 
-     * Userデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
+     * Userデータの配列を返す
+     * @return array
+     *  */
+    public function data(): array
+    {
+        $data = [
+            $this->user_id,
+            $this->kanji_last_name,
+            $this->kanji_first_name,
+            $this->kana_last_name,
+            $this->kana_first_name,
+            $this->email,
+            $this->email_verified_at ?? '未認証',
+            $this->login_id,
+            $this->is_admin ? ConstParams::ADMIN_JP : ConstParams::NOT_ADMIN_JP,
+            $this->created_at,
+            $this->updated_at,
+            $this->created_by,
+            $this->updated_by,
+        ];
+
+        return $data;
+    }
+
+    /** 
+     * Userデータの表示や更新処理のために必要な文字列データをまとめた連想配列を返す
      * @return array
      *  */
     public function dataArray(): array

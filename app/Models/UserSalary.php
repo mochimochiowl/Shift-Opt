@@ -63,6 +63,42 @@ class UserSalary extends Model
     }
 
     /** 
+     * UserSalaryデータの項目名の配列を返す
+     * @return array
+     *  */
+    public function labels(): array
+    {
+        $labels = [
+            ConstParams::USER_SALARY_ID_JP,
+            ConstParams::HOURLY_WAGE_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+        ];
+
+        return $labels;
+    }
+
+    /** 
+     * UserSalaryデータの配列を返す
+     * @return array
+     *  */
+    public function data(): array
+    {
+        $data = [
+            $this->user_salary_id,
+            $this->hourly_wage,
+            $this->created_at,
+            $this->updated_at,
+            $this->created_by,
+            $this->updated_by,
+        ];
+
+        return $data;
+    }
+
+    /** 
      * UserSalaryデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
      * @return array
      *  */

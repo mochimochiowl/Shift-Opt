@@ -86,7 +86,7 @@ class ConstParams
     const KANA_FIRST_NAME_JP = '名（かな）';
     const KANA_LAST_NAME_JP = '姓（かな）';
     const EMAIL_JP = 'メールアドレス';
-    const EMAIL_VERIFIED_AT_JP = 'メールアドレス最終認証日時';
+    const EMAIL_VERIFIED_AT_JP = '最終認証日時';
     const LOGIN_ID_JP = 'ログインID';
     const PASSWORD_JP = 'パスワード';
     const IS_ADMIN_JP = '管理者かどうか';

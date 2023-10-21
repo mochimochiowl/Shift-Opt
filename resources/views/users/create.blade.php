@@ -75,6 +75,7 @@
           'type' => 'submit',
           'label' => '登録',
           'value' => '',
+          'onclick' => '',
           ])
         @endcomponent
     </div>

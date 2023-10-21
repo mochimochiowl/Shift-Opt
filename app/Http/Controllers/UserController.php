@@ -93,13 +93,20 @@ class UserController extends Controller
     public function show($user_id): View
     {
         $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        $user_data = $user->dataArray();
-        $salary_data = $user->salary->dataArray();
-        $condition_data = $user->condition->dataArray();
+        $user_labels = $user->labels();
+        $user_data = $user->data();
+        $salary_labels = $user->salary->labels();
+        $salary_data = $user->salary->data();
+        $condition_labels = $user->condition->labels();
+        $condition_data = $user->condition->data();
 
         return view('users.show', [
+            'user_id' => $user->user_id,
+            'user_labels' => $user_labels,
             'user_data' => $user_data,
+            'salary_labels' => $salary_labels,
             'salary_data' => $salary_data,
+            'condition_labels' => $condition_labels,
             'condition_data' => $condition_data,
         ]);
     }
