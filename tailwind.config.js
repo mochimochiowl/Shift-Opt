@@ -1,4 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+const {
+  iconsPlugin,
+  getIconCollections,
+} = require("@egoist/tailwindcss-icons");
+
 export default {
   content: [
     './resources/**/*.blade.php',
@@ -11,6 +16,10 @@ export default {
   variants: {
     visibility: ['responsive', 'hover', 'focus', 'group-hover'],
   },
-  plugins: [],
+  plugins: [
+    iconsPlugin({
+      collections: getIconCollections(["tabler", "lucide"]),
+    }),
+  ],
 }
 

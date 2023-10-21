@@ -1,41 +1,36 @@
 @extends('layouts.base')
 @section('title', 'ログイン画面')
 @section('content')
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-@if (Auth::check())
-<p>ログイン済みですよ</p>
-@else
-<form action="login" method="post">
-    @csrf
-    <div>
-        <div>
-            <label for="{{ConstParams::LOGIN_ID}}">{{ConstParams::LOGIN_ID_JP}}</label>
-        </div>
-        <div>
-            <input type="text" name="{{ConstParams::LOGIN_ID}}" id="{{ConstParams::LOGIN_ID}}" value="{{old(ConstParams::LOGIN_ID)}}">
-        </div>
-    </div>
-    <div>
-        <div>
-            <label for="{{ConstParams::PASSWORD}}">{{ConstParams::PASSWORD_JP}}</label>
-        </div>
-        <div>
-            <input type="password" name="{{ConstParams::PASSWORD}}" id="{{ConstParams::PASSWORD}}">
-        </div>
-    </div>
-    <div>
-        <button type="submit">送信</button>
-    </div>
-</form>
-@endif
+    @if (Auth::check())
+        @component('components.message',['message' => '既にログイン済みです。'])
+        @endcomponent
+    @else
+        <form action="login" method="post">
+            @csrf
+            @component('components.inputText', [
+                'type' => 'text',
+                'name'=> ConstParams::LOGIN_ID,
+                'name_jp'=> ConstParams::LOGIN_ID_JP,
+                'autocomplete'=> 'off',
+                ])
+            @endcomponent
+            @component('components.inputText', [
+                'type' => 'password',
+                'name'=> ConstParams::PASSWORD,
+                'name_jp'=> ConstParams::PASSWORD_JP,
+                'autocomplete'=> 'off',
+                ])
+            @endcomponent
+            <div class="pt-4">
+                @component('components.button', [
+                'type' => 'submit',
+                'label' => '登録',
+                'value' => '',
+                ])
+                @endcomponent
+            </div>
+        </form>
+    @endif
 @endsection
 
 @section('footer')
