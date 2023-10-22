@@ -1,6 +1,15 @@
 @extends('layouts.base')
-@section('title', 'ユーザー情報詳細画面')
+@section('title', ConstParams::USER_JP . '詳細画面')
 @section('content')
+    <div class="pt-4">
+        @component('components.button', [
+            'type' => 'button',
+            'label' => '戻る',
+            'onclick' => 'movePreviousPage',
+            'w_full' => true,
+            ])
+        @endcomponent
+    </div>
     @component('components.h2',['title' => ConstParams::USER_JP])
     @endcomponent
     @component('components.link', [
@@ -40,8 +49,8 @@
     @component('components.button', [
         'type' => 'button',
         'label' => '戻る',
-        'value' => '',
         'onclick' => 'movePreviousPage',
+        'w_full' => true,
         ])
     @endcomponent
 @endsection

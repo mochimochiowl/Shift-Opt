@@ -38,16 +38,36 @@ class UserController extends Controller
             return DB::transaction(function () use ($request) {
                 $data = $request->validated();
                 $user = User::createNewUser($data);
-                Auth::login($user);
+                $user_labels = $user->labels();
+                $user_data = $user->data();
 
                 UserSalary::createForUser($user);
                 UserCondition::createForUser($user);
 
-                return redirect()->route('users.show', [ConstParams::USER_ID => $user->user_id]);
+                return redirect()
+                    ->route('users.create.result', [ConstParams::USER_ID => $user->user_id])
+                    ->with([
+                        'user_id' => $user->user_id,
+                        'user_labels' => $user_labels,
+                        'user_data' => $user_data,
+                    ]);
             }, 5);
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['message' => 'UserController::storeでエラー' . $e->getMessage()])->withInput($request->except(ConstParams::PASSWORD));
         }
+    }
+
+    /**
+     * ユーザー更新処理を行い、その処理が成功したことを表示する画面を返す
+     * @return View
+     */
+    public function showCreateResult(Request $request): View
+    {
+        return view('users.createResult', [
+            'user_id' => session('user_id'),
+            'user_labels' => session('user_labels'),
+            'user_data' => session('user_data'),
+        ]);
     }
 
     /**

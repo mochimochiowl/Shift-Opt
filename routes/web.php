@@ -31,10 +31,10 @@ Route::get('/', [TopController::class, 'get'])->name('top');
 Route::post('/', [TopController::class, 'post'])->name('top.post');
 
 // ユーザー登録・ログイン・ログアウトにかかわるルート
-Route::get('users/create', [UserController::class, 'create'])->name('users.create');
-Route::post('users', [UserController::class, 'store'])->name('users.store');
-
 Route::middleware('auth')->group(function () {
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user_id}/create/result', [UserController::class, 'showCreateResult'])->name('users.create.result');
     Route::get('logout', [UserController::class, 'logout'])->name('logout');
 });
 Route::get('login', [UserController::class, 'showLogin'])->name('login.form');
@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('users/{user_id}/salaries/result', [UserSalaryController::class, 'showUpdateResult'])->name('users.salaries.update.result');
     Route::get('users/{user_id}/conditions/result', [UserConditionController::class, 'showUpdateResult'])->name('users.conditions.update.result');
 
-    // at_record
+    // at_records
     // 検索にかかわるルート
     Route::get('at_records/search', [SearchController::class, 'showAtRecords'])->name('at_records.search');
 

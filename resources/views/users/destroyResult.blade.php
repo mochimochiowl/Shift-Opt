@@ -2,7 +2,7 @@
 @section('title', ConstParams::USER_JP . '削除処理成功')
 @section('content')
 @if ($count === 0)
-    @component('components.message',['message' => '削除できませんでした。時間をおいてから再度お試しください。'])
+    @component('components.message',['message' => ConstParams::USER_JP . 'を削除できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
 @else
     @component('components.h2',['title' => '削除した' . ConstParams::USER_JP])

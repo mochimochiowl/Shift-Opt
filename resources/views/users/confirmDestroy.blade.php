@@ -32,6 +32,7 @@
         @component('components.button', [
             'type' => 'submit',
             'label' => 'このユーザーを削除する',
+            'w_full' => true,
             ])
         @endcomponent
     </form>

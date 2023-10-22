@@ -1,26 +1,26 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '更新処理成功画面')
+@section('title', ConstParams::USER_JP . '作成成功')
 @section('content')
 <div>
-    @if ($count === 0)
-       @component('components.message',['message' => ConstParams::USER_JP . 'を更新できませんでした。時間をおいてから再度お試しください。'])
+    @if (!isset($user_id))
+       @component('components.message',['message' => ConstParams::USER_JP . 'を作成できませんでした。時間をおいてから再度お試しください。'])
        @endcomponent
     @else
         @component('components.h2',['title' => ConstParams::USER_JP])
         @endcomponent
         @component('components.link', [
             'href'=> route('users.edit', [ConstParams::USER_ID => $user_id]),
-            'label'=> '再度編集する',
+            'label'=> '編集する',
         ])
         @endcomponent
         @component('components.link', [
             'href'=> route('users.show', [ConstParams::USER_ID => $user_id]),
-            'label'=> '詳細に戻る',
+            'label'=> '詳細画面へ',
         ])
         @endcomponent
         @component('components.link', [
             'href'=> route('users.search'),
-            'label'=> '検索に戻る',
+            'label'=> '検索画面へ',
         ])
         @endcomponent
         @component('components.infoTable', [

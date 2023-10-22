@@ -1,29 +1,99 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '検索画面')
 @section('content')
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 <form action="{{route('at_records.search')}}" method="get">
-    <h2>検索条件</h2>
-    <div>
+    <div class="p-4 mb-3 rounded-xl bg-blue-200">
+        @component('components.h2',['title' => '検索条件'])
+        @endcomponent
         <div>
-            <label for="start_date">開始日:</label>
-            <button type="button" onclick="setStartOfMonth()">今月初</button>
-            <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
+            @component('components.inputText', [
+                'type' => 'date',
+                'name'=> 'start_date',
+                'name_jp'=> '開始日',
+                'value' => $search_requirements['start_date'] ?? $default_dates['start_date'],
+                'placeholder' => 'キーワードを入力してください',
+                'autocomplete'=> 'off',
+                'valied'=> true,
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '今月初',
+                'onclick' => 'setStartOfMonth',
+                ])
+            @endcomponent
         </div>
         <div>
-            <label for="end_date">終了日:</label>
-            <button type="button" onclick="setEndOfMonth()">今月末</button>
-            <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
+            <div>
+                <label for="start_date">開始日:</label>
+                <button type="button" onclick="setStartOfMonth()">今月初</button>
+                <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
+            </div>
+            <div>
+                <label for="end_date">終了日:</label>
+                <button type="button" onclick="setEndOfMonth()">今月末</button>
+                <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
+            </div>
+        </div>
+        @component('components.inputRadio', [
+            'label' => '種別',
+            'items' => [
+                    [
+                        'name'=> 'search_field',
+                        'name_jp'=> '全件表示',
+                        'value'=> 'all',
+                        'checked'=> true,
+                    ],
+                    [
+                        'name'=> 'search_field',
+                        'name_jp'=> ConstParams::USER_ID_JP,
+                        'value'=> ConstParams::USER_ID,
+                        'checked'=> false,
+                    ],
+                    [
+                        'name'=> 'search_field',
+                        'name_jp'=> ConstParams::LOGIN_ID_JP,
+                        'value'=> ConstParams::LOGIN_ID,
+                        'checked'=> false,
+                    ],
+                    [
+                        'name'=> 'search_field',
+                        'name_jp'=> '名前（漢字・かな）',
+                        'value'=> 'name',
+                        'checked'=> false,
+                    ],
+                    [
+                        'name'=> 'search_field',
+                        'name_jp'=> ConstParams::EMAIL_JP,
+                        'value'=> ConstParams::EMAIL,
+                        'checked'=> false,
+                    ],
+                ],
+            ])
+          @endcomponent
+          @component('components.inputText', [
+            'type' => 'text',
+            'name'=> 'keyword',
+            'name_jp'=> 'キーワード',
+            'value' => old('keyword') ?? '',
+            'placeholder' => 'キーワードを入力してください',
+            'autocomplete'=> 'off',
+            'valied'=> true,
+            ])
+          @endcomponent
+        <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">
+        <input type="hidden" name="order" value="asc">
+        <div class="pt-4">
+            @component('components.button', [
+                'type' => 'submit',
+                'label' => '検索',
+                'w_full' => true,
+                ])
+            @endcomponent
         </div>
     </div>
+</form>
+    
     <div>
         <label>
             <input type="radio" name="search_field" value="all" @if(old('search_field', 'all') == 'all') checked @endif required> 全件表示

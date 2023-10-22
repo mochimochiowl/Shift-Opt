@@ -1,6 +1,15 @@
 @extends('layouts.base')
 @section('title', '編集画面')
 @section('content')
+<div class="pt-4">
+    @component('components.button', [
+        'type' => 'button',
+        'label' => '戻る',
+        'onclick' => 'movePreviousPage',
+        'w_full' => true,
+        ])
+    @endcomponent
+</div>
 @if ($user_data && $salary_data)
 @component('components.userBriefInfo',['user_data' => $user_data])
 @endcomponent
@@ -22,8 +31,7 @@
         @component('components.button', [
             'type' => 'submit',
             'label' => '更新',
-            'value' => '',
-            'onclick' => '',
+            'w_full' => true,
             ])
         @endcomponent
       </div>

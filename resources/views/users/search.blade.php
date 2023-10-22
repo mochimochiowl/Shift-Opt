@@ -57,8 +57,7 @@
             @component('components.button', [
                 'type' => 'submit',
                 'label' => '検索',
-                'value' => '',
-                'onclick' => '',
+                'w_full' => true,
                 ])
             @endcomponent
         </div>

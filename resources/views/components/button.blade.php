@@ -1,7 +1,10 @@
-<div class="mb-4">
-    <button 
+<button 
     type="{{$type}}" 
-    class="bg-blue-500 hover:bg-blue-600 text-white text-2xl font-semibold rounded-md py-2 px-4 w-full"
+    @if (isset($w_full) && $w_full)
+        class="bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-md py-2 px-4 mb-4 mr-4 w-full"
+    @else
+        class="bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-md py-2 px-4 mb-4 mr-4"
+    @endif
     @if (isset($value) && $value !== '')
         {{' value=' . $value}}       
     @endif
@@ -16,5 +19,4 @@
     @endif
     >
         {{$label}}
-    </button>
-</div>
+</button>

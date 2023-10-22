@@ -2,6 +2,15 @@
 @section('title', ConstParams::USER_JP . '編集画面')
 @section('content')
 @if ($user_data)
+<div class="pt-4">
+    @component('components.button', [
+        'type' => 'button',
+        'label' => '戻る',
+        'onclick' => 'movePreviousPage',
+        'w_full' => true,
+        ])
+    @endcomponent
+</div>
 <form action="{{route('users.update', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">
     @csrf
     @method('PUT')
@@ -107,8 +116,7 @@
         @component('components.button', [
             'type' => 'submit',
             'label' => '更新',
-            'value' => '',
-            'onclick' => '',
+            'w_full' => true,
             ])
         @endcomponent
       </div>
@@ -127,8 +135,7 @@
             @component('components.button', [
                 'type' => 'submit',
                 'label' => '削除',
-                'value' => '',
-                'onclick' => '',
+                'w_full' => true,
                 ])
             @endcomponent
           </div>

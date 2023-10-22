@@ -3,13 +3,19 @@
 @section('content')
 <div>
     @if ($count === 0)
-    <p>データが更新できませんでした。</p>
+    @component('components.message',['message' => ConstParams::USER_SALARY_JP . 'を更新できませんでした。時間をおいてから再度お試しください。'])
+    @endcomponent
     @else
     @component('components.h2',['title' => ConstParams::USER_SALARY_JP])
     @endcomponent
     @component('components.link', [
         'href'=> route('users.salaries.edit', [ConstParams::USER_ID => $user_id]),
         'label'=> '再度編集する',
+    ])
+    @endcomponent
+    @component('components.link', [
+        'href'=> route('users.show', [ConstParams::USER_ID => $user_id]),
+        'label'=> '詳細に戻る',
     ])
     @endcomponent
     @component('components.link', [

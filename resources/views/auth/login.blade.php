@@ -31,8 +31,7 @@
                 @component('components.button', [
                 'type' => 'submit',
                 'label' => '登録',
-                'value' => '',
-                'onclick' => '',
+                'w_full' => true,
                 ])
                 @endcomponent
             </div>
