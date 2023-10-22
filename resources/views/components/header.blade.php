@@ -5,11 +5,18 @@
             <span class="inline-block text-3xl font-bold">Shift-Opt</span>
         </a>
     </h1>
+    <div class="inline-block text-xl font-semibold">
+        @if (Auth::check())
+            <span>{{Auth::user()->getKanjiFullName()}} としてログイン中</span>
+        @else
+            <a href="{{route('login.form')}}" class="">ログインする</a>
+        @endif
+    </div>
     <nav>
-    <button class="fixed z-30 top-6 right-6 text-white" onclick="toggleMenu()">
-        <span id="openBtn" class="inline-block i-lucide-menu w-8 h-8"></span>
-        <span id="closeBtn" class="inline-block i-lucide-x w-8 h-8 hidden"></span>
-    </button>
+        <button class="fixed z-30 top-8 right-8 text-white" onclick="toggleMenu()">
+            <span id="openBtn" class="inline-block i-lucide-menu w-8 h-8"></span>
+            <span id="closeBtn" class="inline-block i-lucide-x w-8 h-8 hidden"></span>
+        </button>
         <ul id="menu" class="fixed top-0 left-0 w-full text-center text-white font-bold bg-blue-500 translate-x-full transition duration-300 ease-linear">
             @if (Auth::check())
                 @if (Auth::user()->isAdmin())
