@@ -1,4 +1,4 @@
-<div class="p-4 mb-3 rounded-xl bg-blue-200">
+<div class="p-4 mb-3 text-2xl rounded-xl bg-blue-200">
     <div>
         <span>{{ConstParams::USER_ID_JP}} :</span><span>{{$user_data[ConstParams::USER_ID]}}</span>
     </div>

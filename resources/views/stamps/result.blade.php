@@ -1,15 +1,29 @@
 @extends('layouts.base')
-@section('title', '打刻処理成功画面')
+@section('title', ConstParams::AT_RECORD_TYPE_JP . '処理成功画面')
 @section('content')
-<div>
-    <button type="button" onclick="movePreviousPage()">戻る</button>
-    <p>処理に成功しました。</p>
-    <p>入力されたデータ</p>
-    <p>{{ConstParams::LOGIN_ID_JP}} : {{$login_id}}</p>
-    <p>名前 : {{$name}}</p>
-    <p>{{ConstParams::AT_RECORD_TYPE_JP}} : {{$type}}</p>
-    <p>{{ConstParams::AT_RECORD_DATE_JP}} : {{$date}}</p>
-    <p>{{ConstParams::AT_RECORD_TIME_JP}} : {{$time}}</p>
+@component('components.h2',['title' => ConstParams::USER_JP])
+@endcomponent
+@component('components.link', [
+    'href'=> route('stamps.index'),
+    'label'=> '戻る',
+])
+@endcomponent
+<div class="p-4 my-4 text-2xl rounded-xl bg-blue-200">
+    <div>
+        <span>{{ConstParams::USER_ID_JP}} :</span><span>{{$login_id}}</span>
+    </div>
+    <div>
+        <span>名前 :</span><span>{{$name}}</span>
+    </div>
+    <div>
+        <span>{{ConstParams::AT_RECORD_TYPE_JP}} :</span><span>{{$type}}</span>
+    </div>
+    <div>
+        <span>{{ConstParams::AT_RECORD_DATE_JP}} :</span><span>{{$date}}</span>
+    </div>
+    <div>
+        <span>{{ConstParams::AT_RECORD_TIME_JP}} :</span><span>{{$time}}</span>
+    </div>
 </div>
 @endsection
 
