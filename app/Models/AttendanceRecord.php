@@ -335,6 +335,58 @@ class AttendanceRecord extends Model
     }
 
     /** 
+     * at_recordデータの項目名の配列を返す
+     * @return array
+     *  */
+    public function labels(): array
+    {
+        $labels = [
+            ConstParams::AT_RECORD_ID_JP,
+            ConstParams::AT_SESSION_ID_JP,
+            ConstParams::USER_ID_JP,
+            ConstParams::KANJI_LAST_NAME_JP,
+            ConstParams::KANJI_FIRST_NAME_JP,
+            ConstParams::KANA_LAST_NAME_JP,
+            ConstParams::KANA_FIRST_NAME_JP,
+            ConstParams::AT_RECORD_TYPE_JP,
+            ConstParams::AT_RECORD_DATE_JP,
+            ConstParams::AT_RECORD_TIME_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+        ];
+
+        return $labels;
+    }
+
+    /** 
+     * at_recordデータの配列を返す
+     * @return array
+     *  */
+    public function data(): array
+    {
+        $data = [
+            $this->at_record_id,
+            $this->at_session_id,
+            $this->user_id,
+            $this->kanji_last_name,
+            $this->kanji_first_name,
+            $this->kana_last_name,
+            $this->kana_first_name,
+            AttendanceRecord::getTypeName($this->at_record_type),
+            $this->at_record_date,
+            $this->at_record_time,
+            $this->created_at,
+            $this->updated_at,
+            $this->created_by,
+            $this->updated_by,
+        ];
+
+        return $data;
+    }
+
+    /** 
      * at_recordデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
      * @return array
      *  */

@@ -1,8 +1,27 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '情報詳細画面')
+@section('title', ConstParams::AT_RECORD_JP . '詳細画面')
 @section('content')
-            <button type="button" onclick="movePreviousPage()">戻る</button>
-            @component('components.atRecordShow', ['data' => $data])
+<div class="flex justify-between items-center">
+    <div class="inline mr-4">
+        @component('components.button', [
+            'type' => 'button',
+            'label' => '戻る',
+            'onclick' => 'movePreviousPage',
+            ])
+        @endcomponent
+    </div>
+    <div class="inline">
+        @component('components.link', [
+            'href'=> route('at_records.edit', [ConstParams::AT_RECORD_ID => $at_record_id]),
+            'label'=> '編集',
+            ])
+        @endcomponent
+    </div>
+</div>
+@component('components.infoTable', [
+    'labels'=> $at_record_labels,
+    'data'=> $at_record_data,
+])
 @endcomponent
 @endsection
 @section('footer')

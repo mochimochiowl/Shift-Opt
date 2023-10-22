@@ -20,8 +20,14 @@ class AttendanceRecordController extends Controller
      */
     public function show($at_record_id): View
     {
-        $data = AttendanceRecord::searchById($at_record_id)->dataArray();
-        return view('at_records.show', ['data' => $data]);
+        $record = AttendanceRecord::searchById($at_record_id);
+        $at_record_labels = $record->labels();
+        $at_record_data = $record->data();
+        return view('at_records.show', [
+            'at_record_id' => $record->at_record_id,
+            'at_record_labels' => $at_record_labels,
+            'at_record_data' => $at_record_data,
+        ]);
     }
 
     /**
