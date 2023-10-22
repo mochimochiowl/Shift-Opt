@@ -65,18 +65,17 @@
 </form>
 
 @if ($results)
-@if ($search_requirements)
-    <div class="p-4 mb-3 rounded-xl bg-blue-200">
-        @component('components.h2',['title' => '検索ワード'])
-        @endcomponent
-        <p>検索種類   : {{$search_requirements['search_field_jp'] ?? ''}}</p>
-        <p>検索ワード : {{$search_requirements['keyword'] ?? ''}}</p>
-        <p>ヒット件数 : {{count($results)}}</p>
-    </div>
+@if ($search_requirement_labels && $search_requirements)
+    @component('components.searchRequirementsShow',[
+        'search_requirement_labels' => $search_requirement_labels,
+        'search_requirements_data' => $search_requirements_data,
+        'count' => count($results),
+        ])
+    @endcomponent
 @endif
-@component('components.h2',['title' => '検索結果'])
-@endcomponent
-<div class="overflow-x-auto">
+<div class="overflow-x-auto p-4 mb-3 rounded-xl bg-blue-200">
+    @component('components.h2',['title' => '検索結果'])
+    @endcomponent
     <table class="border-collapse w-full my-5">
         <thead>
             <tr>
@@ -120,7 +119,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
                 </th>
-                <th class="hidden w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細
                 </th>
             </tr>
@@ -143,7 +142,7 @@
                 <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     {{$result->kana_first_name}}
                 </td>
-                <td class="px-3 py-2">
+                <td class="text-center bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     @component('components.link', [
                         'href'=> route('users.show', [ConstParams::USER_ID => $result->user_id]),
                         'label'=> '詳細',

@@ -145,7 +145,8 @@
                 ])
             @endcomponent
         </div>
-        <hr>
+        @component('components.hr')
+        @endcomponent
         <div class="pt-4">
             @component('components.link', [
                 'href'=> route('at_records.create'),
@@ -158,17 +159,14 @@
 </form>
 
 @if ($results)
-@if (($search_requirements['search_field_jp'])&&($search_requirements['keyword'])&&($search_requirements['start_date'])&&($search_requirements['end_date']))
-    <div class="p-4 mb-3 rounded-xl bg-blue-200">
-        @component('components.h2',['title' => '検索ワード'])
+    @if ($search_requirement_labels && $search_requirements)
+        @component('components.searchRequirementsShow',[
+            'search_requirement_labels' => $search_requirement_labels,
+            'search_requirements_data' => $search_requirements_data,
+            'count' => count($results),
+            ])
         @endcomponent
-        <p>検索種類   : {{$search_requirements['search_field_jp']}}</p>
-        <p>検索ワード : {{$search_requirements['keyword']}}</p>
-        <p>開始日　: {{$search_requirements['start_date']}}</p>
-        <p>終了日　: {{$search_requirements['end_date']}}</p>
-        <p>ヒット件数 : {{count($results)}}</p>
-    </div>
-@endif
+    @endif
 @component('components.h2',['title' => '検索結果'])
 @endcomponent
 <div class="overflow-x-auto">
@@ -265,10 +263,10 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     編集
                 </th>
             </tr>
@@ -303,11 +301,19 @@
                 <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     {{$result[ConstParams::AT_RECORD_TIME]}}
                 </td>
-                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
-                    <a href="{{route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">詳細</a>
+                <td class="text-center bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    @component('components.link', [
+                        'href'=> route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]]),
+                        'label'=> '詳細',
+                    ])
+                    @endcomponent
                 </td>
-                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
-                    <a href="{{route('at_records.edit', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">編集</a>
+                <td class="text-center bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    @component('components.link', [
+                        'href'=> route('at_records.edit', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]]),
+                        'label'=> '編集',
+                    ])
+                    @endcomponent
                 </td>
             </tr>
         @endforeach

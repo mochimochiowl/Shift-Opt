@@ -29,9 +29,12 @@ class SearchController extends Controller
                 'order' => null,
                 'search_field_jp' => null,
             ];
+            $search_requirement_labels = null;
+            $search_requirements_data = null;
         } else { //検索を実行したとき
             $search_field = $request->input('search_field');
             $keyword = $request->input('keyword');
+
             $search_requirements = [
                 'search_field' => $search_field,
                 'keyword' => $keyword,
@@ -39,11 +42,21 @@ class SearchController extends Controller
                 'order' => $request->input('order') ?? 'asc',
                 'search_field_jp' => $this->getFieldNameJP($search_field),
             ];
+            $search_requirement_labels = [
+                '検索種別',
+                'キーワード',
+            ];
+            $search_requirements_data = [
+                $this->getFieldNameJP($search_field),
+                $keyword,
+            ];
             $results = $this->searchUsers($search_requirements);
         }
 
         return view('users/search', [
             'results' => $results,
+            'search_requirement_labels' => $search_requirement_labels,
+            'search_requirements_data' => $search_requirements_data,
             'search_requirements' => $search_requirements,
         ]);
     }
@@ -79,6 +92,8 @@ class SearchController extends Controller
                 'order' => null,
                 'search_field_jp' => null,
             ];
+            $search_requirement_labels = null;
+            $search_requirements_data = null;
         } else { //検索を実行したとき
             $search_field = $request->input('search_field') ?? 'all';
             $keyword = $request->input('keyword') ?? 'empty';
@@ -93,6 +108,18 @@ class SearchController extends Controller
                 'column' => $request->input('column'),
                 'order' => $request->input('order'),
             ];
+            $search_requirement_labels = [
+                '検索種別',
+                'キーワード',
+                '開始日',
+                '終了日',
+            ];
+            $search_requirements_data = [
+                $this->getFieldNameJP($search_field),
+                $keyword,
+                $search_requirements['start_date'],
+                $search_requirements['end_date'],
+            ];
 
             $results = $this->searchAtRecords($search_requirements, false);
 
@@ -102,6 +129,8 @@ class SearchController extends Controller
         $default_dates = $this->defaultDates();
         return view('at_records/search', [
             'results' => $results,
+            'search_requirement_labels' => $search_requirement_labels,
+            'search_requirements_data' => $search_requirements_data,
             'search_requirements' => $search_requirements,
             'default_dates' => $default_dates,
         ]);
