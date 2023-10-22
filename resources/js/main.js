@@ -1,6 +1,7 @@
 // import './bootstrap';
 import showClock from './currentTimer.js';
 import {
+    setToday,
     setNextDay,
     setPreviousDay,
     setStartOfThisMonth,
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+window.setToday = setToday;
 window.setNextDay = setNextDay;
 window.setPreviousDay = setPreviousDay;
 window.setStartOfThisMonth = setStartOfThisMonth;

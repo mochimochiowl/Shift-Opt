@@ -5,86 +5,18 @@
     <div class="p-4 mb-3 rounded-xl bg-blue-200">
         @component('components.h2',['title' => '検索条件'])
         @endcomponent
-        <div>
-            @component('components.inputText', [
-                'type' => 'date',
-                'name'=> 'start_date',
-                'name_jp'=> '開始日',
-                'value' => $search_requirements['start_date'] ?? $default_dates['start_date'],
-                'placeholder' => 'キーワードを入力してください',
-                'autocomplete'=> 'off',
-                'valied'=> true,
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '今月初',
-                'onclick' => 'setStartOfThisMonth',
-                'arg' => "'#start_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '今月末',
-                'onclick' => 'setEndOfThisMonth',
-                'arg' => "'#start_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '先月初',
-                'onclick' => 'setStartOfLastMonth',
-                'arg' => "'#start_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '先月末',
-                'onclick' => 'setEndOfLastMonth',
-                'arg' => "'#start_date'",
-                ])
-            @endcomponent
-        </div>
-        <div>
-            @component('components.inputText', [
-                'type' => 'date',
-                'name'=> 'end_date',
-                'name_jp'=> '開始日',
-                'value' => $search_requirements['end_date'] ?? $default_dates['end_date'],
-                'placeholder' => 'キーワードを入力してください',
-                'autocomplete'=> 'off',
-                'valied'=> true,
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '今月初',
-                'onclick' => 'setStartOfThisMonth',
-                'arg' => "'#end_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '今月末',
-                'onclick' => 'setEndOfThisMonth',
-                'arg' => "'#end_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '先月初',
-                'onclick' => 'setStartOfLastMonth',
-                'arg' => "'#end_date'",
-                ])
-            @endcomponent
-            @component('components.button', [
-                'type' => 'button',
-                'label' => '先月末',
-                'onclick' => 'setEndOfLastMonth',
-                'arg' => "'#end_date'",
-                ])
-            @endcomponent
-        </div>
+        @component('components.inputDateSet',[
+            'name' => 'start_date',
+            'name_jp' => '開始日',
+            'value' => $search_requirements['start_date'] ?? $default_dates['start_date'],
+            ])
+        @endcomponent
+        @component('components.inputDateSet',[
+            'name' => 'end_date',
+            'name_jp' => '終了日',
+            'value' => $search_requirements['end_date'] ?? $default_dates['end_date'],
+            ])
+        @endcomponent
         @component('components.inputRadio', [
             'label' => '種別',
             'items' => [

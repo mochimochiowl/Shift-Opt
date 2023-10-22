@@ -1,24 +1,21 @@
-export function setToday() {
-    const dateInput = document.querySelector('#date');
+export function setToday(selector) {
+    const dateInput = document.querySelector(selector);
     const today = new Date();
     dateInput.value = formatDate(today);
-    dateInput.form.submit();
 }
 
-export function setNextDay() {
-    const dateInput = document.querySelector('#date');
+export function setNextDay(selector) {
+    const dateInput = document.querySelector(selector);
     const day = new Date(dateInput.value);
     const tomorrow = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1);
     dateInput.value = formatDate(tomorrow);
-    dateInput.form.submit();
 }
 
-export function setPreviousDay() {
-    const dateInput = document.querySelector('#date');
+export function setPreviousDay(selector) {
+    const dateInput = document.querySelector(selector);
     const day = new Date(dateInput.value);
     const yesterday = new Date(day.getFullYear(), day.getMonth(), day.getDate() - 1);
     dateInput.value = formatDate(yesterday);
-    dateInput.form.submit();
 }
 
 export function setStartOfThisMonth(selector) {
