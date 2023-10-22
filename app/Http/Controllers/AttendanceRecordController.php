@@ -130,8 +130,14 @@ class AttendanceRecordController extends Controller
      */
     public function confirmDestroy(Request $request): View
     {
-        $data = AttendanceRecord::searchById($request->at_record_id)->dataArray();
-        return view('at_records.confirmDestroy', ['data' => $data]);
+        $record = AttendanceRecord::searchById($request->at_record_id);
+        $at_record_labels = $record->labels();
+        $at_record_data = $record->data();
+        return view('at_records.confirmDestroy', [
+            'at_record_id' => $record->at_record_id,
+            'at_record_labels' => $at_record_labels,
+            'at_record_data' => $at_record_data,
+        ]);
     }
 
     /** 
@@ -142,11 +148,23 @@ class AttendanceRecordController extends Controller
     {
         try {
             return DB::transaction(function () use ($at_record_id) {
+                $record = AttendanceRecord::searchById($at_record_id);
+                if ($record) {
+                    throw new Exception('削除対象の' . ConstParams::AT_RECORD_JP . 'が存在しません。');
+                }
+                $at_record_labels = $record->labels();
+                $at_record_data = $record->data();
                 $count = AttendanceRecord::deletedById($at_record_id);
-                return redirect()->route('at_records.delete.result', [ConstParams::AT_RECORD_ID => $at_record_id])->with(['count' => $count]);
+                return redirect()->route('at_records.delete.result', [
+                    ConstParams::AT_RECORD_ID => $at_record_id,
+                ])->with([
+                    'at_record_labels' => $at_record_labels,
+                    'at_record_data' => $at_record_data,
+                    'count' => $count,
+                ]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'AttendanceRecordController::destroyでエラー' . $e->getMessage()]);
+            return redirect()->route('at_records.search')->withErrors(['message' => $e->getMessage()]);
         }
     }
 
@@ -156,6 +174,10 @@ class AttendanceRecordController extends Controller
      */
     public function showDestroyResult(Request $request): View
     {
-        return view('users.destroyResult', ['count' => session('count')]);
+        return view('at_records.destroyResult', [
+            'at_record_labels' => session('at_record_labels'),
+            'at_record_data' => session('at_record_data'),
+            'count' => session('count'),
+        ]);
     }
 }

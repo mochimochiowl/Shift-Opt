@@ -13,7 +13,6 @@
     ])
     @endcomponent
 @endif
-
 @endsection
 
 @section('footer')
