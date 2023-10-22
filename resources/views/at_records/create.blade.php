@@ -1,63 +1,88 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '登録画面')
 @section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+
+<form action="{{route('at_records.store')}}" method="post">
+    @csrf
+    @component('components.inputText', [
+        'type' => 'text',
+        'name'=> 'target_login_id',
+        'name_jp'=> ConstParams::LOGIN_ID_JP,
+        'value' => old('target_login_id') ?? '',
+        'placeholder' => '',
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
+    @component('components.inputText', [
+        'type' => 'text',
+        'name'=> ConstParams::AT_SESSION_ID,
+        'name_jp'=> ConstParams::AT_SESSION_ID_JP,
+        'value' => old(ConstParams::AT_SESSION_ID) ?? '',
+        'placeholder' => '',
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
+    @component('components.inputRadio', [
+    'label' => ConstParams::AT_RECORD_TYPE_JP,
+    'items' => [
+            [
+                'name'=> ConstParams::AT_RECORD_TYPE,
+                'name_jp'=> ConstParams::AT_RECORD_START_WORK_JP,
+                'value'=> ConstParams::AT_RECORD_START_WORK,
+                'checked'=> (old(ConstParams::AT_RECORD_TYPE) == ConstParams::AT_RECORD_START_WORK),
+            ],
+            [
+                'name'=> ConstParams::AT_RECORD_TYPE,
+                'name_jp'=> ConstParams::AT_RECORD_FINISH_WORK_JP,
+                'value'=> ConstParams::AT_RECORD_FINISH_WORK,
+                'checked'=> (old(ConstParams::AT_RECORD_TYPE) == ConstParams::AT_RECORD_FINISH_WORK),
+            ],
+            [
+                'name'=> ConstParams::AT_RECORD_TYPE,
+                'name_jp'=> ConstParams::AT_RECORD_START_BREAK_JP,
+                'value'=> ConstParams::AT_RECORD_START_BREAK,
+                'checked'=> (old(ConstParams::AT_RECORD_TYPE) == ConstParams::AT_RECORD_START_BREAK),
+            ],
+            [
+                'name'=> ConstParams::AT_RECORD_TYPE,
+                'name_jp'=> ConstParams::AT_RECORD_FINISH_BREAK_JP,
+                'value'=> ConstParams::AT_RECORD_FINISH_BREAK,
+                'checked'=> (old(ConstParams::AT_RECORD_TYPE) == ConstParams::AT_RECORD_FINISH_BREAK),
+            ],
+        ],
+    ])
+    @endcomponent
+    @component('components.inputText', [
+        'type' => 'date',
+        'name'=> ConstParams::AT_RECORD_DATE,
+        'name_jp'=> ConstParams::AT_RECORD_DATE_JP,
+        'value' => old(ConstParams::AT_RECORD_DATE) ?? getToday(),
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
+    @component('components.inputText', [
+        'type' => 'time',
+        'name'=> ConstParams::AT_RECORD_TIME,
+        'name_jp'=> ConstParams::AT_RECORD_TIME_JP,
+        'value' => old(ConstParams::AT_RECORD_TIME) ?? getCurrentTime(),
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
+    <input type="hidden" name="created_by_user_id" value="{{Auth::user()->user_id}}">
+    <input type="hidden" name="is_admin" value="true">
+    <div class="pt-4">
+        @component('components.button', [
+            'type' => 'submit',
+            'label' => '登録',
+            'w_full' => true,
+            ])
+        @endcomponent
     </div>
-    @endif
-    <form action="{{route('at_records.store')}}" method="post">
-        @csrf
-        <div>
-            <div>
-                <label for="target_login_id">{{ConstParams::LOGIN_ID_JP}}</label>
-                <input type="text" name="target_login_id" id="target_login_id" value="{{old('target_login_id')}}">
-            </div>
-        </div>
-        <div>
-            <div>
-                <label for="{{ConstParams::AT_SESSION_ID}}">{{ConstParams::AT_SESSION_ID_JP}}</label>
-                <input type="text" name="{{ConstParams::AT_SESSION_ID}}" id="{{ConstParams::AT_SESSION_ID}}" value="{{old(ConstParams::AT_SESSION_ID)}}">
-            </div>
-        </div>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
-            <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
-                <option value="{{ConstParams::AT_RECORD_START_WORK}}">
-                    {{ConstParams::AT_RECORD_START_WORK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_FINISH_WORK}}">
-                    {{ConstParams::AT_RECORD_FINISH_WORK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_START_BREAK}}">
-                    {{ConstParams::AT_RECORD_START_BREAK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_FINISH_BREAK}}">
-                    {{ConstParams::AT_RECORD_FINISH_BREAK_JP}}
-                </option>
-            </select>
-        </div>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_DATE}}">日付 : </label>
-            <input type="date" name="{{ConstParams::AT_RECORD_DATE}}" id="{{ConstParams::AT_RECORD_DATE}}" value="{{old(ConstParams::AT_RECORD_DATE)}}">
-        </div>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_TIME}}">時刻 : </label>
-            <input type="time" name="{{ConstParams::AT_RECORD_TIME}}" id="{{ConstParams::AT_RECORD_TIME}}" value="{{old(ConstParams::AT_RECORD_TIME)}}">
-        </div>
-        <input type="hidden" name="created_by_user_id" value="{{Auth::user()->user_id}}">
-        <input type="hidden" name="is_admin" value="true">
-        <div>
-            <button type="submit">送信</button>
-        </div>
-    </form>
+</form>
 @endsection
 
 @section('footer')

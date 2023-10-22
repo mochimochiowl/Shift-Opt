@@ -23,5 +23,7 @@ window.setStartOfThisMonth = setStartOfThisMonth;
 window.setEndOfThisMonth = setEndOfThisMonth;
 window.setStartOfLastMonth = setStartOfLastMonth;
 window.setEndOfLastMonth = setEndOfLastMonth;
+
 window.movePreviousPage = movePreviousPage;
+
 window.toggleMenu = toggleMenu;

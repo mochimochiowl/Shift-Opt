@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('at_records/{at_record_id}', [AttendanceRecordController::class, 'destroy'])->name('at_records.delete');
 
     // 確認画面や結果画面などのルート
+    Route::get('at_records/{at_record_id}/create/result', [AttendanceRecordController::class, 'showCreateResult'])->name('at_records.create.result');
     Route::get('at_records/{at_record_id}/edit/result', [AttendanceRecordController::class, 'showUpdateResult'])->name('at_records.update.result');
     Route::post('at_records/{at_record_id}/delete/confirm', [AttendanceRecordController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
     Route::get('at_records/{at_record_id}/delete/result', [AttendanceRecordController::class, 'showDestroyResult'])->name('at_records.delete.result');

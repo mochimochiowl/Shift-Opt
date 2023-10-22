@@ -29,7 +29,7 @@
         @method('DELETE')
         @component('components.button', [
             'type' => 'submit',
-            'label' => 'このユーザーを削除する',
+            'label' => '削除する',
             'w_full' => true,
             ])
         @endcomponent

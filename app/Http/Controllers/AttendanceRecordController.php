@@ -7,6 +7,7 @@ use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\AtRecordUpdateRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,18 +58,33 @@ class AttendanceRecordController extends Controller
                 ];
 
                 $new_record = AttendanceRecord::createNewRecord($data);
+                $at_record_labels = $new_record->labels();
+                $at_record_data = $new_record->data();
 
-                $messages = [
-                    [
-                        'type' => 'success',
-                        'text' => ConstParams::AT_RECORD_JP . 'を新規作成しました | 対象の' . ConstParams::AT_RECORD_ID_JP . ' : ' . $new_record->at_record_id,
-                    ],
-                ];
-                return redirect()->route('at_records.search')->with(['messages' => $messages]);
+                return redirect()->route('at_records.create.result', [
+                    ConstParams::AT_RECORD_ID => $new_record->at_record_id,
+                ])->with([
+                    'at_record_id' => $new_record->at_record_id,
+                    'at_record_labels' => $at_record_labels,
+                    'at_record_data' => $at_record_data,
+                ]);
             }, 5);
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['messages' => 'AttendanceRecordController::storeでエラー' . $e->getMessage()])->withInput();
         }
+    }
+
+    /**
+     * at_record 作成処理を行い、その処理が成功したことを表示する画面を返す
+     * @return View
+     */
+    public function showCreateResult(Request $request): View
+    {
+        return view('at_records.createResult', [
+            'at_record_id' => session('at_record_id'),
+            'at_record_labels' => session('at_record_labels'),
+            'at_record_data' => session('at_record_data'),
+        ]);
     }
 
     /**
@@ -149,7 +165,7 @@ class AttendanceRecordController extends Controller
         try {
             return DB::transaction(function () use ($at_record_id) {
                 $record = AttendanceRecord::searchById($at_record_id);
-                if ($record) {
+                if (!$record) {
                     throw new Exception('削除対象の' . ConstParams::AT_RECORD_JP . 'が存在しません。');
                 }
                 $at_record_labels = $record->labels();

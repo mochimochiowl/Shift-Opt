@@ -21,7 +21,7 @@ function getCurrentTime(): string
 function getToday(): string
 {
     date_default_timezone_set('Asia/Tokyo');
-    return date("Y/m/d");
+    return date("Y-m-d");
 }
 
 /**
