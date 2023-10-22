@@ -253,6 +253,9 @@
     </table>
 </div>
 {{ $results->appends(request()->except('page'))->links() }}
+@else
+    @component('components.message',['message' => 'データがありません。'])
+    @endcomponent
 @endif
 @endsection
 
