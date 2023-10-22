@@ -1,7 +1,7 @@
 <div class="mb-4">
     <label for="{{$name}}" class="block text-2xl text-black font-bold mb-2">
         {{$name_jp}}
-        <span class="ml-4 text-red-800" {{($valied) ? 'hidden' : ''}}>＊この項目は編集できません。</span>
+        <span class="ml-3 text-lg text-red-800" {{($valied) ? 'hidden' : ''}}>＊この項目は編集できません。</span>
     </label>
     <input 
     type="{{$type}}" 

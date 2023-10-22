@@ -91,9 +91,17 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($at_record_id, $request) {
                 $data = $request->validated();
                 $result = AttendanceRecord::updateInfo($at_record_id, $data);
+                $record = AttendanceRecord::searchById($at_record_id);
+                $at_record_labels = $record->labels();
+                $at_record_data = $record->data();
                 return redirect()
                     ->route('at_records.update.result', [ConstParams::AT_RECORD_ID => $result['data'][ConstParams::AT_RECORD_ID]])
-                    ->with(['data' => $result['data'], 'count' => $result['count']]);
+                    ->with([
+                        'at_record_id' => $record->at_record_id,
+                        'at_record_labels' => $at_record_labels,
+                        'at_record_data' => $at_record_data,
+                        'count' => $result['count'],
+                    ]);
             }, 5);
         } catch (Exception $e) {
             return redirect()
@@ -108,7 +116,12 @@ class AttendanceRecordController extends Controller
      */
     public function showUpdateResult(Request $request): View
     {
-        return view('at_records.editResult', ['data' => session('data'), 'count' => session('count')]);
+        return view('at_records.editResult', [
+            'at_record_id' => session('at_record_id'),
+            'at_record_labels' => session('at_record_labels'),
+            'at_record_data' => session('at_record_data'),
+            'count' => session('count'),
+        ]);
     }
 
     /**

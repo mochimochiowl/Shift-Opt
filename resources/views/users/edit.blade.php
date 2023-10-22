@@ -125,7 +125,8 @@
     @component('components.message',['message' => ConstParams::USER_JP . 'を取得できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
 @endif
-<hr class="my-4">
+@component('components.hr')
+@endcomponent
 <div>
     @if ($user_data)
     <form action="{{route('users.delete.confirm', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">

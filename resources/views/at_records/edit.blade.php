@@ -10,67 +10,114 @@
     </ul>
 </div>
 @endif
+@component('components.userBriefInfo',['user_data' => [
+    ConstParams::USER_ID =>  $data[ConstParams::USER_ID],
+    ConstParams::KANJI_LAST_NAME =>  $data[ConstParams::KANJI_LAST_NAME],
+    ConstParams::KANJI_FIRST_NAME =>  $data[ConstParams::KANJI_FIRST_NAME],
+    ConstParams::KANA_LAST_NAME =>  $data[ConstParams::KANA_LAST_NAME],
+    ConstParams::KANA_FIRST_NAME =>  $data[ConstParams::KANA_FIRST_NAME],
+]])
+@endcomponent
 @if ($data)
-<form action="{{route('at_records.update', [ConstParams::AT_RECORD_ID => $data[ConstParams::AT_RECORD_ID]])}}" method="POST">
+<form action="{{route('at_records.update', [ConstParams::AT_RECORD_ID => $data[ConstParams::AT_RECORD_ID]])}}" method="POST" class="mb-3">
     @csrf
     @method('PUT')
-    <div>
-        <p>{{ConstParams::AT_RECORD_ID_JP}} : {{$data[ConstParams::AT_RECORD_ID]}}</p>
-        <p>{{ConstParams::AT_SESSION_ID_JP}} : {{$data[ConstParams::AT_SESSION_ID]}}</p>
-        <input type="hidden" name="{{ConstParams::AT_RECORD_ID}}" id="{{ConstParams::AT_RECORD_ID}}" value="{{$data[ConstParams::AT_RECORD_ID]}}" readonly>
-        <p>{{ConstParams::USER_ID_JP}} : {{$data[ConstParams::USER_ID]}}</p>
-        <p>名前 : {{$data[ConstParams::KANJI_LAST_NAME]}} {{$data[ConstParams::KANJI_FIRST_NAME]}}</p>
-        <p>なまえ : {{$data[ConstParams::KANA_LAST_NAME]}} {{$data[ConstParams::KANA_FIRST_NAME]}}</p>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_TYPE}}">{{ConstParams::AT_RECORD_TYPE_JP}} : </label>
-            <select name="{{ConstParams::AT_RECORD_TYPE}}" id="{{ConstParams::AT_RECORD_TYPE}}">
-                <option value="{{ConstParams::AT_RECORD_START_WORK}}" 
-                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_WORK) ? 'selected' : '' }}>
-                    {{ConstParams::AT_RECORD_START_WORK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_FINISH_WORK}}" 
-                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_WORK) ? 'selected' : '' }}>
-                    {{ConstParams::AT_RECORD_FINISH_WORK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_START_BREAK}}" 
-                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_BREAK) ? 'selected' : '' }}>
-                    {{ConstParams::AT_RECORD_START_BREAK_JP}}
-                </option>
-        
-                <option value="{{ConstParams::AT_RECORD_FINISH_BREAK}}" 
-                        {{ ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_BREAK) ? 'selected' : '' }}>
-                    {{ConstParams::AT_RECORD_FINISH_BREAK_JP}}
-                </option>
-            </select>
-        </div>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_DATE}}">{{ConstParams::AT_RECORD_DATE_JP}} : </label>
-            <input type="date" name="{{ConstParams::AT_RECORD_DATE}}" id="{{ConstParams::AT_RECORD_DATE}}" value="{{$data[ConstParams::AT_RECORD_DATE]}}">
-        </div>
-        <div>
-            <label for="{{ConstParams::AT_RECORD_TIME}}">{{ConstParams::AT_RECORD_TIME_JP}} : </label>
-            <input type="time" name="{{ConstParams::AT_RECORD_TIME}}" id="{{ConstParams::AT_RECORD_TIME}}" value="{{$data[ConstParams::AT_RECORD_TIME]}}">
-        </div>
-        <p>{{ConstParams::CREATED_AT_JP}} : {{$data[ConstParams::CREATED_AT]}}</p>
-        <p>{{ConstParams::UPDATED_AT_JP}} : {{$data[ConstParams::UPDATED_AT]}}</p>
-        <p>{{ConstParams::CREATED_BY_JP}} : {{$data[ConstParams::CREATED_BY]}}</p>
-        <p>{{ConstParams::UPDATED_BY_JP}} : {{$data[ConstParams::UPDATED_BY]}}</p>
-    </div>
+    @component('components.inputText', [
+        'type' => 'text',
+        'name'=> ConstParams::AT_RECORD_ID,
+        'name_jp'=> ConstParams::AT_RECORD_ID_JP,
+        'value' => $data[ConstParams::AT_RECORD_ID],
+        'autocomplete'=> 'off',
+        'valied'=> false,
+        ])
+    @endcomponent
+    @component('components.inputText', [
+      'type' => 'text',
+      'name'=> ConstParams::AT_SESSION_ID,
+      'name_jp'=> ConstParams::AT_SESSION_ID_JP,
+      'value' => $data[ConstParams::AT_SESSION_ID],
+      'placeholder' => '',
+      'autocomplete'=> 'off',
+      'valied'=> true,
+      ])
+    @endcomponent
+    @component('components.inputRadio', [
+      'label' => ConstParams::AT_RECORD_TYPE_JP,
+      'items' => [
+              [
+                  'name'=> ConstParams::AT_RECORD_TYPE,
+                  'name_jp'=> ConstParams::AT_RECORD_START_WORK_JP,
+                  'value'=> ConstParams::AT_RECORD_START_WORK,
+                  'checked'=> ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_WORK),
+              ],
+              [
+                  'name'=> ConstParams::AT_RECORD_TYPE,
+                  'name_jp'=> ConstParams::AT_RECORD_FINISH_WORK_JP,
+                  'value'=> ConstParams::AT_RECORD_FINISH_WORK,
+                  'checked'=> ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_WORK)
+              ],
+              [
+                  'name'=> ConstParams::AT_RECORD_TYPE,
+                  'name_jp'=> ConstParams::AT_RECORD_START_BREAK_JP,
+                  'value'=> ConstParams::AT_RECORD_START_BREAK,
+                  'checked'=> ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_START_BREAK)
+              ],
+              [
+                  'name'=> ConstParams::AT_RECORD_TYPE,
+                  'name_jp'=> ConstParams::AT_RECORD_FINISH_BREAK_JP,
+                  'value'=> ConstParams::AT_RECORD_FINISH_BREAK,
+                  'checked'=> ($data[ConstParams::AT_RECORD_TYPE] == ConstParams::AT_RECORD_FINISH_BREAK)
+              ],
+          ],
+      ])
+    @endcomponent
+    @component('components.inputText', [
+        'type' => 'date',
+        'name'=> ConstParams::AT_RECORD_DATE,
+        'name_jp'=> ConstParams::AT_RECORD_DATE_JP,
+        'value' => $data[ConstParams::AT_RECORD_DATE],
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
+    @component('components.inputText', [
+        'type' => 'time',
+        'name'=> ConstParams::AT_RECORD_TIME,
+        'name_jp'=> ConstParams::AT_RECORD_TIME_JP,
+        'value' => $data[ConstParams::AT_RECORD_TIME],
+        'autocomplete'=> 'off',
+        'valied'=> true,
+        ])
+    @endcomponent
     <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
-    <div><input type="submit" value="更新"></div>
+    <div class="pt-4">
+        @component('components.button', [
+            'type' => 'submit',
+            'label' => '更新',
+            'w_full' => true,
+            ])
+        @endcomponent
+    </div>
 </form>
 @else
-    <p>更新に失敗</p>
+    @component('components.message',['message' => ConstParams::AT_RECORD_JP . 'を更新できませんでした。時間をおいてから再度お試しください。'])
+    @endcomponent
 @endif
-<hr>
+@component('components.hr')
+@endcomponent
 <div>
     @if ($data)
     <form action="{{route('at_records.delete.confirm', [ConstParams::AT_RECORD_ID => $data[ConstParams::AT_RECORD_ID]])}}" method="POST">
         @csrf
         <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
-        <button type="submit">この{{ConstParams::AT_RECORD_JP}}を削除する</button>
+        <div class="pt-4">
+            @component('components.button', [
+                'type' => 'submit',
+                'label' => '削除',
+                'w_full' => true,
+                ])
+            @endcomponent
+          </div>
     </form>
     @endif
 </div>
