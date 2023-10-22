@@ -190,11 +190,17 @@ class UserController extends Controller
     {
         try {
             $user = User::where('user_id', $request->user_id)->first();
-            $user_data = $user->dataArray();
-            if ($user_data[ConstParams::IS_ADMIN]) {
-                throw new Exception(ConstParams::ADMIN_JP . 'を削除することはできません。');
+            $user_labels = $user->labels();
+            $user_data = $user->data();
+            if ($user->is_admin) {
+                throw new Exception(ConstParams::ADMIN_JP . 'は削除できません。');
             }
-            return view('users.confirmDestroy', ['user_data' => $user_data]);
+            return view('users.confirmDestroy', [
+                'user_id' => $user->user_id,
+                'is_admin' => $user->is_admin,
+                'user_labels' => $user_labels,
+                'user_data' => $user_data,
+            ]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => $e->getMessage()]);
         }
@@ -208,11 +214,24 @@ class UserController extends Controller
     {
         try {
             return DB::transaction(function () use ($user_id) {
+                $user = User::where('user_id', $user_id)->first();
+                if (!$user) {
+                    throw new Exception('削除対象の' . ConstParams::USER_JP . 'が存在しません。');
+                }
+                $user_labels = $user->labels();
+                $user_data = $user->data();
                 $count = User::deletedById($user_id);
-                return redirect()->route('users.delete.result', [ConstParams::USER_ID => $user_id])->with(['count' => $count]);
+                return redirect()
+                    ->route('users.delete.result', [ConstParams::USER_ID => $user_id])
+                    ->with([
+                        'user_id' => $user->user_id,
+                        'user_labels' => $user_labels,
+                        'user_data' => $user_data,
+                        'count' => $count,
+                    ]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['message' => 'UserController::destroyでエラー' . $e->getMessage()]);
+            return redirect()->route('users.search')->withErrors(['message' => $e->getMessage()]);
         }
     }
 
@@ -222,6 +241,11 @@ class UserController extends Controller
      */
     public function showDestroyResult(Request $request): View
     {
-        return view('users.destroyResult', ['count' => session('count')]);
+        return view('users.destroyResult', [
+            'user_id' => session('user_id'),
+            'user_labels' => session('user_labels'),
+            'user_data' => session('user_data'),
+            'count' => session('count'),
+        ]);
     }
 }

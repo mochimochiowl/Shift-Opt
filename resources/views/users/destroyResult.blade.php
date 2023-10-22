@@ -1,10 +1,19 @@
 @extends('layouts.base')
-@section('title', 'ユーザー情報削除処理成功画面')
+@section('title', ConstParams::USER_JP . '削除処理成功')
 @section('content')
-<div>
-    <p>データ を削除しました。</p>
-    <p>削除した項目数：{{$count}}</p>
-</div>
+@if ($count === 0)
+    @component('components.message',['message' => '削除できませんでした。時間をおいてから再度お試しください。'])
+    @endcomponent
+@else
+    @component('components.h2',['title' => '削除した' . ConstParams::USER_JP])
+    @endcomponent
+    @component('components.infoTable', [
+        'labels'=> $user_labels,
+        'data'=> $user_data,
+    ])
+    @endcomponent
+@endif
+
 @endsection
 
 @section('footer')

@@ -3,25 +3,25 @@
 @section('content')
 <div>
     @if ($count === 0)
-    <p>データが更新できませんでした。</p>
+       <p>データが更新できませんでした。</p>
     @else
-    @component('components.h2',['title' => ConstParams::USER_JP])
-    @endcomponent
-    @component('components.link', [
-        'href'=> route('users.edit', [ConstParams::USER_ID => $user_id]),
-        'label'=> '再度編集する',
-    ])
-    @endcomponent
-    @component('components.link', [
-        'href'=> route('users.search'),
-        'label'=> '検索に戻る',
-    ])
-    @endcomponent
-    @component('components.infoTable', [
-        'labels'=> $user_labels,
-        'data'=> $user_data,
-    ])
-    @endcomponent
+        @component('components.h2',['title' => ConstParams::USER_JP])
+        @endcomponent
+        @component('components.link', [
+            'href'=> route('users.edit', [ConstParams::USER_ID => $user_id]),
+            'label'=> '再度編集する',
+        ])
+        @endcomponent
+        @component('components.link', [
+            'href'=> route('users.search'),
+            'label'=> '検索に戻る',
+        ])
+        @endcomponent
+        @component('components.infoTable', [
+            'labels'=> $user_labels,
+            'data'=> $user_data,
+        ])
+        @endcomponent
     @endif
 </div>
 @endsection

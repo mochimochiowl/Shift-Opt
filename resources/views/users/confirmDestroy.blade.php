@@ -1,24 +1,42 @@
 @extends('layouts.base')
 @section('title', ConstParams::USER_JP . '削除確認画面')
 @section('content')
-@if ($user_data[ConstParams::USER_ID] === 1)
-    <p>管理者ユーザーは削除できません。</p>
-    @else
-    <div>
-        <p>以下 の データを削除します。</p>
-        <p>データを一度削除すると、戻すことはできません。</p>
-        @component('components.userInfo', ['user_data'=> $user_data])
+@if ($is_admin)
+    @component('components.message',['message' => ConstParams::ADMIN_JP . 'は削除できません。'])
+    @endcomponent
+    <p></p>
+@else
+    @component('components.message',['message' => 'データを一度削除すると、戻すことはできません。'])
+    @endcomponent
+    @component('components.h2',['title' => ConstParams::USER_JP])
+    @endcomponent
+
+    @component('components.infoTable', [
+        'labels'=> $user_labels,
+        'data'=> $user_data,
+    ])
+    @endcomponent
+<div>
+    <div class="mb-4">
+        @component('components.link', [
+            'href'=> route('users.search'),
+            'label'=> '検索に戻る',
+        ])
         @endcomponent
     </div>
-    <div>
-        <p>本当に削除してもよろしいですか？</p>
-        <form action="{{route('users.delete', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit">このユーザーを削除する</button>
-        </form>
-    </div>
-    @endif
+    @component('components.message',['message' => '本当に削除してもよろしいですか？'])
+    @endcomponent
+    <form action="{{route('users.delete', [ConstParams::USER_ID => $user_id])}}" method="POST">
+        @csrf
+        @method('DELETE')
+        @component('components.button', [
+            'type' => 'submit',
+            'label' => 'このユーザーを削除する',
+            ])
+        @endcomponent
+    </form>
+</div>
+@endif
 @endsection
 
 @section('footer')
