@@ -66,13 +66,13 @@
 
 @if ($results)
 @if ($search_requirements)
-<div class="p-4 mb-3 rounded-xl bg-blue-200">
-    @component('components.h2',['title' => '検索ワード'])
-    @endcomponent
-    <p>検索種類   : {{$search_requirements['search_field_jp'] ?? ''}}</p>
-    <p>検索ワード : {{$search_requirements['keyword'] ?? ''}}</p>
-    <p>ヒット件数 : {{count($results)}}</p>
-</div>
+    <div class="p-4 mb-3 rounded-xl bg-blue-200">
+        @component('components.h2',['title' => '検索ワード'])
+        @endcomponent
+        <p>検索種類   : {{$search_requirements['search_field_jp'] ?? ''}}</p>
+        <p>検索ワード : {{$search_requirements['keyword'] ?? ''}}</p>
+        <p>ヒット件数 : {{count($results)}}</p>
+    </div>
 @endif
 @component('components.h2',['title' => '検索結果'])
 @endcomponent

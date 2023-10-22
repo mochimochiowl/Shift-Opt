@@ -19,21 +19,71 @@
             @component('components.button', [
                 'type' => 'button',
                 'label' => '今月初',
-                'onclick' => 'setStartOfMonth',
+                'onclick' => 'setStartOfThisMonth',
+                'arg' => "'#start_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '今月末',
+                'onclick' => 'setEndOfThisMonth',
+                'arg' => "'#start_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '先月初',
+                'onclick' => 'setStartOfLastMonth',
+                'arg' => "'#start_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '先月末',
+                'onclick' => 'setEndOfLastMonth',
+                'arg' => "'#start_date'",
                 ])
             @endcomponent
         </div>
         <div>
-            <div>
-                <label for="start_date">開始日:</label>
-                <button type="button" onclick="setStartOfMonth()">今月初</button>
-                <input type="date" id="start_date" name="start_date" value="{{$search_requirements['start_date'] ?? $default_dates['start_date']}}">
-            </div>
-            <div>
-                <label for="end_date">終了日:</label>
-                <button type="button" onclick="setEndOfMonth()">今月末</button>
-                <input type="date" id="end_date" name="end_date" value="{{$search_requirements['end_date'] ?? $default_dates['end_date']}}">
-            </div>
+            @component('components.inputText', [
+                'type' => 'date',
+                'name'=> 'end_date',
+                'name_jp'=> '開始日',
+                'value' => $search_requirements['end_date'] ?? $default_dates['end_date'],
+                'placeholder' => 'キーワードを入力してください',
+                'autocomplete'=> 'off',
+                'valied'=> true,
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '今月初',
+                'onclick' => 'setStartOfThisMonth',
+                'arg' => "'#end_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '今月末',
+                'onclick' => 'setEndOfThisMonth',
+                'arg' => "'#end_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '先月初',
+                'onclick' => 'setStartOfLastMonth',
+                'arg' => "'#end_date'",
+                ])
+            @endcomponent
+            @component('components.button', [
+                'type' => 'button',
+                'label' => '先月末',
+                'onclick' => 'setEndOfLastMonth',
+                'arg' => "'#end_date'",
+                ])
+            @endcomponent
         </div>
         @component('components.inputRadio', [
             'label' => '種別',
@@ -62,12 +112,6 @@
                         'value'=> 'name',
                         'checked'=> false,
                     ],
-                    [
-                        'name'=> 'search_field',
-                        'name_jp'=> ConstParams::EMAIL_JP,
-                        'value'=> ConstParams::EMAIL,
-                        'checked'=> false,
-                    ],
                 ],
             ])
           @endcomponent
@@ -81,179 +125,195 @@
             'valied'=> true,
             ])
           @endcomponent
-        <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">
-        <input type="hidden" name="order" value="asc">
+          <input type="hidden" name="column" value="datetime">
+          <input type="hidden" name="order" value="asc">
         <div class="pt-4">
             @component('components.button', [
                 'type' => 'submit',
                 'label' => '検索',
                 'w_full' => true,
+                'formaction' => route('at_records.search'),
                 ])
+            @endcomponent
+        </div>
+        <div class="pt-4">
+            @component('components.button', [
+                'type' => 'submit',
+                'label' => 'CSV出力',
+                'w_full' => true,
+                'formaction' => route('at_records.export'),
+                ])
+            @endcomponent
+        </div>
+        <hr>
+        <div class="pt-4">
+            @component('components.link', [
+                'href'=> route('at_records.create'),
+                'label'=> 'データの新規作成',
+                'w_full' => true,
+            ])
             @endcomponent
         </div>
     </div>
 </form>
-    
-    <div>
-        <label>
-            <input type="radio" name="search_field" value="all" @if(old('search_field', 'all') == 'all') checked @endif required> 全件表示
-        </label>
-        <label>
-            <input type="radio" name="search_field" value="{{ConstParams::USER_ID}}" @if(old('search_field') == ConstParams::USER_ID) checked @endif required> {{ConstParams::USER_ID_JP}}
-        </label>
-        <label>
-            <input type="radio" name="search_field" value="{{ConstParams::LOGIN_ID}}" @if(old('search_field') == ConstParams::LOGIN_ID) checked @endif required> {{ConstParams::LOGIN_ID_JP}}
-        </label>
-        <label>
-            <input type="radio" name="search_field" value="name" @if(old('search_field') == 'name') checked @endif required> 名前（漢字・かな）
-        </label>
-    </div>
-    <div>
-        <input type="hidden" name="column" value="datetime">
-        <input type="hidden" name="order" value="asc">
-    </div>
-    <div>
-        <input type="text" name="keyword" placeholder="キーワードを入力してください" value="{{old('keyword', $keyword ?? '')}}">
-        <input type="submit" value="検索" formaction="{{route('at_records.search')}}">
-        <input type="submit" value="CSV出力" formaction="{{route('at_records.export')}}">
-    </div>
-</form>
-
-<hr>
-<a href="{{route('at_records.create')}}">データの新規作成</a>
-<hr>
 
 @if ($results)
 @if (($search_requirements['search_field_jp'])&&($search_requirements['keyword'])&&($search_requirements['start_date'])&&($search_requirements['end_date']))
-<h2>検索ワード</h2>
-<div>
-    <p>検索種類   : {{$search_requirements['search_field_jp']}}</p>
-    <p>検索ワード : {{$search_requirements['keyword']}}</p>
-    <p>開始日　　 : {{$search_requirements['start_date']}}</p>
-    <p>終了日　　 : {{$search_requirements['end_date']}}</p>
-    <p>ヒット件数 : {{count($results)}}</p>
-</div>
+    <div class="p-4 mb-3 rounded-xl bg-blue-200">
+        @component('components.h2',['title' => '検索ワード'])
+        @endcomponent
+        <p>検索種類   : {{$search_requirements['search_field_jp']}}</p>
+        <p>検索ワード : {{$search_requirements['keyword']}}</p>
+        <p>開始日　: {{$search_requirements['start_date']}}</p>
+        <p>終了日　: {{$search_requirements['end_date']}}</p>
+        <p>ヒット件数 : {{count($results)}}</p>
+    </div>
 @endif
-<h2>検索結果</h2>
-<table>
-    <thead>
-        <tr>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::AT_RECORD_ID, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::USER_ID, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::USER_ID_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::KANJI_LAST_NAME, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::KANJI_FIRST_NAME, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::KANA_LAST_NAME, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::KANA_FIRST_NAME, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::AT_RECORD_TYPE, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::AT_RECORD_DATE, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
-            </th>
-            <th>
-                <a href="{{route('at_records.search', [
-                'start_date' => $search_requirements['start_date'],
-                'end_date' => $search_requirements['end_date'],
-                'search_field' => $search_requirements['search_field'],
-                'keyword' => $search_requirements['keyword'],
-                'column' => ConstParams::AT_RECORD_TIME, 
-                'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
-            </th>
-            <th>詳細</th>
-            <th>編集</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach ($results as $result)
-        <tr>
-            <td>{{$result[ConstParams::AT_RECORD_ID]}}</td>
-            <td>{{$result[ConstParams::USER_ID]}}</td>
-            <td>{{$result[ConstParams::KANJI_LAST_NAME]}}</td>
-            <td>{{$result[ConstParams::KANJI_FIRST_NAME]}}</td>
-            <td>{{$result[ConstParams::KANA_LAST_NAME]}}</td>
-            <td>{{$result[ConstParams::KANA_FIRST_NAME]}}</td>
-            <td>{{$result[ConstParams::AT_RECORD_TYPE_TRANSLATED]}}</td>
-            <td>{{$result[ConstParams::AT_RECORD_DATE]}}</td>
-            <td>{{$result[ConstParams::AT_RECORD_TIME]}}</td>
-            <td>
-                <a href="{{route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">詳細</a>
-            </td>
-            <td>
-                <a href="{{route('at_records.edit', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">編集</a>
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+@component('components.h2',['title' => '検索結果'])
+@endcomponent
+<div class="overflow-x-auto">
+    <table class="border-collapse w-full my-5">
+        <thead>
+            <tr>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::AT_RECORD_ID, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::USER_ID, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::USER_ID_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::KANJI_LAST_NAME, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::KANJI_FIRST_NAME, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::KANA_LAST_NAME, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::KANA_FIRST_NAME, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::AT_RECORD_TYPE, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::AT_RECORD_DATE, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.search', [
+                    'start_date' => $search_requirements['start_date'],
+                    'end_date' => $search_requirements['end_date'],
+                    'search_field' => $search_requirements['search_field'],
+                    'keyword' => $search_requirements['keyword'],
+                    'column' => ConstParams::AT_RECORD_TIME, 
+                    'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
+                    ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    詳細
+                </th>
+                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                    編集
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach ($results as $result)
+            <tr>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::AT_RECORD_ID]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::USER_ID]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::KANJI_LAST_NAME]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::KANJI_FIRST_NAME]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::KANA_LAST_NAME]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::KANA_FIRST_NAME]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{App\Models\AttendanceRecord::getTypeName($result[ConstParams::AT_RECORD_TYPE])}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::AT_RECORD_DATE]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    {{$result[ConstParams::AT_RECORD_TIME]}}
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.show', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">詳細</a>
+                </td>
+                <td class="bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
+                    <a href="{{route('at_records.edit', [ConstParams::AT_RECORD_ID => $result[ConstParams::AT_RECORD_ID]])}}">編集</a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
 {{ $results->appends(request()->except('page'))->links() }}
 @endif
 @endsection

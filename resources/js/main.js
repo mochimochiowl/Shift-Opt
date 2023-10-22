@@ -1,6 +1,13 @@
 // import './bootstrap';
 import showClock from './currentTimer.js';
-import { setNextDay, setPreviousDay, setStartOfMonth, setEndOfMonth, } from './calendarButton.js';
+import {
+    setNextDay,
+    setPreviousDay,
+    setStartOfThisMonth,
+    setEndOfThisMonth,
+    setStartOfLastMonth,
+    setEndOfLastMonth,
+} from './calendarButton.js';
 import { movePreviousPage, } from './sceneMoveAssist.js';
 import { toggleMenu, } from './toggler.js';
 
@@ -12,7 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.setNextDay = setNextDay;
 window.setPreviousDay = setPreviousDay;
-window.setStartOfMonth = setStartOfMonth;
-window.setEndOfMonth = setEndOfMonth;
+window.setStartOfThisMonth = setStartOfThisMonth;
+window.setEndOfThisMonth = setEndOfThisMonth;
+window.setStartOfLastMonth = setStartOfLastMonth;
+window.setEndOfLastMonth = setEndOfLastMonth;
 window.movePreviousPage = movePreviousPage;
 window.toggleMenu = toggleMenu;

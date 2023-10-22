@@ -21,17 +21,31 @@ export function setPreviousDay() {
     dateInput.form.submit();
 }
 
-export function setStartOfMonth() {
-    const dateInput = document.querySelector('#start_date');
+export function setStartOfThisMonth(selector) {
+    const dateInput = document.querySelector(selector);
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     dateInput.value = formatDate(firstDayOfMonth);
 }
 
-export function setEndOfMonth() {
-    const dateInput = document.querySelector('#end_date');
+export function setEndOfThisMonth(selector) {
+    const dateInput = document.querySelector(selector);
     const today = new Date();
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    dateInput.value = formatDate(lastDayOfMonth);
+}
+
+export function setStartOfLastMonth(selector) {
+    const dateInput = document.querySelector(selector);
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    dateInput.value = formatDate(firstDayOfMonth);
+}
+
+export function setEndOfLastMonth(selector) {
+    const dateInput = document.querySelector(selector);
+    const today = new Date();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
     dateInput.value = formatDate(lastDayOfMonth);
 }
 

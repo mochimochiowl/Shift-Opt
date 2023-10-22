@@ -9,6 +9,9 @@
         {{' value=' . $value}}       
     @endif
     @if (isset($onclick) && $onclick !== '')
+        @if (isset($arg) && $arg !== '')
+            {{' onclick=' . $onclick . '(' . $arg . ')'}}       
+        @endif
         {{' onclick=' . $onclick . '()'}}       
     @endif
     @if (isset($formaction) && $formaction !== '')
