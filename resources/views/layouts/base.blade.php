@@ -29,6 +29,7 @@
             </div>
         </div>
         <footer class="px-3 py-5 bg-blue-500 text-sm text-gray-200 text-center">
+            copyright 2023 CoderOwlWing
             @yield('footer')
         </footer>
     </body>

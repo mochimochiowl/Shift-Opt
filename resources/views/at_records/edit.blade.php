@@ -124,5 +124,4 @@
 @endsection
 
 @section('footer')
-    copyright 2023 CoderOwlWing
 @endsection
