@@ -27,7 +27,7 @@ class AdminUserSeeder extends Seeder
             ConstParams::EMAIL => 'admin@fakeEmailAddress.jp',
             ConstParams::LOGIN_ID => 'admin',
             ConstParams::PASSWORD => 'shiftOpt',
-            ConstParams::IS_ADMIN => true,
+            ConstParams::IS_ADMIN => 'true',
             ConstParams::CREATED_BY => '新規登録',
             ConstParams::UPDATED_BY => '新規登録',
         ];
@@ -43,7 +43,7 @@ class AdminUserSeeder extends Seeder
             ConstParams::EMAIL => 'systemadmin@fakeEmailAddress.jp',
             ConstParams::LOGIN_ID => 'system',
             ConstParams::PASSWORD => 'shiftOpt',
-            ConstParams::IS_ADMIN => true,
+            ConstParams::IS_ADMIN => 'true',
             ConstParams::CREATED_BY => '新規登録',
             ConstParams::UPDATED_BY => '新規登録',
         ];
