@@ -24,8 +24,8 @@ class SampleAtRecordsSeeder extends Seeder
         // ここでどういうデータを入れたいか定義
         $start_date = new DateTime('2023/09/01');
         $end_date = new DateTime(getToday());
-        $data_per_day_max = 4;
-        $data_per_day_min = 2;
+        $data_per_day_max = 5;
+        $data_per_day_min = 3;
         $working_minutes_sum_max = 540;
         $working_minutes_sum_min = 240;
 
@@ -38,16 +38,16 @@ class SampleAtRecordsSeeder extends Seeder
 
         //毎回名前のためにUserテーブル検索させないために配列でしまっとく
         $name_list = [
+            '1' => User::findUserByUserId('1')->getKanjiFullName(),
+            '2' => User::findUserByUserId('2')->getKanjiFullName(),
             '3' => User::findUserByUserId('3')->getKanjiFullName(),
             '4' => User::findUserByUserId('4')->getKanjiFullName(),
             '5' => User::findUserByUserId('5')->getKanjiFullName(),
-            '6' => User::findUserByUserId('6')->getKanjiFullName(),
-            '7' => User::findUserByUserId('7')->getKanjiFullName(),
         ];
 
         //日数分だけ繰り返す
         for ($day = 0; $day < $period; $day++) {
-            $user_ids = ['3', '4', '5', '6', '7'];
+            $user_ids = ['1', '2', '3', '4', '5'];
             shuffle($user_ids);
 
             $data_per_day = rand($data_per_day_min, $data_per_day_max);
