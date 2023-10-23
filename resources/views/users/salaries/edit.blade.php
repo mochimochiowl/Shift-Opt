@@ -1,15 +1,6 @@
 @extends('layouts.base')
 @section('title', '編集画面')
 @section('content')
-<div class="pt-4">
-    @component('components.btnBlue', [
-        'type' => 'button',
-        'label' => '戻る',
-        'onclick' => 'movePreviousPage',
-        'w_full' => true,
-        ])
-    @endcomponent
-</div>
 @if ($user_data && $salary_data)
 @component('components.userBriefInfo',['user_data' => $user_data])
 @endcomponent
@@ -40,6 +31,15 @@
     @component('components.message',['message' => ConstParams::USER_SALARY_JP . 'を取得できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
 @endif
+<div class="my-5">
+    @component('components.btnBlue', [
+        'type' => 'button',
+        'label' => '更新せずに戻る',
+        'onclick' => 'movePreviousPage',
+        'w_full' => true,
+        ])
+    @endcomponent
+</div>
 @endsection
 
 @section('footer')

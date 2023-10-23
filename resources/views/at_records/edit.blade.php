@@ -1,15 +1,6 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '編集画面')
 @section('content')
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 @component('components.userBriefInfo',['user_data' => [
     ConstParams::USER_ID =>  $data[ConstParams::USER_ID],
     ConstParams::KANJI_LAST_NAME =>  $data[ConstParams::KANJI_LAST_NAME],
@@ -100,9 +91,18 @@
     </div>
 </form>
 @else
-    @component('components.message',['message' => ConstParams::AT_RECORD_JP . 'を更新できませんでした。時間をおいてから再度お試しください。'])
+    @component('components.message',['message' => ConstParams::AT_RECORD_JP . 'を取得できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
 @endif
+<div class="my-5">
+    @component('components.btnBlue', [
+        'type' => 'button',
+        'label' => '更新せずに戻る',
+        'onclick' => 'movePreviousPage',
+        'w_full' => true,
+        ])
+    @endcomponent
+</div>
 @component('components.hr')
 @endcomponent
 <div>

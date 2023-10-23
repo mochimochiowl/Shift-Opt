@@ -7,6 +7,11 @@
 @else
     @component('components.h2',['title' => '削除した' . ConstParams::USER_JP])
     @endcomponent
+    @component('components.link', [
+        'href'=> route('users.search'),
+        'label'=> '検索に戻る',
+    ])
+    @endcomponent
     @component('components.infoTable', [
         'labels'=> $user_labels,
         'data'=> $user_data,

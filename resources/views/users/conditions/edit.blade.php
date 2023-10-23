@@ -57,6 +57,15 @@
     @component('components.message',['message' => ConstParams::USER_SALARY_JP . 'を取得できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
 @endif
+<div class="my-5">
+    @component('components.btnBlue', [
+        'type' => 'button',
+        'label' => '更新せずに戻る',
+        'onclick' => 'movePreviousPage',
+        'w_full' => true,
+        ])
+    @endcomponent
+</div>
 @endsection
 
 @section('footer')

@@ -8,21 +8,27 @@
     @else
     @component('components.h2',['title' => ConstParams::USER_SALARY_JP])
     @endcomponent
-    @component('components.link', [
-        'href'=> route('users.salaries.edit', [ConstParams::USER_ID => $user_id]),
-        'label'=> '再度編集する',
-    ])
-    @endcomponent
-    @component('components.link', [
-        'href'=> route('users.show', [ConstParams::USER_ID => $user_id]),
-        'label'=> '詳細に戻る',
-    ])
-    @endcomponent
-    @component('components.link', [
-        'href'=> route('users.search'),
-        'label'=> '検索に戻る',
-    ])
-    @endcomponent
+    <div class="inline-block mb-2 mr-1">
+        @component('components.link', [
+            'href'=> route('users.salaries.edit', [ConstParams::USER_ID => $user_id]),
+            'label'=> '再度編集する',
+        ])
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.link', [
+            'href'=> route('users.show', [ConstParams::USER_ID => $user_id]),
+            'label'=> '詳細に戻る',
+        ])
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.link', [
+            'href'=> route('users.search'),
+            'label'=> '検索に戻る',
+        ])
+        @endcomponent
+    </div>
     @component('components.infoTable', [
         'labels'=> $salary_labels,
         'data'=> $salary_data,

@@ -17,13 +17,6 @@
     ])
     @endcomponent
 <div>
-    <div class="mb-4">
-        @component('components.link', [
-            'href'=> route('users.search'),
-            'label'=> '検索に戻る',
-        ])
-        @endcomponent
-    </div>
     @component('components.message',['message' => '本当に削除してもよろしいですか？'])
     @endcomponent
     <form action="{{route('users.delete', [ConstParams::USER_ID => $user_id])}}" method="POST">
@@ -35,6 +28,14 @@
             'w_full' => true,
             ])
         @endcomponent
+        <div class="my-4">
+            @component('components.link', [
+                'href'=> route('users.search'),
+                'label'=> '検索に戻る',
+                'w_full' => true,
+            ])
+            @endcomponent
+        </div>
     </form>
 </div>
 @endif
