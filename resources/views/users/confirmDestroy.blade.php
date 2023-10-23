@@ -29,7 +29,7 @@
     <form action="{{route('users.delete', [ConstParams::USER_ID => $user_id])}}" method="POST">
         @csrf
         @method('DELETE')
-        @component('components.button', [
+        @component('components.btnRed', [
             'type' => 'submit',
             'label' => 'このユーザーを削除する',
             'w_full' => true,

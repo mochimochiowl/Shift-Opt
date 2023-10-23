@@ -60,7 +60,7 @@
           <input type="hidden" name="column" value="datetime">
           <input type="hidden" name="order" value="asc">
         <div class="pt-4">
-            @component('components.button', [
+            @component('components.btnBlue', [
                 'type' => 'submit',
                 'label' => '検索',
                 'w_full' => true,
@@ -69,7 +69,7 @@
             @endcomponent
         </div>
         <div class="pt-4">
-            @component('components.button', [
+            @component('components.btnGreen', [
                 'type' => 'submit',
                 'label' => 'CSV出力',
                 'w_full' => true,

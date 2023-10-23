@@ -16,7 +16,7 @@
         ])
     @endcomponent
     <div class="pt-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => ConstParams::AT_RECORD_START_WORK_JP,
             'formaction' => route('stamps.startWork'),
@@ -24,7 +24,7 @@
             'w_full' => true,
             ])
         @endcomponent
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => ConstParams::AT_RECORD_FINISH_WORK_JP,
             'formaction' => route('stamps.finishWork'),
@@ -32,7 +32,7 @@
             'w_full' => true,
             ])
         @endcomponent
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => ConstParams::AT_RECORD_START_BREAK_JP,
             'formaction' => route('stamps.startBreak'),
@@ -40,7 +40,7 @@
             'w_full' => true,
             ])
         @endcomponent
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => ConstParams::AT_RECORD_FINISH_BREAK_JP,
             'formaction' => route('stamps.finishBreak'),

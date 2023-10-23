@@ -2,7 +2,7 @@
 @section('title', ConstParams::USER_JP . '詳細画面')
 @section('content')
     <div class="pt-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'button',
             'label' => '戻る',
             'onclick' => 'movePreviousPage',
@@ -46,7 +46,7 @@
         'data'=> $condition_data,
     ])
     @endcomponent
-    @component('components.button', [
+    @component('components.btnBlue', [
         'type' => 'button',
         'label' => '戻る',
         'onclick' => 'movePreviousPage',

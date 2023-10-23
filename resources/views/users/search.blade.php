@@ -54,7 +54,7 @@
         <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">
         <input type="hidden" name="order" value="asc">
         <div class="pt-4">
-            @component('components.button', [
+            @component('components.btnBlue', [
                 'type' => 'submit',
                 'label' => '検索',
                 'w_full' => true,

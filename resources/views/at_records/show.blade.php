@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex justify-between items-center">
     <div class="inline mr-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'button',
             'label' => '戻る',
             'onclick' => 'movePreviousPage',

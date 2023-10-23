@@ -92,7 +92,7 @@
       ])
     @endcomponent
     <div class="pt-4">
-      @component('components.button', [
+      @component('components.btnBlue', [
           'type' => 'submit',
           'label' => '登録',
           'w_full' => true,

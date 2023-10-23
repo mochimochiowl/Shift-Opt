@@ -9,7 +9,6 @@
         @if (Auth::check())
             <span>{{Auth::user()->getKanjiFullName()}} としてログイン中</span>
         @else
-            <a href="{{route('login.form')}}" class="">ログインする</a>
         @endif
     </div>
     <nav>

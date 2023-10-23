@@ -45,7 +45,7 @@
         ])
       @endcomponent
     <div class="pt-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => '更新',
             'w_full' => true,

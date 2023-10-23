@@ -7,10 +7,10 @@
     <script src="{{asset('/dist/main.js')}}"></script>
     @vite('resources/css/app.css')
     </head>
-    <body class="bg-blue-300"">
+    <body class="flex flex-col min-h-screen bg-blue-300">
         @component('components.header')
         @endcomponent
-        <div class="menu container mx-auto p-3">
+        <div class="menu container mx-auto p-3 flex-grow">
             @section('error_display')
                 @if ($errors->any())
                 <div>

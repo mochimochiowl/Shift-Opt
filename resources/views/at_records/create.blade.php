@@ -75,7 +75,7 @@
     <input type="hidden" name="created_by_user_id" value="{{Auth::user()->user_id}}">
     <input type="hidden" name="is_admin" value="true">
     <div class="pt-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => '登録',
             'w_full' => true,

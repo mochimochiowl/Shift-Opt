@@ -15,24 +15,26 @@
 ])
 @endcomponent
 <div>
-    <div class="mb-4">
-        @component('components.link', [
-            'href'=> route('at_records.search'),
-            'label'=> '検索に戻る',
-        ])
-        @endcomponent
-    </div>
+
     @component('components.message',['message' => '本当に削除してもよろしいですか？'])
     @endcomponent
     <form action="{{route('at_records.delete', [ConstParams::AT_RECORD_ID => $at_record_id])}}" method="POST">
         @csrf
         @method('DELETE')
-        @component('components.button', [
+        @component('components.btnRed', [
             'type' => 'submit',
             'label' => '削除する',
             'w_full' => true,
             ])
         @endcomponent
+        <div class="my-4">
+            @component('components.link', [
+                'href'=> route('at_records.search'),
+                'label'=> '検索に戻る',
+                'w_full' => true,
+            ])
+            @endcomponent
+        </div>
     </form>
 </div>
 @endsection

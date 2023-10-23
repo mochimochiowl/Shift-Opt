@@ -91,7 +91,7 @@
     @endcomponent
     <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
     <div class="pt-4">
-        @component('components.button', [
+        @component('components.btnBlue', [
             'type' => 'submit',
             'label' => '更新',
             'w_full' => true,
@@ -111,7 +111,7 @@
         @csrf
         <input type="hidden" name="logged_in_user_name" value="{{Auth::user()->getKanjiFullName();}}">
         <div class="pt-4">
-            @component('components.button', [
+            @component('components.btnRed', [
                 'type' => 'submit',
                 'label' => '削除',
                 'w_full' => true,
