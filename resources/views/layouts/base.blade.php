@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <script src="{{asset('/dist/main.js')}}"></script>
-    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="{{asset('/dist/app.css')}}">
     </head>
     <body class="flex flex-col min-h-screen bg-blue-300">
         @component('components.header')
