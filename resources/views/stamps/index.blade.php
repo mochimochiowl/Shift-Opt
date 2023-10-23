@@ -15,39 +15,47 @@
         'valied'=> true,
         ])
     @endcomponent
-    <div class="pt-4">
-        @component('components.btnBlue', [
-            'type' => 'submit',
-            'label' => ConstParams::AT_RECORD_START_WORK_JP,
-            'formaction' => route('stamps.startWork'),
-            'formmethod' => 'post',
-            'w_full' => true,
-            ])
-        @endcomponent
-        @component('components.btnBlue', [
-            'type' => 'submit',
-            'label' => ConstParams::AT_RECORD_FINISH_WORK_JP,
-            'formaction' => route('stamps.finishWork'),
-            'formmethod' => 'post',
-            'w_full' => true,
-            ])
-        @endcomponent
-        @component('components.btnBlue', [
-            'type' => 'submit',
-            'label' => ConstParams::AT_RECORD_START_BREAK_JP,
-            'formaction' => route('stamps.startBreak'),
-            'formmethod' => 'post',
-            'w_full' => true,
-            ])
-        @endcomponent
-        @component('components.btnBlue', [
-            'type' => 'submit',
-            'label' => ConstParams::AT_RECORD_FINISH_BREAK_JP,
-            'formaction' => route('stamps.finishBreak'),
-            'formmethod' => 'post',
-            'w_full' => true,
-            ])
-        @endcomponent
+    <div class="pt-2">
+        <div class="mb-4">
+            @component('components.btnBlue', [
+                'type' => 'submit',
+                'label' => ConstParams::AT_RECORD_START_WORK_JP,
+                'formaction' => route('stamps.startWork'),
+                'formmethod' => 'post',
+                'w_full' => true,
+                ])
+            @endcomponent
+        </div>
+        <div class="mb-4">
+            @component('components.btnBlue', [
+                'type' => 'submit',
+                'label' => ConstParams::AT_RECORD_FINISH_WORK_JP,
+                'formaction' => route('stamps.finishWork'),
+                'formmethod' => 'post',
+                'w_full' => true,
+                ])
+            @endcomponent
+        </div>
+        <div class="mb-4">
+            @component('components.btnBlue', [
+                'type' => 'submit',
+                'label' => ConstParams::AT_RECORD_START_BREAK_JP,
+                'formaction' => route('stamps.startBreak'),
+                'formmethod' => 'post',
+                'w_full' => true,
+                ])
+            @endcomponent
+        </div>
+        <div class="mb-4">
+            @component('components.btnBlue', [
+                'type' => 'submit',
+                'label' => ConstParams::AT_RECORD_FINISH_BREAK_JP,
+                'formaction' => route('stamps.finishBreak'),
+                'formmethod' => 'post',
+                'w_full' => true,
+                ])
+            @endcomponent
+        </div>
     </div>
 </form>
 @endsection

@@ -20,12 +20,12 @@
             @if (Auth::check())
                 @if (Auth::user()->isAdmin())
                 <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録画面</a></li>
-                <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻画面</a></li>
                 <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索画面</a></li>
                 <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
                 <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー画面</a></li>
                 @endif
             @endif
+            <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻画面</a></li>
             <li class="p-3"><a href="{{route('debug')}}" class="">CSS確認</a></li>      
             @if (Auth::check())
             <li class="p-3"><a href="{{route('logout')}}" class="">ログアウトする</a></li>
