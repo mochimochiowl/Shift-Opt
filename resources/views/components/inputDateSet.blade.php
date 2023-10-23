@@ -9,53 +9,58 @@
         'valied'=> true,
         ])
     @endcomponent
-    @component('components.btnBlue', [
-        'type' => 'button',
-        'label' => '昨日',
-        'onclick' => 'setPreviousDay',
-        'arg' => "'#" . $name . "'",
-        ])
-    @endcomponent
-    @component('components.btnBlue', [
-        'type' => 'button',
-        'label' => '今日',
-        'onclick' => 'setToday',
-        'arg' => "'#" . $name . "'",
-        ])
-    @endcomponent
-    @component('components.btnBlue', [
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
+            'type' => 'button',
+            'label' => '昨日',
+            'onclick' => 'setPreviousDay',
+            'arg' => "'#" . $name . "'",
+            ])
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '明日',
         'onclick' => 'setNextDay',
         'arg' => "'#" . $name . "'",
         ])
-    @endcomponent
-    @component('components.btnBlue', [
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '先月初',
         'onclick' => 'setStartOfLastMonth',
         'arg' => "'#" . $name . "'",
         ])
-    @endcomponent
-    @component('components.btnBlue', [
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '先月末',
         'onclick' => 'setEndOfLastMonth',
         'arg' => "'#" . $name . "'",
         ])
-    @endcomponent
-    @component('components.btnBlue', [
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '今月初',
         'onclick' => 'setStartOfThisMonth',
         'arg' => "'#" . $name . "'",
         ])
-    @endcomponent
-    @component('components.btnBlue', [
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '今月末',
         'onclick' => 'setEndOfThisMonth',
         'arg' => "'#" . $name . "'",
         ])
-    @endcomponent
+        @endcomponent
+    </div>
 </div>

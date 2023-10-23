@@ -7,14 +7,14 @@
 @else
     @component('components.h2',['title' => '削除した' . ConstParams::AT_RECORD_JP])
     @endcomponent
-    @component('components.infoTable', [
-        'labels'=> $at_record_labels,
-        'data'=> $at_record_data,
-    ])
-    @endcomponent
     @component('components.link', [
         'href'=> route('at_records.search'),
         'label'=> '検索に戻る',
+    ])
+    @endcomponent
+    @component('components.infoTable', [
+        'labels'=> $at_record_labels,
+        'data'=> $at_record_data,
     ])
     @endcomponent
 @endif
