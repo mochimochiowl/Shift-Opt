@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '編集画面')
+@section('title', ConstParams::AT_RECORD_JP . '編集')
 @section('content')
 @component('components.userBriefInfo',['user_data' => [
     ConstParams::USER_ID =>  $data[ConstParams::USER_ID],

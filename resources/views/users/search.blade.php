@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '検索画面')
+@section('title', ConstParams::USER_JP . '検索')
 @section('content')
 <form action="{{route('users.search')}}" method="get">
     <div class="p-4 mb-3 rounded-xl bg-blue-200">
@@ -79,7 +79,7 @@
     <table class="border-collapse w-full my-5">
         <thead>
             <tr>
-                <th class="w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
                     'search_field' => $search_requirements['search_field'],
                     'keyword' => $search_requirements['keyword'],
@@ -87,7 +87,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::USER_ID_JP}}</a>
                 </th>
-                <th class="w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
                     'search_field' => $search_requirements['search_field'],
                     'keyword' => $search_requirements['keyword'],
@@ -95,7 +95,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
                 </th>
-                <th class="w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
                     'search_field' => $search_requirements['search_field'],
                     'keyword' => $search_requirements['keyword'],
@@ -103,7 +103,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
                 </th>
-                <th class="w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
                     'search_field' => $search_requirements['search_field'],
                     'keyword' => $search_requirements['keyword'],
@@ -111,7 +111,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
                 </th>
-                <th class="w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
                     'search_field' => $search_requirements['search_field'],
                     'keyword' => $search_requirements['keyword'],
@@ -119,7 +119,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
                     ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
                 </th>
-                <th class="text-center w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細
                 </th>
             </tr>

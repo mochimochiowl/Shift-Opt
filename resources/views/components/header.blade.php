@@ -5,12 +5,6 @@
             <span class="inline-block text-3xl font-bold">Shift-Opt</span>
         </a>
     </h1>
-    <div class="inline-block text-xl font-semibold">
-        @if (Auth::check())
-            <span>{{Auth::user()->getKanjiFullName()}} としてログイン中</span>
-        @else
-        @endif
-    </div>
     <nav>
         <button class="fixed z-30 top-8 right-8 text-white" onclick="toggleMenu()">
             <span id="openBtn" class="inline-block i-lucide-menu w-8 h-8"></span>
@@ -18,12 +12,15 @@
         </button>
         <ul id="menu" class="fixed top-0 left-0 w-full text-center text-white font-bold bg-blue-500 translate-x-full transition duration-300 ease-linear">
             @if (Auth::check())
+                <li class="h-24 p-9 bg-blue-600">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</li>
                 @if (Auth::user()->isAdmin())
-                <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録画面</a></li>
-                <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索画面</a></li>
-                <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
-                <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー画面</a></li>
+                    <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録画面</a></li>
+                    <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索画面</a></li>
+                    <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
+                    <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー画面</a></li>
                 @endif
+            @else
+                <li class="h-24 p-9 bg-blue-600">ログインしていません。</li>
             @endif
             <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻画面</a></li>
             <li class="p-3"><a href="{{route('debug')}}" class="">CSS確認</a></li>      

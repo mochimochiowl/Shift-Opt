@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '作成成功')
+@section('title', '作成処理結果')
 @section('content')
 <div>
     @if (!isset($user_id))

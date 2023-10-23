@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '編集画面')
+@section('title', ConstParams::USER_JP . '編集')
 @section('content')
 @if ($user_data)
 <form action="{{route('users.update', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">

@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', '編集画面')
+@section('title', ConstParams::USER_SALARY_JP . '編集')
 @section('content')
 @if ($user_data && $salary_data)
 @component('components.userBriefInfo',['user_data' => $user_data])

@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_TYPE_JP . '処理成功画面')
+@section('title', '打刻処理結果（' . ConstParams::AT_RECORD_TYPE_JP .'）')
 @section('content')
 @component('components.h2',['title' => ConstParams::USER_JP])
 @endcomponent

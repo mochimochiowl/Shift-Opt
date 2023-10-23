@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '詳細画面')
+@section('title', ConstParams::AT_RECORD_JP . '詳細')
 @section('content')
 <div class="flex justify-between items-center">
     <div class="inline mr-4">

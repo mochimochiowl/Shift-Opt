@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_SALARY_JP . '更新処理成功画面')
+@section('title', '更新処理結果')
 @section('content')
 <div>
     @if ($count === 0)

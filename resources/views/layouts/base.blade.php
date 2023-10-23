@@ -24,7 +24,7 @@
                 @endif
             @show
             <div class="lg:p-8 md:p-16 sm:p-10 p-8 w-full">
-                <h1 class="inline-block text-4xl font-bold mb-4">@yield('title')</h1>
+                <h1 class="inline-block md:text-4xl text-3xl font-bold mb-4">@yield('title')</h1>
                 @yield('content')
             </div>
         </div>

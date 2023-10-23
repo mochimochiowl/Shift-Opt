@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '作成結果')
+@section('title', '作成処理結果')
 @section('content')
 <div>
     @if (!isset($at_record_id))

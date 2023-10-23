@@ -1,12 +1,12 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_CONDITION_JP . '更新処理成功画面')
+@section('title', '更新処理結果')
 @section('content')
 <div>
     @if ($count === 0)
     @component('components.message',['message' => ConstParams::USER_CONDITION_JP . 'を更新できませんでした。時間をおいてから再度お試しください。'])
     @endcomponent
     @else
-    @component('components.h2',['title' => ConstParams::USER_SALARY_JP])
+    @component('components.h2',['title' => ConstParams::USER_CONDITION_JP])
     @endcomponent
     <div class="inline-block mb-2 mr-1">
         @component('components.link', [

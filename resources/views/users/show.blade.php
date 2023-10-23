@@ -1,8 +1,6 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '詳細画面')
+@section('title', ConstParams::USER_JP . '詳細')
 @section('content')
-    @component('components.h2',['title' => ConstParams::USER_JP])
-    @endcomponent
     <div class="flex justify-between items-center">
         <div class="inline mr-4">
             @component('components.btnBlue', [

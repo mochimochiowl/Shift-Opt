@@ -1,12 +1,12 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '削除確認画面')
+@section('title', ConstParams::AT_RECORD_JP . '削除')
 @section('content')
 <div>
 
 </div>
 @component('components.message',['message' => 'データを一度削除すると、戻すことはできません。'])
 @endcomponent
-@component('components.h2',['title' => ConstParams::AT_RECORD_JP])
+@component('components.h2',['title' => '対象の' . ConstParams::AT_RECORD_JP])
 @endcomponent
 
 @component('components.infoTable', [

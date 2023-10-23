@@ -20,6 +20,15 @@
     </div>
     <div class="inline-block mb-2 mr-1">
         @component('components.btnBlue', [
+            'type' => 'button',
+            'label' => '今日',
+            'onclick' => 'setToday',
+            'arg' => "'#" . $name . "'",
+            ])
+        @endcomponent
+    </div>
+    <div class="inline-block mb-2 mr-1">
+        @component('components.btnBlue', [
         'type' => 'button',
         'label' => '明日',
         'onclick' => 'setNextDay',

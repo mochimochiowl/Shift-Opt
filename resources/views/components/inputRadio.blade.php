@@ -1,8 +1,8 @@
 <div class="mb-4">
     <div class="mb-4">
-        <span class="block text-2xl text-black font-bold mb-2">{{$label}}</span>
+        <span class="block md:text-xl text-lg text-black font-bold mb-2">{{$label}}</span>
     </div>
-    <div class="flex">
+    <div class="flex md:flex-row flex-col">
         @foreach ($items as $item)
         <div class="inline-block mb-5">
             <input 

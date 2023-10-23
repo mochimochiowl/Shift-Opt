@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_JP . '削除確認画面')
+@section('title', ConstParams::USER_JP . '削除')
 @section('content')
 @if ($is_admin)
     @component('components.message',['message' => ConstParams::ADMIN_JP . 'は削除できません。'])
@@ -8,7 +8,7 @@
 @else
     @component('components.message',['message' => 'データを一度削除すると、戻すことはできません。'])
     @endcomponent
-    @component('components.h2',['title' => ConstParams::USER_JP])
+    @component('components.h2',['title' => '対象の' . ConstParams::USER_JP])
     @endcomponent
 
     @component('components.infoTable', [

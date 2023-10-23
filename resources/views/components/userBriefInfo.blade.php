@@ -1,4 +1,6 @@
-<div class="p-4 mb-3 text-2xl rounded-xl bg-blue-200">
+<div class="p-4 mb-3 md:text-xl text-lg rounded-xl bg-blue-200">
+    @component('components.h2',['title' => '対象のユーザー'])
+    @endcomponent
     <div>
         <span>{{ConstParams::USER_ID_JP}} :</span><span>{{$user_data[ConstParams::USER_ID]}}</span>
     </div>

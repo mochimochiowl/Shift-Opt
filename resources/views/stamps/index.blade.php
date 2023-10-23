@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', '打刻画面')
+@section('title', '打刻')
 @section('content')
 <div class="px-2 py-2 text-4xl font-bold text-center text-black rounded-xl bg-blue-200">
     <span id="realTimer" class="">{{getCurrentTime()}}</span>

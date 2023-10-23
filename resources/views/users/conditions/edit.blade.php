@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::USER_CONDITION_JP . '編集画面')
+@section('title', ConstParams::USER_CONDITION_JP . '編集')
 @section('content')
 @if ($user_data && $condition_data)
 @component('components.userBriefInfo',['user_data' => $user_data])

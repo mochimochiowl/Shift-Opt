@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', ConstParams::AT_RECORD_JP . '検索画面')
+@section('title', ConstParams::AT_RECORD_JP . '検索')
 @section('content')
 <form action="{{route('at_records.search')}}" method="get">
     <div class="p-4 mb-3 rounded-xl bg-blue-200">
@@ -68,7 +68,7 @@
                 ])
             @endcomponent
         </div>
-        <div class="pt-4">
+        <div class="pt-4 mb-3">
             @component('components.btnGreen', [
                 'type' => 'submit',
                 'label' => 'CSV出力',
@@ -79,7 +79,7 @@
         </div>
         @component('components.hr')
         @endcomponent
-        <div class="pt-4">
+        <div class="pt-3">
             @component('components.link', [
                 'href'=> route('at_records.create'),
                 'label'=> 'データの新規作成',
@@ -105,7 +105,7 @@
     <table class="border-collapse w-full my-5">
         <thead>
             <tr>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -115,7 +115,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -125,7 +125,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::USER_ID_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -135,7 +135,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -145,7 +145,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -155,7 +155,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -165,7 +165,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -175,7 +175,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -185,7 +185,7 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
                 </th>
-                <th class=" bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
                     'start_date' => $search_requirements['start_date'],
                     'end_date' => $search_requirements['end_date'],
@@ -195,10 +195,10 @@
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
                     ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
                 </th>
-                <th class="text-center bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細
                 </th>
-                <th class="text-center bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
+                <th class="text-center whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     編集
                 </th>
             </tr>

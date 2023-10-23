@@ -57,14 +57,15 @@ class AttendanceRecordController extends Controller
                     ConstParams::CREATED_BY => User::findUserByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
                 ];
 
-                $new_record = AttendanceRecord::createNewRecord($data);
-                $at_record_labels = $new_record->labels();
-                $at_record_data = $new_record->data();
+                $new_record_id = AttendanceRecord::createNewRecord($data)->at_record_id;
+                $record = AttendanceRecord::searchById($new_record_id);
+                $at_record_labels = $record->labels();
+                $at_record_data = $record->data();
 
                 return redirect()->route('at_records.create.result', [
-                    ConstParams::AT_RECORD_ID => $new_record->at_record_id,
+                    ConstParams::AT_RECORD_ID => $new_record_id,
                 ])->with([
-                    'at_record_id' => $new_record->at_record_id,
+                    'at_record_id' => $new_record_id,
                     'at_record_labels' => $at_record_labels,
                     'at_record_data' => $at_record_data,
                 ]);
