@@ -2,7 +2,6 @@
 @section('title', ConstParams::AT_RECORD_JP . '検索')
 @section('content')
 <form action="{{route('at_records.search')}}" method="get">
-    @csrf
     <div class="p-4 mb-3 rounded-xl bg-blue-200">
         @component('components.h2',['title' => '検索条件'])
         @endcomponent
