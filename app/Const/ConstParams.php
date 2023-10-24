@@ -101,8 +101,8 @@ class ConstParams
     //DB user_conditionsテーブルのカラムの表示名を定義
     const USER_CONDITION_JP = 'コンディションデータ';
     const USER_CONDITION_ID_JP = 'コンディションID';
-    const HAS_ATTENDED_JP = ConstParams::AT_RECORD_START_WORK_JP . '打刻済みか';
-    const IS_BREAKING_JP = ConstParams::AT_RECORD_START_BREAK_JP . '打刻済みか';
+    const HAS_ATTENDED_JP = '出勤ステータス';
+    const IS_BREAKING_JP = '休憩ステータス';
     const HAS_ATTENDED_TRUE_JP = '出勤済';
     const HAS_ATTENDED_FALSE_JP = '出勤済ではありません';
     const IS_BREAKING_TRUE_JP = '休憩中';

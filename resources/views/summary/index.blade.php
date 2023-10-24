@@ -34,7 +34,7 @@
                     入｜出
                 </th>
                 <th class="whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
-                    労働時間時間
+                    労働時間
                 </th>
                 <th class="whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     休憩時間
