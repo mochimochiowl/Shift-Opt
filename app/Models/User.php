@@ -168,6 +168,8 @@ class User extends Authenticatable
                 ->orWhere(ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%');
         } elseif ($field === 'all') {
             // 何も追加しない（すべてのレコードを取得）
+        } elseif ($field === ConstParams::USER_ID | $field === ConstParams::LOGIN_ID) {
+            $query->where($field, '=', $keyword);
         } else {
             $query->where($field, 'LIKE', '%' . $keyword . '%');
         }
