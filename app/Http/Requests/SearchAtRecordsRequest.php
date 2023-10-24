@@ -22,10 +22,10 @@ class SearchAtRecordsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'keyword' => 'max:200',
             'search_field' => 'required',
-            'keyword' => '',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d',
         ];
     }
 
@@ -36,9 +36,12 @@ class SearchAtRecordsRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'keyword.max' => 'キーワードは:max文字以下で入力してください。',
             'search_field.required' => '検索種別を選択してください。',
-            'start_date' => '開始日を入力して下さい',
-            'end_date' => '終了日を入力して下さい',
+            'start_date.required' => '開始日を入力して下さい',
+            'end_date.required' => '終了日を入力して下さい',
+            'start_date.date_format' => '開始日はYYYY-MM-DDの形式で入力して下さい',
+            'end_date.date_format' => '終了日はYYYY-MM-DDの形式で入力して下さい',
         ];
     }
 }

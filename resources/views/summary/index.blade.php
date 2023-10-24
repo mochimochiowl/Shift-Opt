@@ -6,7 +6,7 @@
         @csrf
         @component('components.inputDateSet',[
             'name' => 'date',
-            'name_jp' => '開始日',
+            'name_jp' => '対象日',
             'value' => $data['date'] ?? getToday(),
             ])
         @endcomponent

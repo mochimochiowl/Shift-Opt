@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Const\ConstParams;
+use App\Http\Requests\SummaryRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use DateTime;
@@ -27,7 +28,7 @@ class SummaryService
      * 画面からのリクエストを受け取り、データとして次の関数に渡す
      * @return RedirectResponse
      */
-    public function post(Request $request): RedirectResponse
+    public function post(SummaryRequest $request): RedirectResponse
     {
         $date = $request->input('date');
         return $this->generateSummary($date);

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchUserRequest extends FormRequest
+class SummaryRequest extends FormRequest
 {
     /**
      * このアクションが現在のユーザーに許可されているかどうか
@@ -22,8 +22,7 @@ class SearchUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'keyword' => 'max:200',
-            'search_field' => 'required',
+            'date' => 'required|date_format:Y-m-d',
         ];
     }
 
@@ -34,8 +33,7 @@ class SearchUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'keyword.max' => 'キーワードは:max文字以下で入力してください。',
-            'search_field.required' => '検索種別を選択してください。',
+            'date.required' => '対象日を入力して下さい',
         ];
     }
 }

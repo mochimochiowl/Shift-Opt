@@ -23,7 +23,7 @@ class StampRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_login_id' => 'required|exists:users,login_id',
+            'target_login_id' => 'required|min:1|max:20|exists:users,login_id',
         ];
     }
 
@@ -34,8 +34,21 @@ class StampRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'target_login_id' . '.required' => ConstParams::LOGIN_ID_JP . 'を入力して下さい。',
-            'target_login_id' . '.exists' => ConstParams::LOGIN_ID_JP . 'が存在しません。',
+            'required' => ':attributeを入力してください。',
+            'exists' => ':attributeが存在しません。',
+            'min' => ':attributeは最低:min文字にしてください。',
+            'max' => ':attributeは最大:max文字までです。',
+        ];
+    }
+
+    /**
+     * 属性名の配列を返す
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            'target_login_id' => ConstParams::LOGIN_ID_JP,
         ];
     }
 }

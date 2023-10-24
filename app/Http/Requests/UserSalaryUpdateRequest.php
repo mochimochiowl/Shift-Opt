@@ -23,7 +23,7 @@ class UserSalaryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            ConstParams::HOURLY_WAGE => 'required|min:0',
+            ConstParams::HOURLY_WAGE => 'required|numeric|min:0|max:99999.99',
         ];
     }
 
@@ -34,7 +34,21 @@ class UserSalaryUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            ConstParams::HOURLY_WAGE . '.required' => ConstParams::HOURLY_WAGE_JP . 'を入力してください。',
+            'required' => ':attributeを入力してください。',
+            'email' => ConstParams::EMAIL_JP . 'の形式が正しくありません。',
+            'min' => ':attributeは最低:min' . ConstParams::CURRENCY_JP . 'から設定可能です。',
+            'max' => ':attributeは最大:max' . ConstParams::CURRENCY_JP . 'まで設定可能です。',
+        ];
+    }
+
+    /**
+     * 属性名の配列を返す
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            ConstParams::HOURLY_WAGE => ConstParams::HOURLY_WAGE_JP,
         ];
     }
 }

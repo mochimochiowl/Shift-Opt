@@ -26,13 +26,13 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            ConstParams::KANJI_LAST_NAME => 'required',
-            ConstParams::KANJI_FIRST_NAME => 'required',
-            ConstParams::KANA_LAST_NAME => 'required',
-            ConstParams::KANA_FIRST_NAME => 'required',
-            ConstParams::EMAIL => 'required|email',
-            ConstParams::LOGIN_ID => 'required',
-            ConstParams::PASSWORD => 'required',
+            ConstParams::KANJI_LAST_NAME => 'required|min:1|max:15',
+            ConstParams::KANJI_FIRST_NAME => 'required|min:1|max:15',
+            ConstParams::KANA_LAST_NAME => 'required|min:1|max:15',
+            ConstParams::KANA_FIRST_NAME => 'required|min:1|max:15',
+            ConstParams::EMAIL => 'required|email|min:3|max:200',
+            ConstParams::LOGIN_ID => 'required|min:1|max:20',
+            ConstParams::PASSWORD => 'required|min:1|max:20',
             ConstParams::IS_ADMIN => 'required',
         ];
     }
@@ -46,6 +46,8 @@ class UserStoreRequest extends FormRequest
         return [
             'required' => ':attributeを入力してください。',
             'email' => ConstParams::EMAIL_JP . 'の形式が正しくありません。',
+            'min' => ':attributeは最低:min文字にしてください。',
+            'max' => ':attributeは最大:max文字までです。',
         ];
     }
 

@@ -36,7 +36,7 @@ class UserConditionUpdateRequest extends FormRequest
     {
         return [
             'required' => ':attributeを入力してください。',
-            'boolean' => ':attributeが不正な値です。(not boolean)',
+            'boolean' => ':attributeの型が正しくありません。（管理者にご連絡ください。）',
         ];
     }
 

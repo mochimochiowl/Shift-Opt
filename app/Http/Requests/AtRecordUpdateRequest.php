@@ -23,8 +23,9 @@ class AtRecordUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            ConstParams::AT_SESSION_ID =>  ['required', 'size:36', 'regex:/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/'],
             ConstParams::AT_RECORD_TYPE => 'required',
-            ConstParams::AT_RECORD_DATE => 'required',
+            ConstParams::AT_RECORD_DATE => 'required|date_format:Y-m-d',
             ConstParams::AT_RECORD_TIME => 'required',
             'logged_in_user_name' => 'required',
         ];
@@ -38,7 +39,13 @@ class AtRecordUpdateRequest extends FormRequest
     {
         return [
             'required' => ':attributeを入力してください。',
-            'email' => ConstParams::EMAIL_JP . 'の形式が正しくありません。',
+            'min' => ':attributeは最低:min文字以上です。',
+            'max' => ':attributeは最大:max文字までです。',
+            'exists' => ':attributeが存在しません。',
+            ConstParams::AT_SESSION_ID . '.size' => ':attributeは、:size文字で入力して下さい。',
+            ConstParams::AT_SESSION_ID . '.regex' => ':attributeは、uuidの形式(8-4-4-4-12)で入力して下さい。',
+            ConstParams::AT_SESSION_ID . '.date_format' => ':attributeはYYYY-MM-DDの形式で入力して下さい',
+            'logged_in_user_name' . '.required' => 'ログイン済ユーザーのユーザー名を取得できません。（管理者にご連絡ください。）',
         ];
     }
 
@@ -49,10 +56,11 @@ class AtRecordUpdateRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            ConstParams::AT_SESSION_ID => ConstParams::AT_SESSION_ID_JP,
             ConstParams::AT_RECORD_TYPE => ConstParams::AT_RECORD_TYPE_JP,
             ConstParams::AT_RECORD_DATE => ConstParams::AT_RECORD_DATE_JP,
             ConstParams::AT_RECORD_TIME => ConstParams::AT_RECORD_TIME_JP,
-            'logged_in_user_name' => 'ログインユーザー名が空欄です',
+            'logged_in_user_name' => 'ログインユーザー名',
         ];
     }
 }

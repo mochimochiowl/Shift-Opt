@@ -16,5 +16,11 @@
     @if (isset($valied) && !$valied)
          disabled     
     @endif
-     >
+    @if (isset($minlength) && $minlength !== '')
+        {{' minlength=' . $minlength}}       
+    @endif
+    @if (isset($maxlength) && $maxlength !== '')
+        {{' maxlength=' . $maxlength}}       
+    @endif
+    >
 </div>

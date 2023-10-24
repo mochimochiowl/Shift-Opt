@@ -4,24 +4,64 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\SearchAtRecordsRequest;
+use App\Http\Requests\SearchUserRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class SearchController extends Controller
 {
     /**
      * Userテーブル 検索画面を返す
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function showUsers(Request $request): View
+    public function showUsers(Request $request): View | RedirectResponse
     {
-        if (!$request->input('column')) { //検索画面を開いたとき
+        if ($request->input('column')) {
+            // 検索を実行したとき
+            $validator = Validator::make(
+                $request->all(),
+                (new SearchUserRequest)->rules(),
+                (new SearchUserRequest)->messages(),
+                (new SearchUserRequest)->attributes(),
+            );
+
+            if ($validator->fails()) {
+                return redirect('users/search')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            // ここから下はバリデーションが成功した場合の処理
+            $search_requirements = [
+                'search_field' => $request->input('search_field'),
+                'keyword' => $request->input('keyword'),
+                'column' => $request->input('column'),
+                'order' => $request->input('order', 'asc'),
+                'search_field_jp' => $this->getFieldNameJP($request->input('search_field')),
+            ];
+
+            $search_requirement_labels = [
+                '検索種別',
+                'キーワード',
+            ];
+
+            $search_requirements_data = [
+                $this->getFieldNameJP($search_requirements['search_field']),
+                $search_requirements['keyword'],
+            ];
+
+            $results = $this->searchUsers($search_requirements);
+        } else {
+            // 検索画面を開いたとき
             $results = null;
+            $search_requirement_labels = null;
+            $search_requirements_data = null;
             $search_requirements = [
                 'search_field' => null,
                 'keyword' => null,
@@ -29,28 +69,6 @@ class SearchController extends Controller
                 'order' => null,
                 'search_field_jp' => null,
             ];
-            $search_requirement_labels = null;
-            $search_requirements_data = null;
-        } else { //検索を実行したとき
-            $search_field = $request->input('search_field');
-            $keyword = $request->input('keyword');
-
-            $search_requirements = [
-                'search_field' => $search_field,
-                'keyword' => $keyword,
-                'column' => $request->input('column') ?? ConstParams::USER_ID,
-                'order' => $request->input('order') ?? 'asc',
-                'search_field_jp' => $this->getFieldNameJP($search_field),
-            ];
-            $search_requirement_labels = [
-                '検索種別',
-                'キーワード',
-            ];
-            $search_requirements_data = [
-                $this->getFieldNameJP($search_field),
-                $keyword,
-            ];
-            $results = $this->searchUsers($search_requirements);
         }
 
         return view('users/search', [
@@ -77,24 +95,26 @@ class SearchController extends Controller
 
     /**
      * at_recordsテーブル 検索画面を返す
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function showAtRecords(Request $request): View
+    public function showAtRecords(Request $request): View | RedirectResponse
     {
-        if (!$request->input('column')) { //検索画面を開いたとき
-            $results = null;
-            $search_requirements = [
-                'start_date' => null,
-                'end_date' => null,
-                'search_field' => null,
-                'keyword' => null,
-                'column' => null,
-                'order' => null,
-                'search_field_jp' => null,
-            ];
-            $search_requirement_labels = null;
-            $search_requirements_data = null;
-        } else { //検索を実行したとき
+        if ($request->input('column')) {
+            // 検索を実行したとき
+            $validator = Validator::make(
+                $request->all(),
+                (new SearchAtRecordsRequest)->rules(),
+                (new SearchAtRecordsRequest)->messages(),
+                (new SearchAtRecordsRequest)->attributes(),
+            );
+
+            if ($validator->fails()) {
+                return redirect('at_records/search')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            // ここから下はバリデーションが成功した場合の処理
             $search_field = $request->input('search_field') ?? 'all';
             $keyword = $request->input('keyword') ?? 'empty';
             if ($search_field === 'all') {
@@ -124,6 +144,20 @@ class SearchController extends Controller
             $results = $this->searchAtRecords($search_requirements, false);
 
             $search_requirements['search_field_jp'] = $this->getFieldNameJP($search_requirements['search_field']);
+        } else {
+            // 検索画面を開いたとき
+            $results = null;
+            $search_requirement_labels = null;
+            $search_requirements_data = null;
+            $search_requirements = [
+                'start_date' => null,
+                'end_date' => null,
+                'search_field' => null,
+                'keyword' => null,
+                'column' => null,
+                'order' => null,
+                'search_field_jp' => null,
+            ];
         }
 
         $default_dates = $this->defaultDates();
