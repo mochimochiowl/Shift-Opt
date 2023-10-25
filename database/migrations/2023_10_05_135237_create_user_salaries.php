@@ -18,7 +18,7 @@ return new class extends Migration
                 table: 'users',
                 column: ConstParams::USER_ID,
             )->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float(ConstParams::HOURLY_WAGE)->default(ConstParams::HOURLY_WAGE_DEFAULT);
+            $table->decimal(ConstParams::HOURLY_WAGE, 8, 2, true)->default(ConstParams::HOURLY_WAGE_DEFAULT);
             $table->string(ConstParams::CREATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->string(ConstParams::UPDATED_BY, ConstParams::NAME_CHAR_LIMIT * 2)->default(ConstParams::BY_NAME_DEFAULT);
             $table->timestamps();

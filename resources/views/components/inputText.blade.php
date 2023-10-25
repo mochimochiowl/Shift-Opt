@@ -22,5 +22,8 @@
     @if (isset($maxlength) && $maxlength !== '')
         {{' maxlength=' . $maxlength}}       
     @endif
+    @if (isset($pattern) && $pattern !== '')
+        {{' pattern=' . $pattern}}       
+    @endif
     >
 </div>

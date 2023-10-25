@@ -200,13 +200,17 @@ class SummaryService
     }
 
     /**
-     * 人件費を算出する(小数点以下切り捨て)
-     * @return float
+     * 人件費を算出する(小数点以下第一位で四捨五入、整数を返す)
+     * @return int
      */
-    private function calcCostOfLabor(string $user_id, array $working_time): float
+    private function calcCostOfLabor(string $user_id, array $working_time): int
     {
-        $hourly_wage = User::findUserByUserId($user_id)->salary->hourly_wage;
-        $cost = $hourly_wage * $working_time['hour'] + $hourly_wage * ($working_time['minute'] / 60);
-        return floor($cost);
+        $user = User::findUserByUserId($user_id);
+        if (!$user || !$user->salary) {
+            throw new Exception(ConstParams::USER_JP . 'が見つかりません。[user_id = ' . $user_id . ']');
+        }
+        $hourly_wage = (string)$user->salary->hourly_wage;
+        $cost = bcadd(bcmul($hourly_wage, (string)$working_time['hour'], 2), bcmul($hourly_wage, (string)($working_time['minute'] / 60), 2), 2);
+        return round((float)$cost);
     }
 }

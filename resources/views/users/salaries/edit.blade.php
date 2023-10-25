@@ -11,11 +11,12 @@
     @component('components.inputText', [
         'type' => 'text',
         'name'=> ConstParams::HOURLY_WAGE,
-        'name_jp'=> ConstParams::HOURLY_WAGE_JP,
+        'name_jp'=> ConstParams::HOURLY_WAGE_JP . ' (整数部分は6桁まで、小数は第2位まで入力可能 : 0 ~ 999999.99)',
         'value' => $salary_data[ConstParams::HOURLY_WAGE],
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        // 'pattern'=> '^\d{1,6}(\.\d{1,2})?$',
         ])
     @endcomponent
     <div class="pt-4">
