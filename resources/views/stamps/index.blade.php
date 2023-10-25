@@ -13,6 +13,7 @@
         'value' => old('target_login_id') ?? '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '20',
         ])
     @endcomponent
     <div class="pt-2">

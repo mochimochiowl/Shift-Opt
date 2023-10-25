@@ -4,7 +4,7 @@
         'name'=> $name,
         'name_jp'=> $name_jp,
         'value' => $value,
-        'placeholder' => 'キーワードを入力してください',
+        'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
         ])

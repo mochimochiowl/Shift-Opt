@@ -55,6 +55,7 @@
             'placeholder' => 'キーワードを入力してください',
             'autocomplete'=> 'off',
             'valied'=> true,
+            'maxlength'=> '200',
             ])
           @endcomponent
           <input type="hidden" name="column" value="datetime">

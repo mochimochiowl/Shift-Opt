@@ -12,6 +12,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '20',
         ])
     @endcomponent
     @component('components.inputText', [
@@ -22,6 +23,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '36',
         ])
     @endcomponent
     @component('components.inputRadio', [

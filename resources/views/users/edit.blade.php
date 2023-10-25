@@ -23,6 +23,7 @@
       'placeholder' => '',
       'autocomplete'=> 'off',
       'valied'=> true,
+      'maxlength'=> '15',
       ])
     @endcomponent
     @component('components.inputText', [
@@ -33,6 +34,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '15',
         ])
     @endcomponent
     @component('components.inputText', [
@@ -43,6 +45,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '15',
         ])
     @endcomponent
     @component('components.inputText', [
@@ -53,6 +56,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '15',
         ])
     @endcomponent
     @component('components.inputText', [
@@ -63,6 +67,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '200',
         ])
     @endcomponent
     @component('components.inputText', [
@@ -83,6 +88,7 @@
         'placeholder' => '',
         'autocomplete'=> 'off',
         'valied'=> true,
+        'maxlength'=> '20',
         ])
     @endcomponent
     @component('components.inputRadio', [

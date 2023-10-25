@@ -30,6 +30,7 @@
       'placeholder' => '',
       'autocomplete'=> 'off',
       'valied'=> true,
+      'maxlength'=> '36',
       ])
     @endcomponent
     @component('components.inputRadio', [

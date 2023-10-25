@@ -15,6 +15,7 @@
                 'placeholder' => '',
                 'autocomplete'=> 'off',
                 'valied'=> true,
+                'maxlength'=> '20',
                 ])
             @endcomponent
             @component('components.inputText', [
@@ -25,6 +26,7 @@
                 'placeholder' => '',
                 'autocomplete'=> 'off',
                 'valied'=> true,
+                'maxlength'=> '20',
                 ])
             @endcomponent
             <div class="pt-4">
