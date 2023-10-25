@@ -3,15 +3,19 @@
 namespace App\Models;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use DateTime;
-use Error;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * at_record関係のデータの保持・加工とCRUD処理を担当する
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class AttendanceRecord extends Model
 {
     use HasFactory;
@@ -30,8 +34,9 @@ class AttendanceRecord extends Model
     ];
 
     /**
-     * At_recordの作成
-     * @return AttendanceRecord
+     * at_recordの作成
+     * @param array $data ユーザーIDや時刻などを格納した配列
+     * @return AttendanceRecord 新たに作成したat_recordモデル
      */
     public static function createNewRecord(array $data): AttendanceRecord
     {
@@ -51,13 +56,14 @@ class AttendanceRecord extends Model
 
             return $newRecord;
         } catch (Exception $e) {
-            throw new Exception('AttendanceRecord::createNewRecordでエラー : ' . $e->getMessage());
+            ExceptionThrower::saveFailed(ConstParams::AT_RECORD_JP, 101);
         }
     }
 
     /**
-     * at_record_typeの日本語表記を取得
-     * @return string
+     * 出勤レコードタイプの日本語表記を取得する
+     * @param string $type アルファベット表記の出勤レコードタイプ
+     * @return string 日本語表記の出勤レコードタイプ
      */
     public static function getTypeName(string $type): string
     {
@@ -71,37 +77,50 @@ class AttendanceRecord extends Model
             case ConstParams::AT_RECORD_FINISH_BREAK:
                 return ConstParams::AT_RECORD_FINISH_BREAK_JP;
             default:
-                return 'ERROR: タイプの日本語表記取得ができませんでした。';
+                return '取得失敗';
         }
     }
 
     /**
-     * 退勤していないセッションIDを見つけ、返す
-     * @return  string
+     * 退勤していないセッションが存在するかチェックする
+     * @param int $user_id ユーザーID
+     * @return string|null 一番最初に見つけた未退勤のセッションID(未退勤のセッションIDがない場合、null)
      */
-    public static function findSessionId($user_id): string
+    public static function findSessionId(int $user_id): string | null
     {
-        $startRecords = self::where(ConstParams::USER_ID, $user_id)
-            ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_START_WORK)
-            ->pluck(ConstParams::AT_SESSION_ID)
-            ->toArray();
+        try {
+            $startRecords = self::where(ConstParams::USER_ID, $user_id)
+                ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_START_WORK)
+                ->pluck(ConstParams::AT_SESSION_ID)
+                ->toArray();
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 103);
+        }
 
-        $endRecords = self::where(ConstParams::USER_ID, $user_id)
-            ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_FINISH_WORK)
-            ->whereIn(ConstParams::AT_SESSION_ID, $startRecords)
-            ->pluck(ConstParams::AT_SESSION_ID)
-            ->toArray();
+        try {
+            $endRecords = self::where(ConstParams::USER_ID, $user_id)
+                ->where(ConstParams::AT_RECORD_TYPE, ConstParams::AT_RECORD_FINISH_WORK)
+                ->whereIn(ConstParams::AT_SESSION_ID, $startRecords)
+                ->pluck(ConstParams::AT_SESSION_ID)
+                ->toArray();
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 104);
+        }
+
 
         $notEndedSessions = array_diff($startRecords, $endRecords);
 
         if (count($notEndedSessions) > 1) {
-            throw new Error('Error: AttendanceRecord::findSessionIdでエラー：退勤していないセッションIDが' . count($notEndedSessions) . '件見つかりました。');
+            ExceptionThrower::notEndedSessionsExist(105);
         }
+
         return $notEndedSessions ? reset($notEndedSessions) : null;
     }
 
     /**
-     * 条件を満たすat_recordオブジェクトの配列を取得
+     * 条件を満たすat_recordオブジェクトを取得する
+     * @param array $data 検索条件の配列
+     * @param bool $asArray 返り値を配列で取得するか、ペジネーションで取得するか
      * @return  LengthAwarePaginator|array
      */
     public static function search(array $data, bool $asArray): LengthAwarePaginator | array
@@ -114,32 +133,13 @@ class AttendanceRecord extends Model
         $order = $data['order'];
 
         if ($search_field === 'all') {
-            $query = self::join(
-                'users',
-                'users.' . ConstParams::USER_ID,
-                '=',
-                'attendance_records.' . ConstParams::USER_ID
-            )->whereBetween(
-                'attendance_records.' . ConstParams::AT_RECORD_DATE,
-                [$start_date, $end_date]
-            )->select(
-                'attendance_records.*',
-                'users.' . ConstParams::KANJI_LAST_NAME,
-                'users.' . ConstParams::KANJI_FIRST_NAME,
-                'users.' . ConstParams::KANA_LAST_NAME,
-                'users.' . ConstParams::KANA_FIRST_NAME,
-            );
-        } else if ($search_field === 'name') {
-            $query = self::join(
-                'users',
-                'users.' . $search_field,
-                '=',
-                'attendance_records.' . $search_field
-            )->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->whereBetween(
+            try {
+                $query = self::join(
+                    'users',
+                    'users.' . ConstParams::USER_ID,
+                    '=',
+                    'attendance_records.' . ConstParams::USER_ID
+                )->whereBetween(
                     'attendance_records.' . ConstParams::AT_RECORD_DATE,
                     [$start_date, $end_date]
                 )->select(
@@ -149,24 +149,55 @@ class AttendanceRecord extends Model
                     'users.' . ConstParams::KANA_LAST_NAME,
                     'users.' . ConstParams::KANA_FIRST_NAME,
                 );
+            } catch (Exception $e) {
+                ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 106);
+            }
+        } else if ($search_field === 'name') {
+            try {
+                $query = self::join(
+                    'users',
+                    'users.' . $search_field,
+                    '=',
+                    'attendance_records.' . $search_field
+                )->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->whereBetween(
+                        'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                        [$start_date, $end_date]
+                    )->select(
+                        'attendance_records.*',
+                        'users.' . ConstParams::KANJI_LAST_NAME,
+                        'users.' . ConstParams::KANJI_FIRST_NAME,
+                        'users.' . ConstParams::KANA_LAST_NAME,
+                        'users.' . ConstParams::KANA_FIRST_NAME,
+                    );
+            } catch (Exception $e) {
+                ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 107);
+            }
         } else {
             // user_id か login_id の場合
-            $query = self::join(
-                'users',
-                'users.' . $search_field,
-                '=',
-                'attendance_records.' . $search_field
-            )->where('attendance_records.' . $search_field, $keyword)
-                ->whereBetween(
-                    'attendance_records.' . ConstParams::AT_RECORD_DATE,
-                    [$start_date, $end_date]
-                )->select(
-                    'attendance_records.*',
-                    'users.' . ConstParams::KANJI_LAST_NAME,
-                    'users.' . ConstParams::KANJI_FIRST_NAME,
-                    'users.' . ConstParams::KANA_LAST_NAME,
-                    'users.' . ConstParams::KANA_FIRST_NAME,
-                );
+            try {
+                $query = self::join(
+                    'users',
+                    'users.' . $search_field,
+                    '=',
+                    'attendance_records.' . $search_field
+                )->where('attendance_records.' . $search_field, $keyword)
+                    ->whereBetween(
+                        'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                        [$start_date, $end_date]
+                    )->select(
+                        'attendance_records.*',
+                        'users.' . ConstParams::KANJI_LAST_NAME,
+                        'users.' . ConstParams::KANJI_FIRST_NAME,
+                        'users.' . ConstParams::KANA_LAST_NAME,
+                        'users.' . ConstParams::KANA_FIRST_NAME,
+                    );
+            } catch (Exception $e) {
+                ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 108);
+            }
         }
 
         //日時、時刻で昇順並べ替え (指定があればその指定に従う)
@@ -191,8 +222,9 @@ class AttendanceRecord extends Model
     }
 
     /**
-     * summaryに使用するat_recordのデータ配列を取得
-     * @return  array
+     * サマリー画面用のデータ配列を取得する
+     * @param DateTime $date 出力対象の日付
+     * @return  array at_recordのデータ配列
      */
     public static function getDataForSummary(DateTime $date): array
     {
@@ -203,16 +235,20 @@ class AttendanceRecord extends Model
         $start_date = $date->format('Y-m-d'); // 年月日のみのフォーマットに変換
         $end_date = $date->format('Y-m-d');
 
-        $query = self::whereBetween(
-            'attendance_records.' . ConstParams::AT_RECORD_DATE,
-            [$start_date, $end_date]
-        )->where(
-            'attendance_records.' . ConstParams::AT_RECORD_TYPE,
-            '=',
-            ConstParams::AT_RECORD_START_WORK
-        )->select(
-            'attendance_records.' . ConstParams::AT_SESSION_ID,
-        )->get();
+        try {
+            $query = self::whereBetween(
+                'attendance_records.' . ConstParams::AT_RECORD_DATE,
+                [$start_date, $end_date]
+            )->where(
+                'attendance_records.' . ConstParams::AT_RECORD_TYPE,
+                '=',
+                ConstParams::AT_RECORD_START_WORK
+            )->select(
+                'attendance_records.' . ConstParams::AT_SESSION_ID,
+            )->get();
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 110);
+        }
 
         $session_ids = $query->map(function ($record) {
             return $record->at_session_id;
@@ -222,21 +258,25 @@ class AttendanceRecord extends Model
 
         foreach ($session_ids as $session_id) {
             //session_idを持つレコードをすべて取得
-            $query = self::join(
-                'users',
-                'users.' . ConstParams::USER_ID,
-                '=',
-                'attendance_records.' . ConstParams::USER_ID
-            )->where(
-                'attendance_records.' . ConstParams::AT_SESSION_ID,
-                $session_id
-            )->select(
-                'attendance_records.*',
-                'users.' . ConstParams::KANJI_LAST_NAME,
-                'users.' . ConstParams::KANJI_FIRST_NAME,
-                'users.' . ConstParams::KANA_LAST_NAME,
-                'users.' . ConstParams::KANA_FIRST_NAME,
-            );
+            try {
+                $query = self::join(
+                    'users',
+                    'users.' . ConstParams::USER_ID,
+                    '=',
+                    'attendance_records.' . ConstParams::USER_ID
+                )->where(
+                    'attendance_records.' . ConstParams::AT_SESSION_ID,
+                    $session_id
+                )->select(
+                    'attendance_records.*',
+                    'users.' . ConstParams::KANJI_LAST_NAME,
+                    'users.' . ConstParams::KANJI_FIRST_NAME,
+                    'users.' . ConstParams::KANA_LAST_NAME,
+                    'users.' . ConstParams::KANA_FIRST_NAME,
+                );
+            } catch (Exception $e) {
+                ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 112);
+            }
 
             //日付・時刻で昇順に並べ替えることで、休憩始と休憩終のレコードが正しく紐づくようにする
             $records = $query->orderBy(ConstParams::AT_RECORD_DATE, 'asc')
@@ -268,7 +308,7 @@ class AttendanceRecord extends Model
 
             //退勤していないセッションがある場合、例外を投げる
             if (!$finish_work_record) {
-                throw new Exception('退勤処理がされていないユーザーがいます。 user_id：' . $start_work_record[ConstParams::USER_ID] ?? '出勤レコードもないです');
+                ExceptionThrower::notEndedSessionsExist(114);
             }
 
             $dailyAtRecordSet = [
@@ -284,21 +324,32 @@ class AttendanceRecord extends Model
     }
 
     /**
-     * at_record の更新
-     * @return array
+     * at_recordを更新する
+     * @param int $at_record_id 更新対象のID
+     * @param array $data ユーザーIDや時刻などを格納した配列
+     * @return array 更新後のデータを格納した配列
      */
-    public static function updateInfo($at_record_id, array $data): array
+    public static function updateInfo(int $at_record_id, array $data): array
     {
-        $count = self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->update(
-            [
-                ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
-                ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
-                ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
-                ConstParams::UPDATED_BY => $data['logged_in_user_name'],
-            ]
-        );
+        try {
+            $count = self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->update(
+                [
+                    ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
+                    ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
+                    ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
+                    ConstParams::UPDATED_BY => $data['logged_in_user_name'],
+                ]
+            );
+        } catch (Exception $e) {
+            ExceptionThrower::updateFailed(ConstParams::AT_RECORD_JP, 115);
+        }
 
-        $updated_record = self::searchById($at_record_id);
+        try {
+            $updated_record = self::searchById($at_record_id);
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 116);
+        }
+
         $data = $updated_record->dataArray();
 
         $result = [
@@ -310,24 +361,34 @@ class AttendanceRecord extends Model
     }
 
     /**
-     * at_record の削除
-     * @return int
+     * at_recordを削除する
+     * @param $at_record_id 更新対象のID
+     * @return int 削除した個数（削除に成功したかどうかのチェックに使う）
      */
     public static function deletedById($at_record_id): int
     {
-        return self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->delete();
+        try {
+            return self::where(ConstParams::AT_RECORD_ID, '=', $at_record_id)->delete();
+        } catch (Exception $e) {
+            ExceptionThrower::deleteFailed(ConstParams::AT_RECORD_JP, 117);
+        }
     }
 
     /**
-     * 条件を満たすat_recordオブジェクトの配列を取得
-     * @return  AttendanceRecord
+     * 特定のIDをもつat_recordを取得する
+     * @param int $at_record_id 検索対象のID
+     * @return  AttendanceRecord ヒットしたデータのモデル
      */
-    public static function searchById($at_record_id): AttendanceRecord
+    public static function searchById(int $at_record_id): AttendanceRecord
     {
-        $record = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
-            ->where(ConstParams::AT_RECORD_ID, '=', $at_record_id)
-            ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
-            ->first();
+        try {
+            $record = self::join('users', 'users.' . ConstParams::USER_ID, '=', 'attendance_records.' . ConstParams::USER_ID)
+                ->where(ConstParams::AT_RECORD_ID, '=', $at_record_id)
+                ->select('attendance_records.*', 'users.kanji_last_name', 'users.kanji_first_name', 'users.kana_last_name', 'users.kana_first_name',)
+                ->first();
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 118);
+        }
 
         //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
         $record->at_record_type_jp = AttendanceRecord::getTypeName($record->at_record_type);
@@ -335,8 +396,8 @@ class AttendanceRecord extends Model
     }
 
     /** 
-     * at_recordデータの項目名の配列を返す
-     * @return array
+     * データの表示用に項目名の配列を取得する
+     * @return array 項目名の配列
      *  */
     public function labels(): array
     {
@@ -361,61 +422,61 @@ class AttendanceRecord extends Model
     }
 
     /** 
-     * at_recordデータの配列を返す
-     * @return array
+     * データの表示用に各項目のデータの配列を取得する
+     * @return array 各項目のデータの配列
      *  */
     public function data(): array
     {
         $data = [
-            $this->at_record_id,
-            $this->at_session_id,
-            $this->user_id,
-            $this->kanji_last_name,
-            $this->kanji_first_name,
-            $this->kana_last_name,
-            $this->kana_first_name,
-            AttendanceRecord::getTypeName($this->at_record_type),
-            $this->at_record_date,
-            $this->at_record_time,
-            $this->created_at,
-            $this->updated_at,
-            $this->created_by,
-            $this->updated_by,
+            $this->at_record_id ?? '取得失敗',
+            $this->at_session_id ?? '取得失敗',
+            $this->user_id ?? '取得失敗',
+            $this->kanji_last_name ?? '取得失敗',
+            $this->kanji_first_name ?? '取得失敗',
+            $this->kana_last_name ?? '取得失敗',
+            $this->kana_first_name ?? '取得失敗',
+            AttendanceRecord::getTypeName($this->at_record_type) ?? '取得失敗',
+            $this->at_record_date ?? '取得失敗',
+            $this->at_record_time ?? '取得失敗',
+            $this->created_at ?? '取得失敗',
+            $this->updated_at ?? '取得失敗',
+            $this->created_by ?? '取得失敗',
+            $this->updated_by ?? '取得失敗',
         ];
 
         return $data;
     }
 
     /** 
-     * at_recordデータの表示や更新処理のために必要な文字列データをまとめた配列を返す
-     * @return array
+     * データの表示や更新処理用に、項目名をkeyに、項目のデータを値にした連想配列を取得する
+     * @return array 項目名をkeyに、項目のデータを値にした連想配列
      *  */
     public function dataArray(): array
     {
         $data = [
-            ConstParams::AT_RECORD_ID => $this->at_record_id,
-            ConstParams::AT_SESSION_ID => $this->at_session_id,
-            ConstParams::USER_ID => $this->user_id,
-            ConstParams::AT_RECORD_TYPE => $this->at_record_type,
-            ConstParams::AT_RECORD_TYPE_TRANSLATED => AttendanceRecord::getTypeName($this->at_record_type),
-            ConstParams::AT_RECORD_DATE => $this->at_record_date,
-            ConstParams::AT_RECORD_TIME => $this->at_record_time,
-            ConstParams::CREATED_AT => $this->created_at,
-            ConstParams::UPDATED_AT => $this->updated_at,
-            ConstParams::CREATED_BY => $this->created_by,
-            ConstParams::UPDATED_BY => $this->updated_by,
-            ConstParams::KANJI_LAST_NAME => $this->kanji_last_name,
-            ConstParams::KANJI_FIRST_NAME => $this->kanji_first_name,
-            ConstParams::KANA_LAST_NAME => $this->kana_last_name,
-            ConstParams::KANA_FIRST_NAME => $this->kana_first_name,
+            ConstParams::AT_RECORD_ID => $this->at_record_id ?? '取得失敗',
+            ConstParams::AT_SESSION_ID => $this->at_session_id ?? '取得失敗',
+            ConstParams::USER_ID => $this->user_id ?? '取得失敗',
+            ConstParams::AT_RECORD_TYPE => $this->at_record_type ?? '取得失敗',
+            ConstParams::AT_RECORD_TYPE_TRANSLATED => AttendanceRecord::getTypeName($this->at_record_type) ?? '取得失敗',
+            ConstParams::AT_RECORD_DATE => $this->at_record_date ?? '取得失敗',
+            ConstParams::AT_RECORD_TIME => $this->at_record_time ?? '取得失敗',
+            ConstParams::CREATED_AT => $this->created_at ?? '取得失敗',
+            ConstParams::UPDATED_AT => $this->updated_at ?? '取得失敗',
+            ConstParams::CREATED_BY => $this->created_by ?? '取得失敗',
+            ConstParams::UPDATED_BY => $this->updated_by ?? '取得失敗',
+            ConstParams::KANJI_LAST_NAME => $this->kanji_last_name ?? '取得失敗',
+            ConstParams::KANJI_FIRST_NAME => $this->kanji_first_name ?? '取得失敗',
+            ConstParams::KANA_LAST_NAME => $this->kana_last_name ?? '取得失敗',
+            ConstParams::KANA_FIRST_NAME => $this->kana_first_name ?? '取得失敗',
         ];
 
         return $data;
     }
 
     /**
-     * このat_recordモデルと紐づくUserモデルを取得
-     * @return BelongsTo
+     * このモデルと紐づくUserモデルを取得する
+     * @return BelongsTo 紐づくUserモデル
      */
     public function user(): BelongsTo
     {

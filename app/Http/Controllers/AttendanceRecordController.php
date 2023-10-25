@@ -13,13 +13,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
+/**
+ * at_recordに関連するモデルやビューを制御する
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class AttendanceRecordController extends Controller
 {
     /**
-     * at_record 詳細画面を返す
-     * @return View
+     * 打刻レコード詳細画面を返す
+     * @param int $at_record_id 表示対象のID
+     * @return View 詳細画面
      */
-    public function show($at_record_id): View
+    public function show(int $at_record_id): View
     {
         $record = AttendanceRecord::searchById($at_record_id);
         $at_record_labels = $record->labels();
@@ -32,8 +38,8 @@ class AttendanceRecordController extends Controller
     }
 
     /**
-     * データの登録画面（管理者用）を返す
-     * @return View
+     * 打刻レコードの登録画面（打刻画面ではない）を返す
+     * @return View 登録画面
      */
     public function create(): View
     {
@@ -41,8 +47,9 @@ class AttendanceRecordController extends Controller
     }
 
     /** 
-     * at_record データの新規作成
-     * @return RedirectResponse
+     * 打刻レコードを新規作成する
+     * @param AtRecordStoreRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
      *  */
     public function store(AtRecordStoreRequest $request): RedirectResponse
     {
@@ -71,13 +78,13 @@ class AttendanceRecordController extends Controller
                 ]);
             }, 5);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['messages' => 'AttendanceRecordController::storeでエラー' . $e->getMessage()])->withInput();
+            return redirect()->back()->withErrors(['messages' => $e->getMessage()])->withInput();
         }
     }
 
     /**
-     * at_record 作成処理を行い、その処理が成功したことを表示する画面を返す
-     * @return View
+     * 打刻レコードの新規作成結果画面を返す
+     * @return View 結果表示画面
      */
     public function showCreateResult(Request $request): View
     {
@@ -89,10 +96,11 @@ class AttendanceRecordController extends Controller
     }
 
     /**
-     * at_record 編集画面を返す
-     * @return View
+     * 打刻レコードの編集画面を返す
+     * @param int $at_record_id 更新対象のID
+     * @return View 編集画面
      */
-    public function edit($at_record_id): View
+    public function edit(int $at_record_id): View
     {
         $data = AttendanceRecord::searchById($at_record_id)->dataArray();
         return view('at_records.edit', ['data' => $data]);
@@ -100,9 +108,11 @@ class AttendanceRecordController extends Controller
 
     /** 
      * at_record データの更新
-     * @return RedirectResponse
+     * @param int $at_record_id 更新対象のID
+     * @param AtRecordUpdateRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse  更新結果画面か、前の画面へのリダイレクト
      *  */
-    public function update($at_record_id, AtRecordUpdateRequest $request): RedirectResponse
+    public function update(int $at_record_id, AtRecordUpdateRequest $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($at_record_id, $request) {
@@ -123,15 +133,15 @@ class AttendanceRecordController extends Controller
         } catch (Exception $e) {
             return redirect()
                 ->back()
-                ->withErrors(['message' => 'AttendanceRecordController::updateでエラー' . $e->getMessage()]);
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
     /**
-     * at_record 更新処理を行い、その処理が成功したことを表示する画面を返す
-     * @return View
+     * 打刻レコードの更新結果画面を返す
+     * @return View 結果表示画面
      */
-    public function showUpdateResult(Request $request): View
+    public function showUpdateResult(): View
     {
         return view('at_records.editResult', [
             'at_record_id' => session('at_record_id'),
@@ -142,8 +152,8 @@ class AttendanceRecordController extends Controller
     }
 
     /**
-     * at_record 削除処理の前の確認画面を返す
-     * @return View
+     * 打刻レコードの削除確認画面を返す
+     * @return View 確認画面
      */
     public function confirmDestroy(Request $request): View
     {
@@ -159,9 +169,11 @@ class AttendanceRecordController extends Controller
 
     /** 
      * at_record データの削除
-     * @return RedirectResponse
-     *  */
-    public function destroy($at_record_id): RedirectResponse
+     * @param int $at_record_id 削除対象のID
+     * @param AtRecordUpdateRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse  削除結果画面か、前の画面へのリダイレクト
+     */
+    public function destroy(int $at_record_id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($at_record_id) {
@@ -186,8 +198,8 @@ class AttendanceRecordController extends Controller
     }
 
     /**
-     * at_record 削除処理を行い、その処理が成功したことを表示する画面を返す
-     * @return View
+     * 打刻レコードの削除結果画面を返す
+     * @return View 結果表示画面
      */
     public function showDestroyResult(Request $request): View
     {
