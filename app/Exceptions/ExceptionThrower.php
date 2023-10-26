@@ -48,4 +48,10 @@ class ExceptionThrower
         $msg = ConstParams::ADMIN_JP . 'の' . $name . 'は削除できません。 [' . $code . ']';
         throw new Exception($msg);
     }
+
+    public static function genericError(string $error_msg, int $code): void
+    {
+        $msg = $error_msg . ' [' . $code . ']';
+        throw new Exception($msg);
+    }
 }

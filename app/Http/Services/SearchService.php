@@ -174,7 +174,7 @@ class SearchService
 
     /**
      * at_records 検索用に、開始日と終了日のデフォルト値を返す。
-     * @return array
+     * @return array デフォルトの開始日と終了日
      */
     private static function defaultDates(): array
     {
@@ -188,7 +188,7 @@ class SearchService
 
     /**
      * 検索用の属性「search_field」に対応する日本語表記の項目名を返す
-     * @return string
+     * @return string 日本語表記の項目名
      */
     private static function getFieldNameJP(string $search_field): string
     {

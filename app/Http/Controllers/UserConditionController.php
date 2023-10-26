@@ -4,56 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\UserConditionUpdateRequest;
+use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserCondition;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
+/**
+ * コンディションデータに関連するモデルやビューを制御する
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class UserConditionController extends Controller
 {
     /**
-     * UserCondition編集画面を返す
-     * @return View
+     * コンディションデータ編集画面を返す
+     * @param int $user_id 更新対象のユーザーのID
+     * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
      */
-    public function edit($user_id): View
+    public function edit(int $user_id): View
     {
-        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        $user_data = $user->dataArray();
-        $condition_data = $user->condition->dataArray();
+        try {
+            $user = User::findByUserId($user_id);
+            $user_data = $user->dataArray();
+            $condition_data = $user->condition->dataArray();
 
-        return view('users.conditions.edit', [
-            'user_data' => $user_data,
-            'condition_data' => $condition_data,
-        ]);
+            return view('users.conditions.edit', [
+                'user_data' => $user_data,
+                'condition_data' => $condition_data,
+            ]);
+        } catch (Exception $e) {
+            return redirect('users/search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
-     * UserConditionの更新
-     * @return RedirectResponse
+     * コンディションデータを更新する
+     * @param int $user_id 更新対象のID
+     * @param UserSalaryUpdateRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse  更新結果画面か、前の画面へのリダイレクト
      *  */
-    public function update($user_id, UserConditionUpdateRequest $request): RedirectResponse
+    public function update(int $user_id, UserConditionUpdateRequest $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($user_id, $request) {
-                $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-                $condition_data = $user->condition->dataArray();
-                /** @var \App\Models\User $logged_in_user */
-                $logged_in_user = Auth::user();
+                $condition_data = User::findByUserId($user_id)->condition->dataArray();
+                $validated_data = $request->validated();
+                $formatted_data = UpdateService::formatDataForUserCondition($validated_data, $condition_data);
 
-                $data = [
-                    ConstParams::USER_CONDITION_ID => $condition_data[ConstParams::USER_CONDITION_ID],
-                    ConstParams::HAS_ATTENDED => $request->input(ConstParams::HAS_ATTENDED),
-                    ConstParams::IS_BREAKING => $request->input(ConstParams::IS_BREAKING),
-                    ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
-                ];
-                $result = UserCondition::updateInfo($data);
+                $result = UserCondition::updateInfo($formatted_data);
+
                 return redirect()
                     ->route('users.conditions.update.result', [ConstParams::USER_ID => $user_id])
                     ->with([
-                        'user_id' => $user->user_id,
+                        'user_id' => $user_id,
                         'condition_labels' => $result['condition_labels'],
                         'condition_data' => $result['condition_data'],
                         'count' => $result['count'],
@@ -62,15 +68,15 @@ class UserConditionController extends Controller
         } catch (Exception $e) {
             return redirect()
                 ->back()
-                ->withErrors(['message' => 'UserConditionController::updateでエラー' . $e->getMessage()]);
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
     /**
-     * UserCondition更新処理を行い、その処理が成功したことを表示する画面を返す
-     * @return View
+     * コンディションデータの更新結果画面を返す
+     * @return View 結果表示画面
      */
-    public function showUpdateResult(Request $request): View
+    public function showUpdateResult(): View
     {
         return view('users.conditions.editResult', [
             'user_id' => session('user_id'),

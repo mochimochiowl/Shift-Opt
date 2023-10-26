@@ -48,11 +48,11 @@ class UpdateService
 
     /**
      * 時給データの更新に必要なデータを整形する
-     * @param int $user_id 更新対象のID
-     * @param array $data バリエーション済みのデータ
+     * @param array $validated_data バリエーション済みのデータ
+     * @param array $salary_data 現状の時給データ
      * @return array 整形済みのデータの配列
      */
-    public static function formatDataForUserSalary(int $user_id, array $validated_data, array $salary_data): array
+    public static function formatDataForUserSalary(array $validated_data, array $salary_data): array
     {
         /** @var \App\Models\User $logged_in_user */
         $logged_in_user = Auth::user();
@@ -60,6 +60,27 @@ class UpdateService
         $formatted_data = [
             ConstParams::USER_SALARY_ID => $salary_data[ConstParams::USER_SALARY_ID],
             ConstParams::HOURLY_WAGE => $validated_data[ConstParams::HOURLY_WAGE],
+            ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
+        ];
+
+        return $formatted_data;
+    }
+
+    /**
+     * コンディションデータの更新に必要なデータを整形する
+     * @param array $data バリエーション済みのデータ
+     * @param array $condition_data 現状のコンディションデータ
+     * @return array 整形済みのデータの配列
+     */
+    public static function formatDataForUserCondition(array $validated_data, array $condition_data): array
+    {
+        /** @var \App\Models\User $logged_in_user */
+        $logged_in_user = Auth::user();
+
+        $formatted_data = [
+            ConstParams::USER_CONDITION_ID => $condition_data[ConstParams::USER_CONDITION_ID],
+            ConstParams::HAS_ATTENDED => $validated_data[ConstParams::HAS_ATTENDED],
+            ConstParams::IS_BREAKING => $validated_data[ConstParams::IS_BREAKING],
             ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
         ];
 

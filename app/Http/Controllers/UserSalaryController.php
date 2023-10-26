@@ -53,7 +53,7 @@ class UserSalaryController extends Controller
             return DB::transaction(function () use ($user_id, $request) {
                 $salary_data = User::findByUserId($user_id)->salary->dataArray();
                 $validated_data = $request->validated();
-                $formatted_data = UpdateService::formatDataForUserSalary($user_id, $validated_data, $salary_data);
+                $formatted_data = UpdateService::formatDataForUserSalary($validated_data, $salary_data);
 
                 $result = UserSalary::updateInfo($formatted_data);
 
