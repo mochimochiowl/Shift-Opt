@@ -85,7 +85,7 @@ class StampService
     {
         try {
             return DB::transaction(function () use ($data) {
-                $target_user = User::findUserByLoginId($data['target_login_id']);
+                $target_user = User::findByLoginId($data['target_login_id']);
                 $user_condition = UserCondition::where('user_id', $target_user->user_id)->first();
                 if (!$user_condition) {
                     throw new Exception('データが見つかりません。[UserCondition]');

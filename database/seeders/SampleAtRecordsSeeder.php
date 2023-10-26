@@ -38,11 +38,11 @@ class SampleAtRecordsSeeder extends Seeder
 
         //毎回名前のためにUserテーブル検索させないために配列でしまっとく
         $name_list = [
-            '1' => User::findUserByUserId('1')->getKanjiFullName(),
-            '2' => User::findUserByUserId('2')->getKanjiFullName(),
-            '3' => User::findUserByUserId('3')->getKanjiFullName(),
-            '4' => User::findUserByUserId('4')->getKanjiFullName(),
-            '5' => User::findUserByUserId('5')->getKanjiFullName(),
+            '1' => User::findByUserId('1')->getKanjiFullName(),
+            '2' => User::findByUserId('2')->getKanjiFullName(),
+            '3' => User::findByUserId('3')->getKanjiFullName(),
+            '4' => User::findByUserId('4')->getKanjiFullName(),
+            '5' => User::findByUserId('5')->getKanjiFullName(),
         ];
 
         //日数分だけ繰り返す

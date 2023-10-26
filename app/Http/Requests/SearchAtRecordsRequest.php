@@ -26,6 +26,8 @@ class SearchAtRecordsRequest extends FormRequest
             'search_field' => 'required',
             'start_date' => 'required|date_format:Y-m-d',
             'end_date' => 'required|date_format:Y-m-d',
+            'column' => 'required',
+            'order' => 'required',
         ];
     }
 
@@ -36,12 +38,26 @@ class SearchAtRecordsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'keyword.max' => 'キーワードは:max文字以下で入力してください。',
-            'search_field.required' => '検索種別を選択してください。',
-            'start_date.required' => '開始日を入力して下さい',
-            'end_date.required' => '終了日を入力して下さい',
-            'start_date.date_format' => '開始日はYYYY-MM-DDの形式で入力して下さい',
-            'end_date.date_format' => '終了日はYYYY-MM-DDの形式で入力して下さい',
+            'max' => ':attributeは:max文字以下で入力してください。',
+            'required' => ':attributeを入力してください。',
+            'search_field.required' => ':attributeを選択してください。',
+            'date_format' => ':attributeはYYYY-MM-DDの形式で入力して下さい',
+        ];
+    }
+
+    /**
+     * 属性名の配列を返す
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            'keyword' => 'キーワード',
+            'search_field' => '検索種別',
+            'start_date' => '開始日',
+            'end_date' => '終了日',
+            'column' => '整列の対象カラム',
+            'order' => '整列順序',
         ];
     }
 }

@@ -41,4 +41,10 @@ class ExceptionThrower
         $msg = '対象の' . $name . 'が存在しません。 [' . $code . ']';
         throw new Exception($msg);
     }
+
+    public static function unableDeleteAdmin(string $name, int $code): void
+    {
+        $msg = ConstParams::ADMIN_JP . 'の' . $name . 'は削除できません。 [' . $code . ']';
+        throw new Exception($msg);
+    }
 }

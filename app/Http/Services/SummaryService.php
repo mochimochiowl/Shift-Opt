@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Ramsey\Uuid\Type\Integer;
 
+/**
+ * サマリー画面の表示に関連するビジネスロジックを管轄する
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class SummaryService
 {
     /**
@@ -205,7 +210,7 @@ class SummaryService
      */
     private function calcCostOfLabor(string $user_id, array $working_time): int
     {
-        $user = User::findUserByUserId($user_id);
+        $user = User::findByUserId($user_id);
         if (!$user || !$user->salary) {
             throw new Exception(ConstParams::USER_JP . 'が見つかりません。[user_id = ' . $user_id . ']');
         }

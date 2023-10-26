@@ -35,9 +35,8 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            ConstParams::LOGIN_ID . '.required' => 'ログインIDを入力して下さい。',
-            ConstParams::LOGIN_ID . '.exists' => 'ログインIDが存在しません。',
-            ConstParams::PASSWORD . '.required' => 'パスワードを入力して下さい。',
+            'required' => ':attributeを入力して下さい。',
+            'exists' => ':attributeが存在しません。',
         ];
     }
 

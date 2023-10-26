@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AttendanceRecordController;
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TopController;
 use App\Http\Controllers\UserConditionController;
 use App\Http\Controllers\UserController;
@@ -54,7 +53,7 @@ Route::prefix('stamps')->name('stamps.')->group(function () {
 Route::middleware('auth')->group(function () {
     // users
     // 検索にかかわるルート
-    Route::get('users/search', [SearchController::class, 'showUsers'])->name('users.search');
+    Route::get('users/search', [UserController::class, 'showSearchPage'])->name('users.search');
 
     // 情報操作にかかわるルート
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
@@ -77,10 +76,10 @@ Route::middleware('auth')->group(function () {
 
     // at_records
     // 検索にかかわるルート
-    Route::get('at_records/search', [SearchController::class, 'showAtRecords'])->name('at_records.search');
+    Route::get('at_records/search', [AttendanceRecordController::class, 'showSearchPage'])->name('at_records.search');
 
     // CSV出力
-    Route::get('at_records/export-csv', [SearchController::class, 'exportAtRecordCsv'])->name('at_records.export');
+    Route::get('at_records/export-csv', [AttendanceRecordController::class, 'exportCsv'])->name('at_records.export');
 
     // 情報操作にかかわるルート
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');

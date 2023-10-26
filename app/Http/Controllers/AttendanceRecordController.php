@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Const\ConstParams;
 use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\AtRecordUpdateRequest;
+use App\Http\Requests\SearchAtRecordsRequest;
+use App\Http\Services\SearchService;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
@@ -20,23 +25,6 @@ use Illuminate\View\View;
  */
 class AttendanceRecordController extends Controller
 {
-    /**
-     * 打刻レコード詳細画面を返す
-     * @param int $at_record_id 表示対象のID
-     * @return View 詳細画面
-     */
-    public function show(int $at_record_id): View
-    {
-        $record = AttendanceRecord::searchById($at_record_id);
-        $at_record_labels = $record->labels();
-        $at_record_data = $record->data();
-        return view('at_records.show', [
-            'at_record_id' => $record->at_record_id,
-            'at_record_labels' => $at_record_labels,
-            'at_record_data' => $at_record_data,
-        ]);
-    }
-
     /**
      * 打刻レコードの登録画面（打刻画面ではない）を返す
      * @return View 登録画面
@@ -56,12 +44,12 @@ class AttendanceRecordController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $data = [
-                    'target_user_id' => User::findUserByLoginId($request->target_login_id)->user_id,
+                    'target_user_id' => User::findByLoginId($request->target_login_id)->user_id,
                     ConstParams::AT_SESSION_ID => $request->input(ConstParams::AT_SESSION_ID),
                     ConstParams::AT_RECORD_TYPE => $request->input(ConstParams::AT_RECORD_TYPE),
                     ConstParams::AT_RECORD_DATE => $request->input(ConstParams::AT_RECORD_DATE),
                     ConstParams::AT_RECORD_TIME => $request->input(ConstParams::AT_RECORD_TIME),
-                    ConstParams::CREATED_BY => User::findUserByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
+                    ConstParams::CREATED_BY => User::findByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
                 ];
 
                 $new_record_id = AttendanceRecord::createNewRecord($data)->at_record_id;
@@ -97,7 +85,94 @@ class AttendanceRecordController extends Controller
     }
 
     /**
-     * 打刻レコードの編集画面を返す
+     * 打刻レコード詳細画面を返す
+     * @param int $at_record_id 表示対象のID
+     * @return View 詳細画面
+     */
+    public function show(int $at_record_id): View
+    {
+        $record = AttendanceRecord::searchById($at_record_id);
+        $at_record_labels = $record->labels();
+        $at_record_data = $record->data();
+        return view('at_records.show', [
+            'at_record_id' => $record->at_record_id,
+            'at_record_labels' => $at_record_labels,
+            'at_record_data' => $at_record_data,
+        ]);
+    }
+
+    /**
+     * 打刻レコード検索画面を返す
+     * @param Request $request バリデーション未実施のリクエスト
+     * @return View|RedirectResponse 検索画面
+     */
+    public function showSearchPage(Request $request): View | RedirectResponse
+    {
+        if ($request->input('column')) {
+            // 検索ボタンを押下したとき
+
+            // カスタムフォームリクエストを初めから利用すると、
+            // リダイレクトループが発生してしまうため、あえてここでバリエーション実行
+            $validator = Validator::make(
+                $request->all(),
+                (new SearchAtRecordsRequest)->rules(),
+                (new SearchAtRecordsRequest)->messages(),
+                (new SearchAtRecordsRequest)->attributes(),
+            );
+
+            if ($validator->fails()) {
+                return redirect('at_records/search')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $validated_data = $validator->validated();
+            $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+            $results = $this->search($formatted_data['search_requirements'], false);
+        } else {
+            // 検索画面を最初に開いたとき
+            $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
+            $results = null;
+        }
+
+        return view('at_records/search', [
+            'results' => $results,
+            'search_requirements' => $formatted_data['search_requirements'],
+            'search_requirement_labels' => $formatted_data['search_requirement_labels'],
+            'search_requirements_data' => $formatted_data['search_requirements_data'],
+            'default_dates' => $formatted_data['default_dates'],
+        ]);
+    }
+
+    /**
+     * 検索条件に基づき、打刻レコードの検索結果をCSVで出力する
+     * @param Request $request バリデーション未実施のリクエスト
+     * @return Response CSVのダウンロードが開始
+     */
+    public function exportCsv(SearchAtRecordsRequest $request): Response
+    {
+        $validated_data = $request->validated();
+        $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+        $results = $this->search($formatted_data['search_requirements'], true);
+        $response_data = SearchService::createCSV($formatted_data, $results);
+
+        return response($response_data['csv'], 200)
+            ->withHeaders($response_data['headers']);
+    }
+
+    /**
+     * 検索条件に基づき、打刻レコードを検索する
+     * @param array $search_requirements 検索条件
+     * @param bool $asArray 検索結果を配列で受け取るかどうか
+     * @return LengthAwarePaginator|array 検索結果
+     */
+    private function search(array $search_requirements, bool $asArray): LengthAwarePaginator | array
+    {
+        return AttendanceRecord::search($search_requirements, $asArray);
+    }
+
+    /**
+     * 打刻レコード編集画面を返す
      * @param int $at_record_id 更新対象のID
      * @return View 編集画面
      */
@@ -108,7 +183,7 @@ class AttendanceRecordController extends Controller
     }
 
     /** 
-     * at_record データの更新
+     * 打刻レコードを更新する
      * @param int $at_record_id 更新対象のID
      * @param AtRecordUpdateRequest $request バリデーション済みのリクエスト
      * @return RedirectResponse  更新結果画面か、前の画面へのリダイレクト
@@ -154,6 +229,7 @@ class AttendanceRecordController extends Controller
 
     /**
      * 打刻レコードの削除確認画面を返す
+     * @param Request $request IDを受け取るために使う
      * @return View 確認画面
      */
     public function confirmDestroy(Request $request): View
@@ -169,9 +245,8 @@ class AttendanceRecordController extends Controller
     }
 
     /** 
-     * at_record データの削除
+     * 打刻レコードを削除する
      * @param int $at_record_id 削除対象のID
-     * @param AtRecordUpdateRequest $request バリデーション済みのリクエスト
      * @return RedirectResponse  削除結果画面か、前の画面へのリダイレクト
      */
     public function destroy(int $at_record_id): RedirectResponse
@@ -202,7 +277,7 @@ class AttendanceRecordController extends Controller
      * 打刻レコードの削除結果画面を返す
      * @return View 結果表示画面
      */
-    public function showDestroyResult(Request $request): View
+    public function showDestroyResult(): View
     {
         return view('at_records.destroyResult', [
             'at_record_labels' => session('at_record_labels'),
