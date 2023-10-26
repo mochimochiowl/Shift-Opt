@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Services\SearchService;
 use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserCondition;
@@ -16,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
@@ -183,7 +187,7 @@ class UserController extends Controller
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $validated_data = $request->validated();
-                $formatted_data = UpdateService::formatDataForUser($validated_data);
+                $formatted_data = UpdateService::formatDataForUser($user_id, $validated_data);
                 $result = User::updateInfo($formatted_data);
 
                 return redirect()

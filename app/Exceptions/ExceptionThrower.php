@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Const\ConstParams;
 use Exception;
 
 class ExceptionThrower
