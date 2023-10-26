@@ -311,6 +311,11 @@ class AttendanceRecord extends Model
                 ExceptionThrower::notEndedSessionsExist(114);
             }
 
+            if (!$start_work_record) {
+                ExceptionThrower::notExist(ConstParams::AT_RECORD_START_WORK_JP . ConstParams::AT_RECORD_JP, 121);
+            }
+
+
             $dailyAtRecordSet = [
                 'start_work_record' => $start_work_record,
                 'finish_work_record' => $finish_work_record,
@@ -348,6 +353,10 @@ class AttendanceRecord extends Model
             $updated_record = self::searchById($at_record_id);
         } catch (Exception $e) {
             ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 116);
+        }
+
+        if (!$updated_record) {
+            ExceptionThrower::notExist(ConstParams::AT_RECORD_JP, 120);
         }
 
         $data = $updated_record->dataArray();
@@ -388,6 +397,10 @@ class AttendanceRecord extends Model
                 ->first();
         } catch (Exception $e) {
             ExceptionThrower::fetchFailed(ConstParams::AT_RECORD_JP, 118);
+        }
+
+        if (!$record) {
+            ExceptionThrower::notExist(ConstParams::AT_RECORD_JP, 119);
         }
 
         //Viewで加工しないようにするため、画面表示用に日本語表記の文字列を追加
