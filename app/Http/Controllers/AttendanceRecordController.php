@@ -66,6 +66,7 @@ class AttendanceRecordController extends Controller
 
                 $new_record_id = AttendanceRecord::createNewRecord($data)->at_record_id;
                 $record = AttendanceRecord::searchById($new_record_id);
+
                 $at_record_labels = $record->labels();
                 $at_record_data = $record->data();
 
@@ -86,7 +87,7 @@ class AttendanceRecordController extends Controller
      * 打刻レコードの新規作成結果画面を返す
      * @return View 結果表示画面
      */
-    public function showCreateResult(Request $request): View
+    public function showCreateResult(): View
     {
         return view('at_records.createResult', [
             'at_record_id' => session('at_record_id'),
@@ -179,7 +180,7 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($at_record_id) {
                 $record = AttendanceRecord::searchById($at_record_id);
                 if (!$record) {
-                    throw new Exception('削除対象の' . ConstParams::AT_RECORD_JP . 'が存在しません。');
+                    ExceptionThrower::notExist(ConstParams::AT_RECORD_JP);
                 }
                 $at_record_labels = $record->labels();
                 $at_record_data = $record->data();

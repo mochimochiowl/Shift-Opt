@@ -35,4 +35,10 @@ class ExceptionThrower
         $msg = '退勤していないセッションが存在します。退勤処理を済ませてから再度お試しください。 [' . $code . ']';
         throw new Exception($msg);
     }
+
+    public static function notExist(string $name, int $code): void
+    {
+        $msg = '対象の' . $name . 'が存在しません。 [' . $code . ']';
+        throw new Exception($msg);
+    }
 }
