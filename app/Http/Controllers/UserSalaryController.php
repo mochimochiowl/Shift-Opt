@@ -4,55 +4,63 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\UserSalaryUpdateRequest;
+use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserSalary;
+use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
+/**
+ * 時給データに関連するモデルやビューを制御する
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class UserSalaryController extends Controller
 {
     /**
-     * UserSalary編集画面を返す
-     * @return View
+     * 時給データ編集画面を返す
+     * @param int $user_id 更新対象のユーザーのID
+     * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
      */
-    public function edit($user_id): View
+    public function edit(int $user_id): View | RedirectResponse
     {
-        $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-        $user_data = $user->dataArray();
-        $salary_data = $user->salary->dataArray();
+        try {
+            $user = User::findByUserId($user_id);
+            $user_data = $user->dataArray();
+            $salary_data = $user->salary->dataArray();
 
-        return view('users.salaries.edit', [
-            'user_data' => $user_data,
-            'salary_data' => $salary_data,
-        ]);
+            return view('users.salaries.edit', [
+                'user_data' => $user_data,
+                'salary_data' => $salary_data,
+            ]);
+        } catch (Exception $e) {
+            return redirect('users/search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
-     * UserSalaryの更新
-     * @return RedirectResponse
+     * 時給データを更新する
+     * @param int $user_id 更新対象のID
+     * @param UserSalaryUpdateRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse  更新結果画面か、前の画面へのリダイレクト
      *  */
-    public function update($user_id, UserSalaryUpdateRequest $request): RedirectResponse
+    public function update(int $user_id, UserSalaryUpdateRequest $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($user_id, $request) {
-                $user = User::where(ConstParams::USER_ID, '=', $user_id)->first();
-                $salary_data = $user->salary->dataArray();
-                /** @var \App\Models\User $logged_in_user */
-                $logged_in_user = Auth::user();
+                $salary_data = User::findByUserId($user_id)->salary->dataArray();
+                $validated_data = $request->validated();
+                $formatted_data = UpdateService::formatDataForUserSalary($user_id, $validated_data, $salary_data);
 
-                $data = [
-                    ConstParams::USER_SALARY_ID => $salary_data[ConstParams::USER_SALARY_ID],
-                    ConstParams::HOURLY_WAGE => $request->input(ConstParams::HOURLY_WAGE),
-                    ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
-                ];
-                $result = UserSalary::updateInfo($data);
+                $result = UserSalary::updateInfo($formatted_data);
+
                 return redirect()
                     ->route('users.salaries.update.result', [ConstParams::USER_ID => $user_id])
                     ->with([
-                        'user_id' => $user->user_id,
+                        'user_id' => $user_id,
                         'salary_labels' => $result['salary_labels'],
                         'salary_data' => $result['salary_data'],
                         'count' => $result['count'],
@@ -61,15 +69,15 @@ class UserSalaryController extends Controller
         } catch (Exception $e) {
             return redirect()
                 ->back()
-                ->withErrors(['message' => 'UserSalaryController::updateでエラー' . $e->getMessage()]);
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
     /**
-     * UserSalary更新処理を行い、その処理が成功したことを表示する画面を返す
-     * @return View
+     * 時給データの更新結果画面を返す
+     * @return View 結果表示画面
      */
-    public function showUpdateResult(Request $request): View
+    public function showUpdateResult(): View
     {
         return view('users.salaries.editResult', [
             'user_id' => session('user_id'),

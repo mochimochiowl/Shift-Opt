@@ -13,7 +13,7 @@
         <ul id="menu" class="fixed top-0 left-0 w-full text-center text-white font-bold bg-blue-500 translate-x-full transition duration-300 ease-linear">
             @if (Auth::check())
                 <li class="h-24 p-9 bg-blue-600">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</li>
-                @if (Auth::user()->isAdmin())
+                @if (Auth::user()->is_admin)
                     <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録画面</a></li>
                     <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索画面</a></li>
                     <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>

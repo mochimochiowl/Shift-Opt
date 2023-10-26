@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
- * at_recordに関連するモデルやビューを制御する
+ * 打刻レコードに関連するモデルやビューを制御する
  * @author mochimochiowl
  * @version 1.0.0
  */

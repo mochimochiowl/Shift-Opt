@@ -7,9 +7,9 @@ use Exception;
 
 class ExceptionThrower
 {
-    public static function saveFailed(string $name, int $code): void
+    public static function createFailed(string $name, int $code): void
     {
-        $msg = $name . 'の保存に失敗しました。 [' . $code . ']';
+        $msg = $name . 'の作成に失敗しました。 [' . $code . ']';
         throw new Exception($msg);
     }
 

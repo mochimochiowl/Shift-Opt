@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use Exception;
 use Laravel\Sanctum\HasApiTokens;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,7 +16,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * user関係のデータの保持・加工とCRUD処理を担当する
+ * ユーザー関係のデータの保持・加工とCRUD処理を担当する
  * @author mochimochiowl
  * @version 1.0.0
  */
@@ -23,11 +24,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $primaryKey = ConstParams::USER_ID;
     protected $fillable = [
         ConstParams::KANJI_LAST_NAME,
@@ -47,30 +43,21 @@ class User extends Authenticatable
         ConstParams::CREATED_AT,
         ConstParams::UPDATED_AT,
     ];
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+
     protected $hidden = [
         ConstParams::PASSWORD,
         ConstParams::REMEMBER_TOKEN,
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         ConstParams::EMAIL_VERIFIED_AT => 'datetime',
         ConstParams::PASSWORD => 'hashed',
     ];
 
     /**
-     * userの作成
+     * ユーザーの作成
      * @param array $data 氏名やログインIDなどを格納した配列
-     * @return User 新たに作成したuserモデル
+     * @return User 新たに作成したモデル
      */
     public static function createNewUser(array $data): User
     {
@@ -92,14 +79,14 @@ class User extends Authenticatable
 
             return $user;
         } catch (Exception $e) {
-            ExceptionThrower::saveFailed(ConstParams::USER_JP, 201);
+            ExceptionThrower::createFailed(ConstParams::USER_JP, 201);
         }
     }
 
     /**
-     * 特定のユーザーIDをもつuserを取得する
+     * 特定のユーザーIDをもつユーザーを取得する
      * @param int $user_id 検索対象のID
-     * @return  User ヒットしたデータのモデル
+     * @return User ヒットしたデータのモデル
      */
     public static function findByUserId(int $user_id): User
     {
@@ -117,7 +104,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 特定のログインIDをもつuserを取得する
+     * 特定のログインIDをもつユーザーを取得する
      * @param string $login_id 検索対象のID
      * @return  User ヒットしたデータのモデル
      */
@@ -137,12 +124,12 @@ class User extends Authenticatable
     }
 
     /**
-     * 条件を満たすuserを取得する
+     * 条件を満たすユーザーを取得する
      * @param string $field 検索対象のカラム
      * @param string $keyword 検索ワード
      * @param string $column 整列の基準となるカラム
      * @param string $order 昇順か降順か
-     * @return  LengthAwarePaginator ペジネーションに対応したuserのデータコレクション
+     * @return  LengthAwarePaginator ペジネーションに対応したユーザーのデータコレクション
      */
     public static function searchByKeyword(string $field, string $keyword, string $column, string $order): LengthAwarePaginator
     {
@@ -173,7 +160,7 @@ class User extends Authenticatable
 
 
     /**
-     * userを更新する
+     * ユーザーを更新する
      * @param array $data 氏名やログインIDなどを格納した配列
      * @return array 更新後のデータを格納した配列
      */
@@ -200,7 +187,7 @@ class User extends Authenticatable
         try {
             $user = self::findByUserId($data[ConstParams::USER_ID]);
         } catch (Exception $e) {
-            ExceptionThrower::updateFailed(ConstParams::USER_JP, 208);
+            ExceptionThrower::fetchFailed(ConstParams::USER_JP, 208);
         }
 
         $user_labels = $user->labels();
@@ -217,7 +204,7 @@ class User extends Authenticatable
     }
 
     /**
-     * userを削除する
+     * ユーザーを削除する
      * @param int $user_id 削除対象のID
      * @return int 削除した個数（削除に成功したかどうかのチェックに使う）
      */
@@ -350,14 +337,5 @@ class User extends Authenticatable
     public function getKanaFullName(): string
     {
         return $this->kana_last_name . ' ' . $this->kana_first_name;
-    }
-
-    /**
-     * 管理者かどうかを取得する
-     * @return bool 管理者かどうか
-     */
-    public function isAdmin(): bool
-    {
-        return $this->is_admin;
     }
 }

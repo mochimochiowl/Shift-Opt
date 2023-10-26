@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * at_record関係のデータの保持・加工とCRUD処理を担当する
+ * 打刻レコード関係のデータの保持・加工とCRUD処理を担当する
  * @author mochimochiowl
  * @version 1.0.0
  */
@@ -56,7 +56,7 @@ class AttendanceRecord extends Model
 
             return $newRecord;
         } catch (Exception $e) {
-            ExceptionThrower::saveFailed(ConstParams::AT_RECORD_JP, 101);
+            ExceptionThrower::createFailed(ConstParams::AT_RECORD_JP, 101);
         }
     }
 

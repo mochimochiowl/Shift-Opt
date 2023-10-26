@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
- * userに関連するモデルやビューを制御する
+ * ユーザーに関連するモデルやビューを制御する
  * @author mochimochiowl
  * @version 1.0.0
  */
@@ -167,13 +167,20 @@ class UserController extends Controller
     /**
      * ユーザー編集画面を返す
      * @param int $at_record_id 更新対象のID
-     * @return View 編集画面
+     * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
      */
-    public function edit(int $user_id): View
+    public function edit(int $user_id): View | RedirectResponse
     {
-        $user = User::findByUserId($user_id);
-        $user_data = $user->dataArray();
-        return view('users.edit', ['user_data' => $user_data]);
+        try {
+            $user = User::findByUserId($user_id);
+            $user_data = $user->dataArray();
+            return view('users.edit', [
+                'user_data' => $user_data
+            ]);
+        } catch (Exception $e) {
+            return redirect('users/search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
