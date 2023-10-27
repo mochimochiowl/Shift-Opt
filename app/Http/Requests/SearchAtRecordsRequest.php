@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * 打刻レコードの検索に関するリクエスト
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class SearchAtRecordsRequest extends FormRequest
 {
     /**

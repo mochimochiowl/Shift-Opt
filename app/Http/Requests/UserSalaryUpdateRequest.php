@@ -5,6 +5,11 @@ namespace App\Http\Requests;
 use App\Const\ConstParams;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * 時給データの更新に関するリクエスト
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class UserSalaryUpdateRequest extends FormRequest
 {
     /**

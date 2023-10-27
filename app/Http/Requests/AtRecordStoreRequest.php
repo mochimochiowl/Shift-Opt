@@ -5,6 +5,11 @@ namespace App\Http\Requests;
 use App\Const\ConstParams;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * 打刻レコードの作成に関するリクエスト
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class AtRecordStoreRequest extends FormRequest
 {
     /**

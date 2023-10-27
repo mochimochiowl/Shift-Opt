@@ -6,7 +6,9 @@ use App\Const\ConstParams;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * User新規登録の際に使うカスタムフォームリクエスト
+ * ユーザーの作成に関するリクエスト
+ * @author mochimochiowl
+ * @version 1.0.0
  */
 class UserStoreRequest extends FormRequest
 {

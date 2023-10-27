@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * サマリー画面の表示に関するリクエスト
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 class SummaryRequest extends FormRequest
 {
     /**
