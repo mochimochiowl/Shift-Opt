@@ -23,7 +23,6 @@
                 <li class="h-24 p-9 bg-blue-600">ログインしていません。</li>
             @endif
             <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻画面</a></li>
-            <li class="p-3"><a href="{{route('debug')}}" class="">CSS確認</a></li>      
             @if (Auth::check())
             <li class="p-3"><a href="{{route('logout')}}" class="">ログアウトする</a></li>
             @else
