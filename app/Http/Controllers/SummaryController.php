@@ -1,60 +1,80 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use App\Http\Requests\SummaryRequest;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Ramsey\Uuid\Type\Integer;
 
 /**
  * サマリー画面の表示に関連するビジネスロジックを管轄する
  * @author mochimochiowl
  * @version 1.0.0
  */
-class SummaryService
+class SummaryController
 {
     /**
-     * サマリー画面を返す
-     * @return RedirectResponse
+     * 初期表示として、今日のサマリーを表示するために、generateSummaryにデータを渡す中継役の関数
+     * @return View|RedirectResponse サマリー画面か、トップ画面へのリダイレクト
      */
-    public function index(): RedirectResponse
+    public function index(): View | RedirectResponse
     {
-        return $this->generateSummary(str_replace('/', '-', getToday()));
+        try {
+            return $this->generateSummary(str_replace('/', '-', getToday()));
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
-     * 画面からのリクエストを受け取り、データとして次の関数に渡す
-     * @return RedirectResponse
+     * 特定の日のサマリーを表示するために、generateSummaryにデータを渡す中継役の関数
+     * @param SummaryRequest $request バリデーション済みのリクエスト
+     * @return View|RedirectResponse サマリー画面か、トップ画面へのリダイレクト
      */
-    public function post(SummaryRequest $request): RedirectResponse
+    public function post(SummaryRequest $request): View | RedirectResponse
     {
-        $date = $request->input('date');
-        return $this->generateSummary($date);
+
+        try {
+            $date = $request->input('date');
+            return $this->generateSummary($date);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * サマリー画面を返す
-     * @return View
+     * @return View|RedirectResponse サマリー画面か、トップ画面へのリダイレクト
      */
     public function showSummary(): View
     {
-        return view('summary.index', [
-            'data' => session('data'),
-        ]);
+        try {
+            return view('summary.index', [
+                'data' => session('data'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
      * 特定の日のサマリー用データを準備する
-     * @return RedirectResponse
+     * @param string $date 集計の対象日(YYYY-MM-DD)
+     * @return RedirectResponse サマリー画面か、トップ画面へのリダイレクト
      *  */
-    private function generateSummary(string $date): RedirectResponse
+    private function generateSummary(string $date): View|RedirectResponse
     {
         try {
             $inputDate = DateTime::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0);
@@ -67,15 +87,20 @@ class SummaryService
                 'sums' => $rowsSums['sums'],
             ];
 
-            return redirect()->route('summary.show')->with(['data' => $data]);
+            return redirect()
+                ->route('summary.show')
+                ->with(['data' => $data]);
         } catch (\Exception $e) {
-            return redirect()->route('summary.show')->withErrors(['message' => 'SummaryService::generateSummaryでエラー' . $e->getMessage()])->withInput();
+            return redirect()
+                ->route('summary.show')
+                ->withErrors(['message' => $e->getMessage()])->withInput();
         }
     }
 
     /**
-     * rows配列とsums配列を作成し、返す
-     * @return array
+     * サマリーを表示するために必要なデータの配列を作成し、返す
+     * @param array $recordSets 打刻レコードの配列
+     * @return array 表形式で表示できるように整形したデータ配列
      */
     private function makeRowsSums(array $recordSets): array
     {
@@ -150,7 +175,9 @@ class SummaryService
 
     /**
      * 休憩時間を返す
-     * @return int
+     * @param array $start_break_record 休憩始レコードの日時が入った配列
+     * @param array $finish_break_record 休憩終レコードの日時が入った配列
+     * @return int 休憩時間(s)
      */
     private function calcBreakingSeconds(array $start_break_record, array $finish_break_record): int
     {
@@ -172,7 +199,10 @@ class SummaryService
 
     /**
      * 休憩時間を除いた労働時間を返す
-     * @return int
+     * @param array $start_work_record 出勤レコードの日時が入った配列
+     * @param array $finish_work_record 退勤レコードの日時が入った配列
+     * @param int $total_breaking_seconds 休憩時間の合計
+     * @return int 休憩時間を除いた労働時間(s)
      */
     private function calcWorkingSeconds(array $start_work_record, array $finish_work_record, int $total_breaking_seconds): int
     {
@@ -194,7 +224,8 @@ class SummaryService
 
     /**
      * 秒の時間を時間と分に変換する
-     * @return array
+     * @param int $seconds 時間(s)
+     * @return array 時間(hour, minute) secは切り捨て
      */
     private function secsToHours(int $seconds): array
     {
@@ -205,14 +236,19 @@ class SummaryService
     }
 
     /**
-     * 人件費を算出する(小数点以下第一位で四捨五入、整数を返す)
-     * @return int
+     * 人件費を算出する
+     * @param string $user_id 対象のID
+     * @param array $working_time 労働時間(hour, minute)
+     * @return int 人件費(小数点以下第一位で四捨五入、整数を返す)
      */
     private function calcCostOfLabor(string $user_id, array $working_time): int
     {
         $user = User::findByUserId($user_id);
-        if (!$user || !$user->salary) {
-            throw new Exception(ConstParams::USER_JP . 'が見つかりません。[user_id = ' . $user_id . ']');
+        if (!$user) {
+            ExceptionThrower::notExist(ConstParams::USER_JP, 501);
+        }
+        if (!$user->salary) {
+            ExceptionThrower::notExist(ConstParams::USER_SALARY_JP, 502);
         }
         $hourly_wage = (string)$user->salary->hourly_wage;
         $cost = bcadd(bcmul($hourly_wage, (string)$working_time['hour'], 2), bcmul($hourly_wage, (string)($working_time['minute'] / 60), 2), 2);

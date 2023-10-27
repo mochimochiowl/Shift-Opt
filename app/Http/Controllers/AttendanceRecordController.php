@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\AtRecordUpdateRequest;
 use App\Http\Requests\SearchAtRecordsRequest;
+use App\Http\Requests\StampRequest;
+use App\Http\Services\CreateService;
 use App\Http\Services\SearchService;
 use App\Models\AttendanceRecord;
 use App\Models\User;
@@ -16,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -25,6 +29,164 @@ use Illuminate\View\View;
  */
 class AttendanceRecordController extends Controller
 {
+
+    /**
+     * 打刻画面を返す
+     * @return View|RedirectResponse 登録画面か、トップ画面へのリダイレクト
+     */
+    public function showStamp(): View
+    {
+        try {
+            return view('stamps.index');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    /** 
+     * 出勤のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
+     *  */
+    public function startWork(StampRequest $request): RedirectResponse
+    {
+        try {
+            $data = [
+                'target_login_id' => $request->input('target_login_id'),
+                'at_record_type' => ConstParams::AT_RECORD_START_WORK,
+            ];
+            return $this->createRecord($data);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])->withInput();
+        }
+    }
+
+    /** 
+     * 退勤のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
+     *  */
+    public function finishWork(StampRequest $request): RedirectResponse
+    {
+        try {
+            $data = [
+                'target_login_id' => $request->input('target_login_id'),
+                'at_record_type' => ConstParams::AT_RECORD_FINISH_WORK,
+            ];
+            return $this->createRecord($data);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])->withInput();
+        }
+    }
+
+    /** 
+     * 休憩始のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
+     *  */
+    public function startBreak(StampRequest $request): RedirectResponse
+    {
+        try {
+            $data = [
+                'target_login_id' => $request->input('target_login_id'),
+                'at_record_type' => ConstParams::AT_RECORD_START_BREAK,
+            ];
+            return $this->createRecord($data);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])->withInput();
+        }
+    }
+
+    /** 
+     * 休憩終のat_record を新規作成（createRecord関数への中継関数）
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
+     *  */
+    public function finishBreak(StampRequest $request): RedirectResponse
+    {
+        try {
+            $data = [
+                'target_login_id' => $request->input('target_login_id'),
+                'at_record_type' => ConstParams::AT_RECORD_FINISH_BREAK,
+            ];
+            return $this->createRecord($data);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])->withInput();
+        }
+    }
+
+    /** 
+     * 打刻レコードの新規作成＋コンディションデータの更新 打刻画面からのみ呼び出される。
+     * @param array $data バリデーション済みのデータ
+     * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
+     *  */
+    private function createRecord(array $data): RedirectResponse
+    {
+        try {
+            return DB::transaction(function () use ($data) {
+                $target_user = User::findByLoginId($data['target_login_id']);
+                $user_condition = $target_user->condition;
+
+                if (!$user_condition) {
+                    ExceptionThrower::fetchFailed(ConstParams::USER_CONDITION_JP, 1101);
+                }
+
+                $user_condition->validateConditions($target_user, $data[ConstParams::AT_RECORD_TYPE]);
+
+                if ($data[ConstParams::AT_RECORD_TYPE] === ConstParams::AT_RECORD_START_WORK) {
+                    $data[ConstParams::AT_SESSION_ID] = Str::uuid()->toString();
+                } else {
+                    $data[ConstParams::AT_SESSION_ID] = AttendanceRecord::findSessionId($target_user->user_id);
+                }
+
+                $name = $target_user->getKanjiFullName();
+                $data[ConstParams::AT_RECORD_DATE] = getToday();
+                $data[ConstParams::AT_RECORD_TIME] = getCurrentTime();
+
+                $formatted_data = CreateService::formatDataForAtRecord($target_user->user_id, $name, $data);
+
+                $new_record = AttendanceRecord::createNewRecord($formatted_data);
+
+                $param = [
+                    'login_id' => $target_user->login_id,
+                    'name' => $target_user->getKanjiFullName(),
+                    'type' => getAtRecordTypeNameJP($formatted_data[ConstParams::AT_RECORD_TYPE]),
+                    'date' => $new_record->at_record_date,
+                    'time' => $new_record->at_record_time,
+                ];
+
+                return redirect()
+                    ->route('stamps.result')
+                    ->with(['param' => $param]);
+            }, 5);
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])->withInput();
+        }
+    }
+
+    /**
+     * 打刻処理成功画面を返す
+     * @return View|RedirectResponse 登録画面か、打刻画面へのリダイレクト
+     */
+    public function showStampResult(): View
+    {
+        try {
+            return view('stamps.result', session('param'));
+        } catch (Exception $e) {
+            return redirect()
+                ->route('stamps.index')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
     /**
      * 打刻レコードの登録画面（打刻画面ではない）を返す
      * @return View|RedirectResponse 登録画面か、トップ画面へのリダイレクト
@@ -41,38 +203,31 @@ class AttendanceRecordController extends Controller
     }
 
     /** 
-     * 打刻レコードを新規作成する
+     * 打刻レコードの新規作成　管理者用作成画面からのみ呼び出される。
      * @param AtRecordStoreRequest $request バリデーション済みのリクエスト
      * @return RedirectResponse 作成結果画面か、前の画面へのリダイレクト
      *  */
-    public function store(AtRecordStoreRequest $request): RedirectResponse
+    public function createRecordByAdmin(AtRecordStoreRequest $request): RedirectResponse
     {
         try {
-            return DB::transaction(function () use ($request) {
-                $data = [
-                    'target_user_id' => User::findByLoginId($request->target_login_id)->user_id,
-                    ConstParams::AT_SESSION_ID => $request->input(ConstParams::AT_SESSION_ID),
-                    ConstParams::AT_RECORD_TYPE => $request->input(ConstParams::AT_RECORD_TYPE),
-                    ConstParams::AT_RECORD_DATE => $request->input(ConstParams::AT_RECORD_DATE),
-                    ConstParams::AT_RECORD_TIME => $request->input(ConstParams::AT_RECORD_TIME),
-                    ConstParams::CREATED_BY => User::findByUserId($request->input('created_by_user_id'))->getKanjiFullName(),
-                ];
+            $user_id = User::findByLoginId($request->target_login_id)->user_id;
+            $validated_data = $request->validated();
+            $name = User::findByUserId($validated_data['created_by_user_id'])->getKanjiFullName();
+            $formatted_data = CreateService::formatDataForAtRecord($user_id, $name, $validated_data);
 
-                $new_record_id = AttendanceRecord::createNewRecord($data)->at_record_id;
-                $record = AttendanceRecord::searchById($new_record_id);
+            $new_record_id = AttendanceRecord::createNewRecord($formatted_data)->at_record_id;
+            $record = AttendanceRecord::searchById($new_record_id);
+            $at_record_labels = $record->labels();
+            $at_record_data = $record->data();
 
-                $at_record_labels = $record->labels();
-                $at_record_data = $record->data();
-
-                return redirect()
-                    ->route('at_records.create.result', [
-                        ConstParams::AT_RECORD_ID => $new_record_id,
-                    ])->with([
-                        'at_record_id' => $new_record_id,
-                        'at_record_labels' => $at_record_labels,
-                        'at_record_data' => $at_record_data,
-                    ]);
-            }, 5);
+            return redirect()
+                ->route('at_records.create.result', [
+                    ConstParams::AT_RECORD_ID => $new_record_id,
+                ])->with([
+                    'at_record_id' => $new_record_id,
+                    'at_record_labels' => $at_record_labels,
+                    'at_record_data' => $at_record_data,
+                ]);
         } catch (Exception $e) {
             return redirect()
                 ->back()
@@ -309,7 +464,7 @@ class AttendanceRecordController extends Controller
             return DB::transaction(function () use ($at_record_id) {
                 $record = AttendanceRecord::searchById($at_record_id);
                 if (!$record) {
-                    ExceptionThrower::notExist(ConstParams::AT_RECORD_JP);
+                    ExceptionThrower::notExist(ConstParams::AT_RECORD_JP, 1102);
                 }
                 $at_record_labels = $record->labels();
                 $at_record_data = $record->data();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Const\ConstParams;
+use App\Exceptions\ExceptionThrower;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

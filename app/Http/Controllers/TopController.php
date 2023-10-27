@@ -13,10 +13,10 @@ class TopController extends Controller
         ]);
     }
 
-    public function post(Request $request)
-    {
-        return view('top', [
-            'date' => $request->input('date') ?? getToday(),
-        ]);
-    }
+    // public function post(Request $request)
+    // {
+    //     return view('top', [
+    //         'date' => $request->input('date') ?? getToday(),
+    //     ]);
+    // }
 }

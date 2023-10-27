@@ -5,8 +5,7 @@ use App\Http\Controllers\TopController;
 use App\Http\Controllers\UserConditionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaryController;
-use App\Http\Services\StampService;
-use App\Http\Services\SummaryService;
+use App\Http\Controllers\SummaryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +26,6 @@ Route::view('debug/table', 'debug.css.table')->name('debug.table');
 
 // トップページのルート
 Route::get('/', [TopController::class, 'get'])->name('top');
-Route::post('/', [TopController::class, 'post'])->name('top.post');
 
 // ログイン・ログアウトにかかわるルート
 Route::middleware('auth')->group(function () {
@@ -38,12 +36,12 @@ Route::post('login', [UserController::class, 'login'])->name('login.store');
 
 // 勤怠にかかわるルート
 Route::prefix('stamps')->name('stamps.')->group(function () {
-    Route::get('/', [StampService::class, 'index'])->name('index');
-    Route::post('start-work', [StampService::class, 'startWork'])->name('startWork');
-    Route::post('finish-work', [StampService::class, 'finishWork'])->name('finishWork');
-    Route::post('start-break', [StampService::class, 'startBreak'])->name('startBreak');
-    Route::post('finish-break', [StampService::class, 'finishBreak'])->name('finishBreak');
-    Route::get('result', [StampService::class, 'showResult'])->name('result');
+    Route::get('/', [AttendanceRecordController::class, 'showStamp'])->name('index');
+    Route::post('start-work', [AttendanceRecordController::class, 'startWork'])->name('startWork');
+    Route::post('finish-work', [AttendanceRecordController::class, 'finishWork'])->name('finishWork');
+    Route::post('start-break', [AttendanceRecordController::class, 'startBreak'])->name('startBreak');
+    Route::post('finish-break', [AttendanceRecordController::class, 'finishBreak'])->name('finishBreak');
+    Route::get('result', [AttendanceRecordController::class, 'showStampResult'])->name('result');
 });
 
 // DB閲覧、編集にはログインが必要
@@ -78,7 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('at_records/export-csv', [AttendanceRecordController::class, 'exportCsv'])->name('at_records.export');
 
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
-    Route::post('at_records', [AttendanceRecordController::class, 'store'])->name('at_records.store');
+    Route::post('at_records', [AttendanceRecordController::class, 'createRecordByAdmin'])->name('at_records.store');
     Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
     Route::get('at_records/{at_record_id}/edit', [AttendanceRecordController::class, 'edit'])->name('at_records.edit');
     Route::put('at_records/{at_record_id}', [AttendanceRecordController::class, 'update'])->name('at_records.update');
@@ -90,7 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('at_records/{at_record_id}/delete/result', [AttendanceRecordController::class, 'showDestroyResult'])->name('at_records.delete.result');
 
     // summary
-    Route::get('summary/index', [SummaryService::class, 'index'])->name('summary.index');
-    Route::post('summary/post', [SummaryService::class, 'post'])->name('summary.post');
-    Route::get('summary/show', [SummaryService::class, 'showSummary'])->name('summary.show');
+    Route::get('summary/index', [SummaryController::class, 'index'])->name('summary.index');
+    Route::post('summary/post', [SummaryController::class, 'post'])->name('summary.post');
+    Route::get('summary/show', [SummaryController::class, 'showSummary'])->name('summary.show');
 });
