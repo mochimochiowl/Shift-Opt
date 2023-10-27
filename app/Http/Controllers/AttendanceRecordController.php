@@ -27,11 +27,17 @@ class AttendanceRecordController extends Controller
 {
     /**
      * 打刻レコードの登録画面（打刻画面ではない）を返す
-     * @return View 登録画面
+     * @return View|RedirectResponse 登録画面か、トップ画面へのリダイレクト
      */
-    public function create(): View
+    public function create(): View | RedirectResponse
     {
-        return view('at_records.create');
+        try {
+            return view('at_records.create');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
@@ -58,106 +64,136 @@ class AttendanceRecordController extends Controller
                 $at_record_labels = $record->labels();
                 $at_record_data = $record->data();
 
-                return redirect()->route('at_records.create.result', [
-                    ConstParams::AT_RECORD_ID => $new_record_id,
-                ])->with([
-                    'at_record_id' => $new_record_id,
-                    'at_record_labels' => $at_record_labels,
-                    'at_record_data' => $at_record_data,
-                ]);
+                return redirect()
+                    ->route('at_records.create.result', [
+                        ConstParams::AT_RECORD_ID => $new_record_id,
+                    ])->with([
+                        'at_record_id' => $new_record_id,
+                        'at_record_labels' => $at_record_labels,
+                        'at_record_data' => $at_record_data,
+                    ]);
             }, 5);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['messages' => $e->getMessage()])->withInput();
+            return redirect()
+                ->back()
+                ->withErrors([
+                    'messages' => $e->getMessage()
+                ])
+                ->withInput();
         }
     }
 
     /**
      * 打刻レコードの新規作成結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か、トップ画面へのリダイレクト
      */
-    public function showCreateResult(): View
+    public function showCreateResult(): View | RedirectResponse
     {
-        return view('at_records.createResult', [
-            'at_record_id' => session('at_record_id'),
-            'at_record_labels' => session('at_record_labels'),
-            'at_record_data' => session('at_record_data'),
-        ]);
+        try {
+            return view('at_records.createResult', [
+                'at_record_id' => session('at_record_id'),
+                'at_record_labels' => session('at_record_labels'),
+                'at_record_data' => session('at_record_data'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * 打刻レコード詳細画面を返す
      * @param int $at_record_id 表示対象のID
-     * @return View 詳細画面
+     * @return View|RedirectResponse  詳細画面か、検索画面へのリダイレクト
      */
-    public function show(int $at_record_id): View
+    public function show(int $at_record_id): View | RedirectResponse
     {
-        $record = AttendanceRecord::searchById($at_record_id);
-        $at_record_labels = $record->labels();
-        $at_record_data = $record->data();
-        return view('at_records.show', [
-            'at_record_id' => $record->at_record_id,
-            'at_record_labels' => $at_record_labels,
-            'at_record_data' => $at_record_data,
-        ]);
+        try {
+            $record = AttendanceRecord::searchById($at_record_id);
+            $at_record_labels = $record->labels();
+            $at_record_data = $record->data();
+            return view('at_records.show', [
+                'at_record_id' => $record->at_record_id,
+                'at_record_labels' => $at_record_labels,
+                'at_record_data' => $at_record_data,
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * 打刻レコード検索画面を返す
      * @param Request $request バリデーション未実施のリクエスト
-     * @return View|RedirectResponse 検索画面
+     * @return View|RedirectResponse 検索画面か、トップ画面へのリダイレクト
      */
     public function showSearchPage(Request $request): View | RedirectResponse
     {
-        if ($request->input('column')) {
-            // 検索ボタンを押下したとき
+        try {
+            if ($request->input('column')) {
+                // 検索ボタンを押下したとき
 
-            // カスタムフォームリクエストを初めから利用すると、
-            // リダイレクトループが発生してしまうため、あえてここでバリエーション実行
-            $validator = Validator::make(
-                $request->all(),
-                (new SearchAtRecordsRequest)->rules(),
-                (new SearchAtRecordsRequest)->messages(),
-                (new SearchAtRecordsRequest)->attributes(),
-            );
+                // カスタムフォームリクエストを初めから利用すると、
+                // リダイレクトループが発生してしまうため、あえてここでバリエーション実行
+                $validator = Validator::make(
+                    $request->all(),
+                    (new SearchAtRecordsRequest)->rules(),
+                    (new SearchAtRecordsRequest)->messages(),
+                    (new SearchAtRecordsRequest)->attributes(),
+                );
 
-            if ($validator->fails()) {
-                return redirect('at_records/search')
-                    ->withErrors($validator)
-                    ->withInput();
+                if ($validator->fails()) {
+                    return redirect('at_records/search')
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+
+                $validated_data = $validator->validated();
+                $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+                $results = $this->search($formatted_data['search_requirements'], false);
+            } else {
+                // 検索画面を最初に開いたとき
+                $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
+                $results = null;
             }
 
-            $validated_data = $validator->validated();
-            $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
-            $results = $this->search($formatted_data['search_requirements'], false);
-        } else {
-            // 検索画面を最初に開いたとき
-            $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
-            $results = null;
+            return view('at_records/search', [
+                'results' => $results,
+                'search_requirements' => $formatted_data['search_requirements'],
+                'search_requirement_labels' => $formatted_data['search_requirement_labels'],
+                'search_requirements_data' => $formatted_data['search_requirements_data'],
+                'default_dates' => $formatted_data['default_dates'],
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
         }
-
-        return view('at_records/search', [
-            'results' => $results,
-            'search_requirements' => $formatted_data['search_requirements'],
-            'search_requirement_labels' => $formatted_data['search_requirement_labels'],
-            'search_requirements_data' => $formatted_data['search_requirements_data'],
-            'default_dates' => $formatted_data['default_dates'],
-        ]);
     }
 
     /**
      * 検索条件に基づき、打刻レコードの検索結果をCSVで出力する
      * @param Request $request バリデーション未実施のリクエスト
-     * @return Response CSVのダウンロードが開始
+     * @return Response|RedirectResponse CSVのダウンロードが開始するか、検索画面へのリダイレクト
      */
-    public function exportCsv(SearchAtRecordsRequest $request): Response
+    public function exportCsv(SearchAtRecordsRequest $request): Response | RedirectResponse
     {
-        $validated_data = $request->validated();
-        $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
-        $results = $this->search($formatted_data['search_requirements'], true);
-        $response_data = SearchService::createCSV($formatted_data, $results);
+        try {
+            $validated_data = $request->validated();
+            $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+            $results = $this->search($formatted_data['search_requirements'], true);
+            $response_data = SearchService::createCSV($formatted_data, $results);
 
-        return response($response_data['csv'], 200)
-            ->withHeaders($response_data['headers']);
+            return response($response_data['csv'], 200)
+                ->withHeaders($response_data['headers']);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -174,12 +210,18 @@ class AttendanceRecordController extends Controller
     /**
      * 打刻レコード編集画面を返す
      * @param int $at_record_id 更新対象のID
-     * @return View 編集画面
+     * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
      */
-    public function edit(int $at_record_id): View
+    public function edit(int $at_record_id): View | RedirectResponse
     {
-        $data = AttendanceRecord::searchById($at_record_id)->dataArray();
-        return view('at_records.edit', ['data' => $data]);
+        try {
+            $data = AttendanceRecord::searchById($at_record_id)->dataArray();
+            return view('at_records.edit', ['data' => $data]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
@@ -215,33 +257,45 @@ class AttendanceRecordController extends Controller
 
     /**
      * 打刻レコードの更新結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
      */
-    public function showUpdateResult(): View
+    public function showUpdateResult(): View | RedirectResponse
     {
-        return view('at_records.editResult', [
-            'at_record_id' => session('at_record_id'),
-            'at_record_labels' => session('at_record_labels'),
-            'at_record_data' => session('at_record_data'),
-            'count' => session('count'),
-        ]);
+        try {
+            return view('at_records.editResult', [
+                'at_record_id' => session('at_record_id'),
+                'at_record_labels' => session('at_record_labels'),
+                'at_record_data' => session('at_record_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * 打刻レコードの削除確認画面を返す
      * @param Request $request IDを受け取るために使う
-     * @return View 確認画面
+     * @return View|RedirectResponse 確認画面か検索画面へのリダイレクト
      */
-    public function confirmDestroy(Request $request): View
+    public function confirmDestroy(Request $request): View | RedirectResponse
     {
-        $record = AttendanceRecord::searchById($request->at_record_id);
-        $at_record_labels = $record->labels();
-        $at_record_data = $record->data();
-        return view('at_records.confirmDestroy', [
-            'at_record_id' => $record->at_record_id,
-            'at_record_labels' => $at_record_labels,
-            'at_record_data' => $at_record_data,
-        ]);
+        try {
+            $record = AttendanceRecord::searchById($request->at_record_id);
+            $at_record_labels = $record->labels();
+            $at_record_data = $record->data();
+            return view('at_records.confirmDestroy', [
+                'at_record_id' => $record->at_record_id,
+                'at_record_labels' => $at_record_labels,
+                'at_record_data' => $at_record_data,
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
@@ -269,20 +323,28 @@ class AttendanceRecordController extends Controller
                 ]);
             }, 5);
         } catch (\Exception $e) {
-            return redirect()->route('at_records.search')->withErrors(['message' => $e->getMessage()]);
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
     /**
      * 打刻レコードの削除結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
      */
-    public function showDestroyResult(): View
+    public function showDestroyResult(): View | RedirectResponse
     {
-        return view('at_records.destroyResult', [
-            'at_record_labels' => session('at_record_labels'),
-            'at_record_data' => session('at_record_data'),
-            'count' => session('count'),
-        ]);
+        try {
+            return view('at_records.destroyResult', [
+                'at_record_labels' => session('at_record_labels'),
+                'at_record_data' => session('at_record_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('at_records.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 }

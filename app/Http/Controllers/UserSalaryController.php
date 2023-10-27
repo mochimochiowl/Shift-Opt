@@ -75,15 +75,21 @@ class UserSalaryController extends Controller
 
     /**
      * 時給データの更新結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
      */
-    public function showUpdateResult(): View
+    public function showUpdateResult(): View | RedirectResponse
     {
-        return view('users.salaries.editResult', [
-            'user_id' => session('user_id'),
-            'salary_labels' => session('salary_labels'),
-            'salary_data' => session('salary_data'),
-            'count' => session('count'),
-        ]);
+        try {
+            return view('users.salaries.editResult', [
+                'user_id' => session('user_id'),
+                'salary_labels' => session('salary_labels'),
+                'salary_data' => session('salary_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 }

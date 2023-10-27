@@ -29,11 +29,8 @@ Route::view('debug/table', 'debug.css.table')->name('debug.table');
 Route::get('/', [TopController::class, 'get'])->name('top');
 Route::post('/', [TopController::class, 'post'])->name('top.post');
 
-// ユーザー登録・ログイン・ログアウトにかかわるルート
+// ログイン・ログアウトにかかわるルート
 Route::middleware('auth')->group(function () {
-    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('users', [UserController::class, 'store'])->name('users.store');
-    Route::get('users/{user_id}/create/result', [UserController::class, 'showCreateResult'])->name('users.create.result');
     Route::get('logout', [UserController::class, 'logout'])->name('logout');
 });
 Route::get('login', [UserController::class, 'showLogin'])->name('login.form');
@@ -52,10 +49,12 @@ Route::prefix('stamps')->name('stamps.')->group(function () {
 // DB閲覧、編集にはログインが必要
 Route::middleware('auth')->group(function () {
     // users
-    // 検索にかかわるルート
     Route::get('users/search', [UserController::class, 'showSearchPage'])->name('users.search');
 
-    // 情報操作にかかわるルート
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user_id}/create/result', [UserController::class, 'showCreateResult'])->name('users.create.result');
+
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
     Route::get('users/{user_id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user_id}', [UserController::class, 'update'])->name('users.update');
@@ -66,7 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::get('users/{user_id}/conditions/edit', [UserConditionController::class, 'edit'])->name('users.conditions.edit');
     Route::put('users/{user_id}/conditions', [UserConditionController::class, 'update'])->name('users.conditions.update');
 
-    // 確認画面や結果画面などのルート
     Route::get('users/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('users.update.result');
     Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
     Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
@@ -75,13 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::get('users/{user_id}/conditions/result', [UserConditionController::class, 'showUpdateResult'])->name('users.conditions.update.result');
 
     // at_records
-    // 検索にかかわるルート
     Route::get('at_records/search', [AttendanceRecordController::class, 'showSearchPage'])->name('at_records.search');
 
-    // CSV出力
     Route::get('at_records/export-csv', [AttendanceRecordController::class, 'exportCsv'])->name('at_records.export');
 
-    // 情報操作にかかわるルート
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
     Route::post('at_records', [AttendanceRecordController::class, 'store'])->name('at_records.store');
     Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
@@ -89,13 +84,12 @@ Route::middleware('auth')->group(function () {
     Route::put('at_records/{at_record_id}', [AttendanceRecordController::class, 'update'])->name('at_records.update');
     Route::delete('at_records/{at_record_id}', [AttendanceRecordController::class, 'destroy'])->name('at_records.delete');
 
-    // 確認画面や結果画面などのルート
     Route::get('at_records/{at_record_id}/create/result', [AttendanceRecordController::class, 'showCreateResult'])->name('at_records.create.result');
     Route::get('at_records/{at_record_id}/edit/result', [AttendanceRecordController::class, 'showUpdateResult'])->name('at_records.update.result');
     Route::post('at_records/{at_record_id}/delete/confirm', [AttendanceRecordController::class, 'confirmDestroy'])->name('at_records.delete.confirm');
     Route::get('at_records/{at_record_id}/delete/result', [AttendanceRecordController::class, 'showDestroyResult'])->name('at_records.delete.result');
 
-    // 集計画面にかかわるルート
+    // summary
     Route::get('summary/index', [SummaryService::class, 'index'])->name('summary.index');
     Route::post('summary/post', [SummaryService::class, 'post'])->name('summary.post');
     Route::get('summary/show', [SummaryService::class, 'showSummary'])->name('summary.show');

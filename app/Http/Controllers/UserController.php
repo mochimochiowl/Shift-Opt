@@ -31,11 +31,17 @@ class UserController extends Controller
 {
     /**
      * ユーザー登録画面を返す
-     * @return View 登録画面
+     * @return View|RedirectResponse 登録画面か、トップ画面へのリダイレクト
      */
-    public function create(): View
+    public function create(): View | RedirectResponse
     {
-        return view('users.create');
+        try {
+            return view('users.create');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /** 
@@ -64,89 +70,110 @@ class UserController extends Controller
                     ]);
             }, 5);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['message' => $e->getMessage()])->withInput($request->except(ConstParams::PASSWORD));
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()])
+                ->withInput($request->except(ConstParams::PASSWORD));
         }
     }
 
     /**
      * ユーザーの新規作成結果画面を返す
-     * @return View 結果表示画面
+     * @return View 結果表示画面|RedirectResponse 結果表示画面か、トップ画面へのリダイレクト
      */
-    public function showCreateResult(): View
+    public function showCreateResult(): View | RedirectResponse
     {
-        return view('users.createResult', [
-            'user_id' => session('user_id'),
-            'user_labels' => session('user_labels'),
-            'user_data' => session('user_data'),
-        ]);
+        try {
+            return view('users.createResult', [
+                'user_id' => session('user_id'),
+                'user_labels' => session('user_labels'),
+                'user_data' => session('user_data'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * ユーザー詳細画面を返す
      * @param int $user_id 表示対象のID
-     * @return View 詳細画面
+     * @return View|RedirectResponse  詳細画面か、検索画面へのリダイレクト
      */
-    public function show(int $user_id): View
+    public function show(int $user_id): View | RedirectResponse
     {
-        $user = User::findByUserId($user_id);
-        $user_labels = $user->labels();
-        $user_data = $user->data();
-        $salary_labels = $user->salary->labels();
-        $salary_data = $user->salary->data();
-        $condition_labels = $user->condition->labels();
-        $condition_data = $user->condition->data();
+        try {
+            $user = User::findByUserId($user_id);
+            $user_labels = $user->labels();
+            $user_data = $user->data();
+            $salary_labels = $user->salary->labels();
+            $salary_data = $user->salary->data();
+            $condition_labels = $user->condition->labels();
+            $condition_data = $user->condition->data();
 
-        return view('users.show', [
-            'user_id' => $user->user_id,
-            'user_labels' => $user_labels,
-            'user_data' => $user_data,
-            'salary_labels' => $salary_labels,
-            'salary_data' => $salary_data,
-            'condition_labels' => $condition_labels,
-            'condition_data' => $condition_data,
-        ]);
+            return view('users.show', [
+                'user_id' => $user->user_id,
+                'user_labels' => $user_labels,
+                'user_data' => $user_data,
+                'salary_labels' => $salary_labels,
+                'salary_data' => $salary_data,
+                'condition_labels' => $condition_labels,
+                'condition_data' => $condition_data,
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * ユーザー検索画面を返す
      * @param Request $request バリデーション未実施のリクエスト
-     * @return View|RedirectResponse 検索画面
+     * @return View|RedirectResponse 検索画面か、トップ画面へのリダイレクト
      */
     public function showSearchPage(Request $request): View | RedirectResponse
     {
-        if ($request->input('column')) {
-            // 検索ボタンを押下したとき
+        try {
+            if ($request->input('column')) {
+                // 検索ボタンを押下したとき
 
-            // カスタムフォームリクエストを初めから利用すると、
-            // リダイレクトループが発生してしまうため、あえてここでバリエーション実行
-            $validator = Validator::make(
-                $request->all(),
-                (new SearchUserRequest)->rules(),
-                (new SearchUserRequest)->messages(),
-                (new SearchUserRequest)->attributes(),
-            );
+                // カスタムフォームリクエストを初めから利用すると、
+                // リダイレクトループが発生してしまうため、あえてここでバリエーション実行
+                $validator = Validator::make(
+                    $request->all(),
+                    (new SearchUserRequest)->rules(),
+                    (new SearchUserRequest)->messages(),
+                    (new SearchUserRequest)->attributes(),
+                );
 
-            if ($validator->fails()) {
-                return redirect('users/search')
-                    ->withErrors($validator)
-                    ->withInput();
+                if ($validator->fails()) {
+                    return redirect('users/search')
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+
+                $validated_data = $validator->validated();
+                $formatted_data = SearchService::formatUserSearchRequirements(false, $validated_data);
+                $results = $this->search($formatted_data['search_requirements']);
+            } else {
+                // 検索画面を開いたとき
+                $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
+                $results = null;
             }
 
-            $validated_data = $validator->validated();
-            $formatted_data = SearchService::formatUserSearchRequirements(false, $validated_data);
-            $results = $this->search($formatted_data['search_requirements']);
-        } else {
-            // 検索画面を開いたとき
-            $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
-            $results = null;
+            return view('users/search', [
+                'results' => $results,
+                'search_requirements' => $formatted_data['search_requirements'],
+                'search_requirement_labels' => $formatted_data['search_requirement_labels'],
+                'search_requirements_data' => $formatted_data['search_requirements_data'],
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
         }
-
-        return view('users/search', [
-            'results' => $results,
-            'search_requirements' => $formatted_data['search_requirements'],
-            'search_requirement_labels' => $formatted_data['search_requirement_labels'],
-            'search_requirements_data' => $formatted_data['search_requirements_data'],
-        ]);
     }
 
     /**
@@ -178,7 +205,8 @@ class UserController extends Controller
                 'user_data' => $user_data
             ]);
         } catch (Exception $e) {
-            return redirect('users/search')
+            return redirect()
+                ->route('users.search')
                 ->withErrors(['message' => $e->getMessage()]);
         }
     }
@@ -216,22 +244,28 @@ class UserController extends Controller
 
     /**
      * ユーザーの更新結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
      */
-    public function showUpdateResult(): View
+    public function showUpdateResult(): View | RedirectResponse
     {
-        return view('users.editResult', [
-            'user_id' => session('user_id'),
-            'user_labels' => session('user_labels'),
-            'user_data' => session('user_data'),
-            'count' => session('count'),
-        ]);
+        try {
+            return view('users.editResult', [
+                'user_id' => session('user_id'),
+                'user_labels' => session('user_labels'),
+                'user_data' => session('user_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * ユーザーの削除確認画面を返す
      * @param Request $request IDを受け取るために使う
-     * @return View 確認画面
+     * @return View|RedirectResponse 確認画面か検索画面へのリダイレクト
      */
     public function confirmDestroy(Request $request): View | RedirectResponse
     {
@@ -251,7 +285,9 @@ class UserController extends Controller
                 'user_data' => $user_data,
             ]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['message' => $e->getMessage()]);
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
@@ -285,31 +321,45 @@ class UserController extends Controller
                     ]);
             }, 5);
         } catch (Exception $e) {
-            return redirect()->route('users.search')->withErrors(['message' => $e->getMessage()]);
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
         }
     }
 
     /**
      * ユーザーの削除結果画面を返す
-     * @return View 結果表示画面
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
      */
-    public function showDestroyResult(): View
+    public function showDestroyResult(): View | RedirectResponse
     {
-        return view('users.destroyResult', [
-            'user_id' => session('user_id'),
-            'user_labels' => session('user_labels'),
-            'user_data' => session('user_data'),
-            'count' => session('count'),
-        ]);
+        try {
+            return view('users.destroyResult', [
+                'user_id' => session('user_id'),
+                'user_labels' => session('user_labels'),
+                'user_data' => session('user_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
      * ログイン画面を返す
-     * @return View ログイン画面
+     * @return View|RedirectResponse ログイン画面かトップへのリダイレクト
      */
     public function showLogin(): View
     {
-        return view('auth.login');
+        try {
+            return view('auth.login');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('top')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -327,7 +377,9 @@ class UserController extends Controller
         }
 
         // パスワードが一致しない場合
-        return back()->withErrors(['message' => 'パスワードが一致しません。'])->withInput($request->except(ConstParams::PASSWORD));
+        return back()
+            ->withErrors(['message' => 'パスワードが一致しません。'])
+            ->withInput($request->except(ConstParams::PASSWORD));
     }
 
     /**
