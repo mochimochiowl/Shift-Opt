@@ -96,7 +96,7 @@
         @component('components.searchRequirementsShow',[
             'search_requirement_labels' => $search_requirement_labels,
             'search_requirements_data' => $search_requirements_data,
-            'count' => count($results),
+            'count' => $results->total(),
             ])
         @endcomponent
     @endif

@@ -96,6 +96,17 @@ class ExceptionThrower
     }
 
     /**
+     * 正規のルートでないアクセスを検知したときに投げる
+     * @param int $code エラーコード
+     * @return void
+     */
+    public static function unauthorizedAccess(int $code): void
+    {
+        $msg = '不正なアクセスです。' . ' [' . $code . ']';
+        throw new Exception($msg);
+    }
+
+    /**
      * 任意のエラーメッセージを投げる。上になくて汎用化する必要がない時に使用
      * @param string $error_msg メッセージ
      * @param int $code エラーコード

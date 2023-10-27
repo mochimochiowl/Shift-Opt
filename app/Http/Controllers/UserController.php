@@ -84,6 +84,9 @@ class UserController extends Controller
     public function showCreateResult(): View | RedirectResponse
     {
         try {
+            if (!session('user_id')) {
+                ExceptionThrower::unauthorizedAccess(1205);
+            }
             return view('users.createResult', [
                 'user_id' => session('user_id'),
                 'user_labels' => session('user_labels'),
@@ -249,6 +252,9 @@ class UserController extends Controller
     public function showUpdateResult(): View | RedirectResponse
     {
         try {
+            if (!session('user_id')) {
+                ExceptionThrower::unauthorizedAccess(1204);
+            }
             return view('users.editResult', [
                 'user_id' => session('user_id'),
                 'user_labels' => session('user_labels'),
@@ -334,6 +340,9 @@ class UserController extends Controller
     public function showDestroyResult(): View | RedirectResponse
     {
         try {
+            if (!session('user_id')) {
+                ExceptionThrower::unauthorizedAccess(1203);
+            }
             return view('users.destroyResult', [
                 'user_id' => session('user_id'),
                 'user_labels' => session('user_labels'),

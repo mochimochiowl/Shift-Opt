@@ -282,7 +282,7 @@ class User extends Authenticatable
             ConstParams::KANA_LAST_NAME => $this->kana_last_name ?? '取得失敗',
             ConstParams::KANA_FIRST_NAME => $this->kana_first_name ?? '取得失敗',
             ConstParams::EMAIL => $this->email ?? '取得失敗',
-            ConstParams::EMAIL_VERIFIED_AT => $this->email_verified_at ?? '取得失敗',
+            ConstParams::EMAIL_VERIFIED_AT => $this->email_verified_at,
             ConstParams::LOGIN_ID => $this->login_id ?? '取得失敗',
             ConstParams::IS_ADMIN => $this->is_admin ?? '取得失敗',
             ConstParams::CREATED_AT => $this->created_at ?? '取得失敗',

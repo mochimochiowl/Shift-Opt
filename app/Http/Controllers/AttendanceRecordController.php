@@ -52,6 +52,9 @@ class AttendanceRecordController extends Controller
     public function startWork(StampRequest $request): RedirectResponse
     {
         try {
+            if (!$request->input('target_login_id')) {
+                ExceptionThrower::unauthorizedAccess(1103);
+            }
             $data = [
                 'target_login_id' => $request->input('target_login_id'),
                 'at_record_type' => ConstParams::AT_RECORD_START_WORK,
@@ -71,6 +74,9 @@ class AttendanceRecordController extends Controller
     public function finishWork(StampRequest $request): RedirectResponse
     {
         try {
+            if (!$request->input('target_login_id')) {
+                ExceptionThrower::unauthorizedAccess(1104);
+            }
             $data = [
                 'target_login_id' => $request->input('target_login_id'),
                 'at_record_type' => ConstParams::AT_RECORD_FINISH_WORK,
@@ -90,6 +96,9 @@ class AttendanceRecordController extends Controller
     public function startBreak(StampRequest $request): RedirectResponse
     {
         try {
+            if (!$request->input('target_login_id')) {
+                ExceptionThrower::unauthorizedAccess(1105);
+            }
             $data = [
                 'target_login_id' => $request->input('target_login_id'),
                 'at_record_type' => ConstParams::AT_RECORD_START_BREAK,
@@ -109,6 +118,9 @@ class AttendanceRecordController extends Controller
     public function finishBreak(StampRequest $request): RedirectResponse
     {
         try {
+            if (!$request->input('target_login_id')) {
+                ExceptionThrower::unauthorizedAccess(1106);
+            }
             $data = [
                 'target_login_id' => $request->input('target_login_id'),
                 'at_record_type' => ConstParams::AT_RECORD_FINISH_BREAK,
@@ -129,6 +141,9 @@ class AttendanceRecordController extends Controller
     private function createRecord(array $data): RedirectResponse
     {
         try {
+            if (!$data['target_login_id']) {
+                ExceptionThrower::unauthorizedAccess(1107);
+            }
             return DB::transaction(function () use ($data) {
                 $target_user = User::findByLoginId($data['target_login_id']);
                 $user_condition = $target_user->condition;
@@ -179,6 +194,9 @@ class AttendanceRecordController extends Controller
     public function showStampResult(): View
     {
         try {
+            if (!session('param')) {
+                ExceptionThrower::unauthorizedAccess(1108);
+            }
             return view('stamps.result', session('param'));
         } catch (Exception $e) {
             return redirect()
@@ -210,24 +228,30 @@ class AttendanceRecordController extends Controller
     public function createRecordByAdmin(AtRecordStoreRequest $request): RedirectResponse
     {
         try {
-            $user_id = User::findByLoginId($request->target_login_id)->user_id;
-            $validated_data = $request->validated();
-            $name = User::findByUserId($validated_data['created_by_user_id'])->getKanjiFullName();
-            $formatted_data = CreateService::formatDataForAtRecord($user_id, $name, $validated_data);
+            if (!$request->target_login_id) {
+                ExceptionThrower::unauthorizedAccess(1109);
+            }
 
-            $new_record_id = AttendanceRecord::createNewRecord($formatted_data)->at_record_id;
-            $record = AttendanceRecord::searchById($new_record_id);
-            $at_record_labels = $record->labels();
-            $at_record_data = $record->data();
+            return DB::transaction(function () use ($request) {
+                $user_id = User::findByLoginId($request->target_login_id)->user_id;
+                $validated_data = $request->validated();
+                $name = User::findByUserId($validated_data['created_by_user_id'])->getKanjiFullName();
+                $formatted_data = CreateService::formatDataForAtRecord($user_id, $name, $validated_data);
 
-            return redirect()
-                ->route('at_records.create.result', [
-                    ConstParams::AT_RECORD_ID => $new_record_id,
-                ])->with([
-                    'at_record_id' => $new_record_id,
-                    'at_record_labels' => $at_record_labels,
-                    'at_record_data' => $at_record_data,
-                ]);
+                $new_record_id = AttendanceRecord::createNewRecord($formatted_data)->at_record_id;
+                $record = AttendanceRecord::searchById($new_record_id);
+                $at_record_labels = $record->labels();
+                $at_record_data = $record->data();
+
+                return redirect()
+                    ->route('at_records.create.result', [
+                        ConstParams::AT_RECORD_ID => $new_record_id,
+                    ])->with([
+                        'at_record_id' => $new_record_id,
+                        'at_record_labels' => $at_record_labels,
+                        'at_record_data' => $at_record_data,
+                    ]);
+            }, 5);
         } catch (Exception $e) {
             return redirect()
                 ->back()
@@ -245,6 +269,9 @@ class AttendanceRecordController extends Controller
     public function showCreateResult(): View | RedirectResponse
     {
         try {
+            if (!session('at_record_id')) {
+                ExceptionThrower::unauthorizedAccess(1110);
+            }
             return view('at_records.createResult', [
                 'at_record_id' => session('at_record_id'),
                 'at_record_labels' => session('at_record_labels'),
@@ -388,6 +415,9 @@ class AttendanceRecordController extends Controller
     public function update(int $at_record_id, AtRecordUpdateRequest $request): RedirectResponse
     {
         try {
+            if (!$request) {
+                ExceptionThrower::unauthorizedAccess(1111);
+            }
             return DB::transaction(function () use ($at_record_id, $request) {
                 $data = $request->validated();
                 $result = AttendanceRecord::updateInfo($at_record_id, $data);
@@ -417,6 +447,9 @@ class AttendanceRecordController extends Controller
     public function showUpdateResult(): View | RedirectResponse
     {
         try {
+            if (!session('at_record_id')) {
+                ExceptionThrower::unauthorizedAccess(1112);
+            }
             return view('at_records.editResult', [
                 'at_record_id' => session('at_record_id'),
                 'at_record_labels' => session('at_record_labels'),
@@ -491,6 +524,9 @@ class AttendanceRecordController extends Controller
     public function showDestroyResult(): View | RedirectResponse
     {
         try {
+            if (!session('at_record_labels')) {
+                ExceptionThrower::unauthorizedAccess(1113);
+            }
             return view('at_records.destroyResult', [
                 'at_record_labels' => session('at_record_labels'),
                 'at_record_data' => session('at_record_data'),
