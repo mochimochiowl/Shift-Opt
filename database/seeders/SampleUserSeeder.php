@@ -9,7 +9,9 @@ use App\Models\UserSalary;
 use Illuminate\Database\Seeder;
 
 /**
- * サンプルuserデータ(user_salaryやuser_conditionを含む)をシーディング
+ * サンプルのユーザーを追加する
+ * @author mochimochiowl
+ * @version 1.0.0
  */
 class SampleUserSeeder extends Seeder
 {

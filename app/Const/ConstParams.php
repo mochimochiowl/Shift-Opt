@@ -3,12 +3,13 @@
 namespace App\Const;
 
 /**
- * 色々なファイルで入力する値をここに集約し、一元管理する
+ * 色々なファイルで参照する値をここに集約し、一元管理する
+ * @author mochimochiowl
+ * @version 1.0.0
  */
-
 class ConstParams
 {
-    // ペジネーション
+    // ペジネーション設定
     const USERS_PAGINATION_LIMIT = 25;
     const AT_RECORDS_PAGINATION_LIMIT = 50;
 
@@ -31,6 +32,7 @@ class ConstParams
     const AT_RECORD_START_BREAK = 'start_break';
     const AT_RECORD_FINISH_BREAK = 'finish_break';
 
+    //at_record_typeの表示名を定義
     const AT_RECORD_START_WORK_JP = '出勤';
     const AT_RECORD_FINISH_WORK_JP = '退勤';
     const AT_RECORD_START_BREAK_JP = '休憩始';

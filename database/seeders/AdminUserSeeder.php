@@ -9,7 +9,9 @@ use App\Models\UserSalary;
 use Illuminate\Database\Seeder;
 
 /**
- * 管理者ユーザーとして、userデータ(user_salaryやuser_conditionを含む)をシーディング
+ * 管理者ユーザーとシステムユーザーを追加する
+ * @author mochimochiowl
+ * @version 1.0.0
  */
 class AdminUserSeeder extends Seeder
 {

@@ -11,7 +11,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * 23年9月1日～シーディング実行前日までのサンプルat_recordデータをシーディング
+ * 23年9月1日～シーディング実行前日までのサンプル打刻レコードを追加する
+ * @author mochimochiowl
+ * @version 1.0.0
  */
 class SampleAtRecordsSeeder extends Seeder
 {

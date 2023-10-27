@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Const\ConstParams;
 
 /**
- * 現在時刻(H:i:s)を取得する
- * @return string
+ * 現在時刻を取得する
+ * @return string 現在時刻(H:i:s)
  */
 function getCurrentTime(): string
 {
@@ -15,8 +15,8 @@ function getCurrentTime(): string
 }
 
 /**
- * 今日の日付(Y/m/d)を取得する
- * @return string
+ * 今日の日付を取得する
+ * @return string 今日の日付(Y/m/d)
  */
 function getToday(): string
 {
@@ -25,8 +25,9 @@ function getToday(): string
 }
 
 /**
- * AT_RECORD_TYPEの日本語表記を取得する
- * @return string
+ * 打刻レコードタイプの日本語表記を取得する
+ * @return string $at_record_type 対象の打刻レコードタイプ
+ * @return string 日本語表記
  */
 function getAtRecordTypeNameJP(string $at_record_type): string
 {

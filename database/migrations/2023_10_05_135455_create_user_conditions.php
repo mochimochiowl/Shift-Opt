@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * コンディションデータテーブルの定義
+ * @author mochimochiowl
+ * @version 1.0.0
+ */
 return new class extends Migration
 {
     /**
