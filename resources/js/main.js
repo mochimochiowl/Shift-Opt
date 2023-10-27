@@ -1,4 +1,4 @@
-// import './bootstrap';
+// jsファイルのとりまとめ
 import showClock from './currentTimer.js';
 import {
     setToday,

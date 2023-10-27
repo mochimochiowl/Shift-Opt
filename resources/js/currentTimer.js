@@ -1,3 +1,6 @@
+/**
+ * 打刻画面で現在時刻を表示する
+ */
 export default function showClock() {
     let nowTime = new Date();
     let nowHour = String(nowTime.getHours()).padStart(2, '0');

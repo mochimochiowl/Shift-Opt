@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
 Route::get('login', [UserController::class, 'showLogin'])->name('login.form');
 Route::post('login', [UserController::class, 'login'])->name('login.store');
 
-// 勤怠にかかわるルート
+// 打刻にかかわるルート
 Route::prefix('stamps')->name('stamps.')->group(function () {
     Route::get('/', [AttendanceRecordController::class, 'showStamp'])->name('index');
     Route::post('start-work', [AttendanceRecordController::class, 'startWork'])->name('startWork');
@@ -39,37 +39,40 @@ Route::prefix('stamps')->name('stamps.')->group(function () {
     Route::get('result', [AttendanceRecordController::class, 'showStampResult'])->name('result');
 });
 
-// DB閲覧、編集にはログインが必要
+// DB操作にかかわるルート
 Route::middleware('auth')->group(function () {
     // users
     Route::get('users/search', [UserController::class, 'showSearchPage'])->name('users.search');
 
+    //CRUD
     Route::get('users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('users', [UserController::class, 'store'])->name('users.store');
-    Route::get('users/{user_id}/create/result', [UserController::class, 'showCreateResult'])->name('users.create.result');
 
     Route::get('users/{user_id}', [UserController::class, 'show'])->name('users.show');
     Route::get('users/{user_id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user_id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('users/{user_id}', [UserController::class, 'destroy'])->name('users.delete');
 
-    Route::get('users/{user_id}/salaries/edit', [UserSalaryController::class, 'edit'])->name('users.salaries.edit');
-    Route::put('users/{user_id}/salaries', [UserSalaryController::class, 'update'])->name('users.salaries.update');
-    Route::get('users/{user_id}/conditions/edit', [UserConditionController::class, 'edit'])->name('users.conditions.edit');
-    Route::put('users/{user_id}/conditions', [UserConditionController::class, 'update'])->name('users.conditions.update');
-
+    Route::get('users/{user_id}/create/result', [UserController::class, 'showCreateResult'])->name('users.create.result');
     Route::get('users/{user_id}/edit/result', [UserController::class, 'showUpdateResult'])->name('users.update.result');
     Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
     Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
 
+    // userSalaries
+    Route::get('users/{user_id}/salaries/edit', [UserSalaryController::class, 'edit'])->name('users.salaries.edit');
+    Route::put('users/{user_id}/salaries', [UserSalaryController::class, 'update'])->name('users.salaries.update');
     Route::get('users/{user_id}/salaries/result', [UserSalaryController::class, 'showUpdateResult'])->name('users.salaries.update.result');
+
+    // userConditions
+    Route::get('users/{user_id}/conditions/edit', [UserConditionController::class, 'edit'])->name('users.conditions.edit');
+    Route::put('users/{user_id}/conditions', [UserConditionController::class, 'update'])->name('users.conditions.update');
     Route::get('users/{user_id}/conditions/result', [UserConditionController::class, 'showUpdateResult'])->name('users.conditions.update.result');
 
     // at_records
     Route::get('at_records/search', [AttendanceRecordController::class, 'showSearchPage'])->name('at_records.search');
-
     Route::get('at_records/export-csv', [AttendanceRecordController::class, 'exportCsv'])->name('at_records.export');
 
+    //CRUD
     Route::get('at_records/create', [AttendanceRecordController::class, 'create'])->name('at_records.create');
     Route::post('at_records', [AttendanceRecordController::class, 'createRecordByAdmin'])->name('at_records.store');
     Route::get('at_records/{at_record_id}', [AttendanceRecordController::class, 'show'])->name('at_records.show');
