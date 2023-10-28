@@ -14,15 +14,15 @@
             @if (Auth::check())
                 <li class="h-24 p-9 bg-blue-600">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</li>
                 @if (Auth::user()->is_admin)
-                    <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録画面</a></li>
-                    <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索画面</a></li>
-                    <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索画面</a></li>
-                    <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー画面</a></li>
+                    <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録</a></li>
+                    <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索</a></li>
+                    <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索</a></li>
+                    <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー</a></li>
                 @endif
             @else
                 <li class="h-24 p-9 bg-blue-600">ログインしていません。</li>
             @endif
-            <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻画面</a></li>
+            <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻</a></li>
             @if (Auth::check())
             <li class="p-3"><a href="{{route('logout')}}" class="">ログアウトする</a></li>
             @else

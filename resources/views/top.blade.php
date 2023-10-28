@@ -16,25 +16,25 @@
                     <li class="p-4 border-b-2 border-b-blue-500">
                         <a href="{{route('users.create')}}" class="flex items-center hover:text-blue-800">
                             <span class="i-lucide-user-plus-2 w-8 h-8 mt-1 flex-shrink-0"></span>
-                            <span class="ml-4 font-bold md:text-3xl text-2xl">スタッフ登録画面</span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">スタッフ登録</span>
                         </a>
                     </li>
                     <li class="p-4 border-b-2 border-b-blue-500">
                         <a href="{{route('users.search')}}" class="flex items-center hover:text-blue-800">
                             <span class="i-lucide-users-2 w-8 h-8 mt-1 flex-shrink-0"></span>
-                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::USER_JP}}検索画面</span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::USER_JP}}検索</span>
                         </a>
                     </li>
                     <li class="p-4 border-b-2 border-b-blue-500">
                         <a href="{{route('at_records.search')}}" class="flex items-center hover:text-blue-800">
                             <span class="i-lucide-database w-8 h-8 mt-1 flex-shrink-0"></span>
-                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::AT_RECORD_JP}}検索画面</span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::AT_RECORD_JP}}検索</span>
                         </a>
                     </li>
                     <li class="p-4 border-b-2 border-b-blue-500">
                         <a href="{{route('summary.index')}}" class="flex items-center hover:text-blue-800">
                             <span class="i-lucide-table w-8 h-8 mt-1 flex-shrink-0"></span>
-                            <span class="ml-4 font-bold md:text-3xl text-2xl">サマリー画面</span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">サマリー</span>
                         </a>
                     </li>
                     <li class="p-4 border-b-2 border-b-blue-500">
@@ -48,7 +48,7 @@
                 <li class="p-4 border-b-2 border-b-blue-500">
                     <a href="{{route('stamps.index')}}" class="flex items-center hover:text-blue-800">
                         <span class="i-lucide-stamp w-8 h-8 mt-1 flex-shrink-0"></span>
-                        <span class="ml-4 font-bold md:text-3xl text-2xl">打刻画面</span>
+                        <span class="ml-4 font-bold md:text-3xl text-2xl">打刻</span>
                     </a>
                 </li>
                 <li class="p-4 border-b-2 border-b-blue-500">
