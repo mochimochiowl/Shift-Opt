@@ -1,9 +1,9 @@
 @extends('layouts.base')
 @section('title', 'トップ')
 @section('content')
-<div class="p-4 border-b-2 border-b-blue-500">
+<div class="p-4 border-b-2 border-b-blue-500 font-bold md:text-3xl text-2xl">
     @if (Auth::check())
-    <span class="font-bold md:text-3xl text-2xl">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</span>
+    <span>{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</span>
     @else
     <span>ログインしていません</span>
     @endif
