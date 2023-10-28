@@ -1,16 +1,67 @@
 @extends('layouts.base')
-@section('title', 'トップ画面')
+@section('title', 'トップ')
 @section('content')
+<div class="p-4 border-b-2 border-b-blue-500">
     @if (Auth::check())
-    <p>{{Auth::user()->getKanjiFullName()}}さん、こんにちは</p>
+    <span class="font-bold md:text-3xl text-2xl">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</span>
     @else
-    <p>ログインしていません</p>
+    <span>ログインしていません</span>
     @endif
-    <h2>H２タグ</h2>
-    <div>
-        <p>コンテンツ</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est debitis nostrum similique officiis, amet laboriosam facilis iste! Laborum molestiae odio quis, autem temporibus consequatur facere beatae nemo sapiente enim sed!</p>
-    </div>
+</div>
+<div>
+    <nav>
+        <ul>
+            @if (Auth::check())
+                @if (Auth::user()->is_admin)
+                    <li class="p-4 border-b-2 border-b-blue-500">
+                        <a href="{{route('users.create')}}" class="flex items-center hover:text-blue-800">
+                            <span class="i-lucide-user-plus-2 w-8 h-8 mt-1 flex-shrink-0"></span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">スタッフ登録画面</span>
+                        </a>
+                    </li>
+                    <li class="p-4 border-b-2 border-b-blue-500">
+                        <a href="{{route('users.search')}}" class="flex items-center hover:text-blue-800">
+                            <span class="i-lucide-users-2 w-8 h-8 mt-1 flex-shrink-0"></span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::USER_JP}}検索画面</span>
+                        </a>
+                    </li>
+                    <li class="p-4 border-b-2 border-b-blue-500">
+                        <a href="{{route('at_records.search')}}" class="flex items-center hover:text-blue-800">
+                            <span class="i-lucide-database w-8 h-8 mt-1 flex-shrink-0"></span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">{{ConstParams::AT_RECORD_JP}}検索画面</span>
+                        </a>
+                    </li>
+                    <li class="p-4 border-b-2 border-b-blue-500">
+                        <a href="{{route('summary.index')}}" class="flex items-center hover:text-blue-800">
+                            <span class="i-lucide-table w-8 h-8 mt-1 flex-shrink-0"></span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">サマリー画面</span>
+                        </a>
+                    </li>
+                    <li class="p-4 border-b-2 border-b-blue-500">
+                        <a href="{{route('logout')}}" class="flex items-center hover:text-blue-800">
+                            <span class="i-lucide-log-out w-8 h-8 mt-1 flex-shrink-0"></span>
+                            <span class="ml-4 font-bold md:text-3xl text-2xl">ログアウト</span>
+                        </a>
+                    </li>
+                @endif
+            @else
+                <li class="p-4 border-b-2 border-b-blue-500">
+                    <a href="{{route('stamps.index')}}" class="flex items-center hover:text-blue-800">
+                        <span class="i-lucide-stamp w-8 h-8 mt-1 flex-shrink-0"></span>
+                        <span class="ml-4 font-bold md:text-3xl text-2xl">打刻画面</span>
+                    </a>
+                </li>
+                <li class="p-4 border-b-2 border-b-blue-500">
+                    <a href="{{route('login.form')}}" class="flex items-center hover:text-blue-800">
+                        <span class="i-lucide-log-in w-8 h-8 mt-1 flex-shrink-0"></span>
+                        <span class="ml-4 font-bold md:text-3xl text-2xl">ログイン</span>
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+
 @endsection
 
 @section('footer')
