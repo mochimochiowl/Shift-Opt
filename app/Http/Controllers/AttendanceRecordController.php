@@ -8,8 +8,6 @@ use App\Http\Requests\AtRecordStoreRequest;
 use App\Http\Requests\AtRecordUpdateRequest;
 use App\Http\Requests\SearchAtRecordsRequest;
 use App\Http\Requests\StampRequest;
-use App\Http\Services\CreateService;
-use App\Http\Services\SearchService;
 use App\Models\AttendanceRecord;
 use App\Models\User;
 use Exception;
@@ -164,7 +162,7 @@ class AttendanceRecordController extends Controller
                 $data[ConstParams::AT_RECORD_DATE] = getToday();
                 $data[ConstParams::AT_RECORD_TIME] = getCurrentTime();
 
-                $formatted_data = CreateService::formatDataForAtRecord($target_user->user_id, $name, $data);
+                $formatted_data = $this->formatDataForAtRecord($target_user->user_id, $name, $data);
 
                 $new_record = AttendanceRecord::createNewRecord($formatted_data);
 
@@ -236,7 +234,7 @@ class AttendanceRecordController extends Controller
                 $user_id = User::findByLoginId($request->target_login_id)->user_id;
                 $validated_data = $request->validated();
                 $name = User::findByUserId($validated_data['created_by_user_id'])->getKanjiFullName();
-                $formatted_data = CreateService::formatDataForAtRecord($user_id, $name, $validated_data);
+                $formatted_data = $this->formatDataForAtRecord($user_id, $name, $validated_data);
 
                 $new_record_id = AttendanceRecord::createNewRecord($formatted_data)->at_record_id;
                 $record = AttendanceRecord::searchById($new_record_id);
@@ -334,11 +332,11 @@ class AttendanceRecordController extends Controller
                 }
 
                 $validated_data = $validator->validated();
-                $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+                $formatted_data = $this->formatSearchRequirements(false, $validated_data);
                 $results = $this->search($formatted_data['search_requirements'], false);
             } else {
                 // 検索画面を最初に開いたとき
-                $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
+                $formatted_data = $this->formatSearchRequirements(true);
                 $results = null;
             }
 
@@ -365,9 +363,9 @@ class AttendanceRecordController extends Controller
     {
         try {
             $validated_data = $request->validated();
-            $formatted_data = SearchService::formatAtRecordSearchRequirements(false, $validated_data);
+            $formatted_data = $this->formatSearchRequirements(false, $validated_data);
             $results = $this->search($formatted_data['search_requirements'], true);
-            $response_data = SearchService::createCSV($formatted_data, $results);
+            $response_data = $this->createCSV($formatted_data, $results);
 
             return response($response_data['csv'], 200)
                 ->withHeaders($response_data['headers']);
@@ -376,6 +374,65 @@ class AttendanceRecordController extends Controller
                 ->route('at_records.search')
                 ->withErrors(['message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * 検索条件と結果に基づき、CSVを作成する
+     * @param array $data 検索条件
+     * @param array $results 検索条件と結果に基づき、CSVを作成する
+     * @return array 
+     */
+    private static function createCSV(array $data, array $results): array
+    {
+
+        $headers = [
+            'Content-Type'
+            => 'text/csv',
+            'Content-Disposition'
+            => 'attachment; filename="AtRecords_'
+                . $data['search_requirements']['start_date']
+                . '_' . $data['search_requirements']['end_date']
+                . '.csv"',
+        ];
+
+        // 出力データの作成
+        $output = fopen('php://temp', 'r+');
+        fputcsv($output, [
+            ConstParams::AT_RECORD_ID_JP,
+            ConstParams::USER_ID_JP,
+            ConstParams::AT_RECORD_TYPE_JP,
+            ConstParams::AT_RECORD_TYPE_TRANSLATED_JP,
+            ConstParams::AT_RECORD_DATE_JP,
+            ConstParams::AT_RECORD_TIME_JP,
+            ConstParams::CREATED_BY_JP,
+            ConstParams::UPDATED_BY_JP,
+            ConstParams::CREATED_AT_JP,
+            ConstParams::UPDATED_AT_JP,
+        ]);
+
+        foreach ($results as $result) {
+            fputcsv($output, [
+                $result[ConstParams::AT_RECORD_ID],
+                $result[ConstParams::USER_ID],
+                $result[ConstParams::AT_RECORD_TYPE],
+                $result[ConstParams::AT_RECORD_TYPE_TRANSLATED],
+                $result[ConstParams::AT_RECORD_DATE],
+                $result[ConstParams::AT_RECORD_TIME],
+                $result[ConstParams::CREATED_BY],
+                $result[ConstParams::UPDATED_BY],
+                $result[ConstParams::CREATED_AT],
+                $result[ConstParams::UPDATED_AT],
+            ]);
+        }
+
+        rewind($output);
+        $csv = stream_get_contents($output);
+        fclose($output);
+
+        return [
+            'headers' => $headers,
+            'csv' => $csv,
+        ];
     }
 
     /**
@@ -537,5 +594,97 @@ class AttendanceRecordController extends Controller
                 ->route('at_records.search')
                 ->withErrors(['message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * 打刻レコードの作成に必要なデータを整形する
+     * @param int $user_id 打刻者のID
+     * @param string $name 更新者の名前
+     * @param array $data バリエーション済みのデータ
+     * @return array 整形済みのデータの配列
+     */
+    private function formatDataForAtRecord(int $user_id, string $name, array $data): array
+    {
+        $formatted_data = [
+            'target_user_id' => $user_id,
+            ConstParams::AT_SESSION_ID => $data[ConstParams::AT_SESSION_ID],
+            ConstParams::AT_RECORD_TYPE => $data[ConstParams::AT_RECORD_TYPE],
+            ConstParams::AT_RECORD_DATE => $data[ConstParams::AT_RECORD_DATE],
+            ConstParams::AT_RECORD_TIME => $data[ConstParams::AT_RECORD_TIME],
+            ConstParams::CREATED_BY => $name,
+        ];
+
+        return $formatted_data;
+    }
+
+
+    /**
+     * 打刻レコード検索の実行と結果表示に必要なデータを整形する
+     * @param bool $is_empty 空の配列を返すかどうか
+     * @param array $data バリエーション済みの検索条件
+     * @return array
+     */
+    private static function formatSearchRequirements(bool $is_empty, array $data = []): array
+    {
+        if ($is_empty) {
+            return [
+                'search_requirements' => null,
+                'search_requirement_labels' => null,
+                'search_requirements_data' => null,
+                'default_dates' => self::defaultDates(),
+            ];
+        }
+
+        $search_field = $data['search_field'] ?? 'all';
+        $keyword = $data['keyword'] ?? 'empty';
+        if ($search_field === 'all') {
+            $keyword = 'all';
+        }
+        $search_requirements = [
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'search_field' => $search_field,
+            'search_field_jp' => getFieldNameJP($search_field),
+            'keyword' => $keyword,
+            'column' => $data['column'],
+            'order' => $data['order'],
+        ];
+        $search_requirement_labels = [
+            '検索種別',
+            'キーワード',
+            '開始日',
+            '終了日',
+        ];
+        $search_requirements_data = [
+            getFieldNameJP($search_field),
+            $keyword,
+            $search_requirements['start_date'],
+            $search_requirements['end_date'],
+        ];
+
+        $default_dates = self::defaultDates();
+
+        return [
+            'search_requirements' => $search_requirements,
+            'search_requirement_labels' => $search_requirement_labels,
+            'search_requirements_data' => $search_requirements_data,
+            'default_dates' => $default_dates,
+        ];
+    }
+
+
+
+    /**
+     * at_records 検索用に、開始日と終了日のデフォルト値を返す。
+     * @return array デフォルトの開始日と終了日
+     */
+    private static function defaultDates(): array
+    {
+        $start_date = date('Y-m-d', strtotime('-1 week'));
+        $end_date = date('Y-m-d', strtotime('+1 day'));
+        return [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ];
     }
 }

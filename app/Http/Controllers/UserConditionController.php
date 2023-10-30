@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\UserConditionUpdateRequest;
-use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserCondition;
 use Illuminate\Http\RedirectResponse;
@@ -52,7 +51,7 @@ class UserConditionController extends Controller
             return DB::transaction(function () use ($user_id, $request) {
                 $condition_data = User::findByUserId($user_id)->condition->dataArray();
                 $validated_data = $request->validated();
-                $formatted_data = UpdateService::formatDataForUserCondition($validated_data, $condition_data);
+                $formatted_data = $this->formatDataForUpdate($validated_data, $condition_data);
 
                 $result = UserCondition::updateInfo($formatted_data);
 
@@ -90,5 +89,26 @@ class UserConditionController extends Controller
                 ->route('users.search')
                 ->withErrors(['message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * コンディションデータの更新に必要なデータを整形する
+     * @param array $data バリエーション済みのデータ
+     * @param array $condition_data 現状のコンディションデータ
+     * @return array 整形済みのデータの配列
+     */
+    public static function formatDataForUpdate(array $validated_data, array $condition_data): array
+    {
+        /** @var \App\Models\User $logged_in_user */
+        $logged_in_user = Auth::user();
+
+        $formatted_data = [
+            ConstParams::USER_CONDITION_ID => $condition_data[ConstParams::USER_CONDITION_ID],
+            ConstParams::HAS_ATTENDED => $validated_data[ConstParams::HAS_ATTENDED],
+            ConstParams::IS_BREAKING => $validated_data[ConstParams::IS_BREAKING],
+            ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
+        ];
+
+        return $formatted_data;
     }
 }

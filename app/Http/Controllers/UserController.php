@@ -8,8 +8,6 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Http\Services\SearchService;
-use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserCondition;
 use App\Models\UserSalary;
@@ -158,11 +156,11 @@ class UserController extends Controller
                 }
 
                 $validated_data = $validator->validated();
-                $formatted_data = SearchService::formatUserSearchRequirements(false, $validated_data);
+                $formatted_data = $this->formatSearchRequirements(false, $validated_data);
                 $results = $this->search($formatted_data['search_requirements']);
             } else {
                 // 検索画面を開いたとき
-                $formatted_data = SearchService::formatAtRecordSearchRequirements(true);
+                $formatted_data = $this->formatSearchRequirements(true);
                 $results = null;
             }
 
@@ -225,7 +223,7 @@ class UserController extends Controller
         try {
             return DB::transaction(function () use ($user_id, $request) {
                 $validated_data = $request->validated();
-                $formatted_data = UpdateService::formatDataForUser($user_id, $validated_data);
+                $formatted_data = $this->formatDataForUpdate($user_id, $validated_data);
                 $result = User::updateInfo($formatted_data);
 
                 return redirect()
@@ -399,5 +397,85 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect(route('top'));
+    }
+
+    /**
+     * ユーザーレコードの更新に必要なデータを整形する
+     * @param int $user_id 更新対象のID
+     * @param array $data バリエーション済みのデータ
+     * @return array 整形済みのデータの配列
+     */
+    private static function formatDataForUpdate(int $user_id, array $data): array
+    {
+        /** @var \App\Models\User $logged_in_user */
+        $logged_in_user = Auth::user();
+
+        $updated_by = $logged_in_user->getKanjiFullName();
+
+        // ログインユーザー自身の情報を更新する場合、
+        // 変更後の氏名（＝最新の氏名）を最終更新者に記録するようにする
+        if ($user_id == $logged_in_user->user_id) {
+            $updated_by = $data[ConstParams::KANJI_LAST_NAME] . ' ' . $data[ConstParams::KANJI_FIRST_NAME];
+        }
+
+        $formatted_data = [
+            ConstParams::USER_ID => $user_id,
+            ConstParams::KANJI_LAST_NAME => $data[ConstParams::KANJI_LAST_NAME],
+            ConstParams::KANJI_FIRST_NAME => $data[ConstParams::KANJI_FIRST_NAME],
+            ConstParams::KANA_LAST_NAME => $data[ConstParams::KANA_LAST_NAME],
+            ConstParams::KANA_FIRST_NAME => $data[ConstParams::KANA_FIRST_NAME],
+            ConstParams::EMAIL => $data[ConstParams::EMAIL],
+            ConstParams::LOGIN_ID => $data[ConstParams::LOGIN_ID],
+            ConstParams::IS_ADMIN => $data[ConstParams::IS_ADMIN],
+            ConstParams::UPDATED_BY => $updated_by,
+        ];
+
+        return $formatted_data;
+    }
+
+    /**
+     * ユーザーレコード検索の実行と結果表示に必要なデータを整形する
+     * @param bool $is_empty 空の配列を返すかどうか
+     * @param array $data バリエーション済みの検索条件
+     * @return array 整形済みのデータの配列
+     */
+    public static function formatSearchRequirements(bool $is_empty, array $data = []): array
+    {
+        if ($is_empty) {
+            return [
+                'search_requirements' => null,
+                'search_requirement_labels' => null,
+                'search_requirements_data' => null,
+            ];
+        }
+
+        $search_field = $data['search_field'] ?? 'all';
+        $keyword = $data['keyword'] ?? 'empty';
+        if ($search_field === 'all') {
+            $keyword = 'all';
+        }
+        $search_requirements = [
+            'search_field' => $search_field,
+            'search_field_jp' => getFieldNameJP($search_field),
+            'keyword' => $keyword,
+            'column' => $data['column'],
+            'order' => $data['order'],
+        ];
+
+        $search_requirement_labels = [
+            '検索種別',
+            'キーワード',
+        ];
+
+        $search_requirements_data = [
+            getFieldNameJP($search_requirements['search_field']),
+            $search_requirements['keyword'],
+        ];
+
+        return [
+            'search_requirements' => $search_requirements,
+            'search_requirement_labels' => $search_requirement_labels,
+            'search_requirements_data' => $search_requirements_data,
+        ];
     }
 }

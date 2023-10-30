@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Const\ConstParams;
 use App\Http\Requests\UserSalaryUpdateRequest;
-use App\Http\Services\UpdateService;
 use App\Models\User;
 use App\Models\UserSalary;
 use Exception;
@@ -53,7 +52,7 @@ class UserSalaryController extends Controller
             return DB::transaction(function () use ($user_id, $request) {
                 $salary_data = User::findByUserId($user_id)->salary->dataArray();
                 $validated_data = $request->validated();
-                $formatted_data = UpdateService::formatDataForUserSalary($validated_data, $salary_data);
+                $formatted_data = $this->formatDataForUpdate($validated_data, $salary_data);
 
                 $result = UserSalary::updateInfo($formatted_data);
 
@@ -91,5 +90,25 @@ class UserSalaryController extends Controller
                 ->route('users.search')
                 ->withErrors(['message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * 時給データの更新に必要なデータを整形する
+     * @param array $validated_data バリエーション済みのデータ
+     * @param array $salary_data 現状の時給データ
+     * @return array 整形済みのデータの配列
+     */
+    public function formatDataForUpdate(array $validated_data, array $salary_data): array
+    {
+        /** @var \App\Models\User $logged_in_user */
+        $logged_in_user = Auth::user();
+
+        $formatted_data = [
+            ConstParams::USER_SALARY_ID => $salary_data[ConstParams::USER_SALARY_ID],
+            ConstParams::HOURLY_WAGE => $validated_data[ConstParams::HOURLY_WAGE],
+            ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
+        ];
+
+        return $formatted_data;
     }
 }
