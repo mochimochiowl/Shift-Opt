@@ -114,7 +114,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::AT_RECORD_ID, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::AT_RECORD_ID_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::AT_RECORD_ID_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -124,7 +128,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::USER_ID, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::USER_ID_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::USER_ID_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -134,7 +142,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANJI_LAST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANJI_LAST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -144,7 +156,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANJI_FIRST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANJI_FIRST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -154,7 +170,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANA_LAST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANA_LAST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -164,7 +184,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANA_FIRST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANA_FIRST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -174,7 +198,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::AT_RECORD_TYPE, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::AT_RECORD_TYPE_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::AT_RECORD_TYPE_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -184,7 +212,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::AT_RECORD_DATE, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::AT_RECORD_DATE_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::AT_RECORD_DATE_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class=" whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('at_records.search', [
@@ -194,7 +226,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::AT_RECORD_TIME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc',
-                    ])}}">{{ConstParams::AT_RECORD_TIME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::AT_RECORD_TIME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="text-center whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細

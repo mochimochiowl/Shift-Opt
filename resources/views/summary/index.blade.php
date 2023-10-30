@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', '日別サマリー')
+@section('title', '日別実績集計表')
 @section('content')
 <div class="p-4 mb-3 rounded-xl bg-blue-200">
     <form action="{{route('summary.post')}}" method="POST">

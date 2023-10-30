@@ -54,12 +54,22 @@
           @endcomponent
         <input type="hidden" name="column" value="{{ConstParams::USER_ID}}">
         <input type="hidden" name="order" value="asc">
-        <div class="pt-4">
+        <div class="pt-4 mb-3">
             @component('components.btnBlue', [
                 'type' => 'submit',
                 'label' => '検索',
                 'w_full' => true,
                 ])
+            @endcomponent
+        </div>
+        @component('components.hr')
+        @endcomponent
+        <div class="pt-3">
+            @component('components.link', [
+                'href'=> route('users.create'),
+                'label'=> 'データの新規作成',
+                'w_full' => true,
+            ])
             @endcomponent
         </div>
     </div>
@@ -86,7 +96,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::USER_ID, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
-                    ])}}">{{ConstParams::USER_ID_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block ml-1 mr-2">{{ConstParams::USER_ID_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
@@ -94,7 +108,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANJI_LAST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
-                    ])}}">{{ConstParams::KANJI_LAST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANJI_LAST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
@@ -102,7 +120,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANJI_FIRST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
-                    ])}}">{{ConstParams::KANJI_FIRST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANJI_FIRST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
@@ -110,7 +132,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANA_LAST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
-                    ])}}">{{ConstParams::KANA_LAST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANA_LAST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     <a href="{{route('users.search', [
@@ -118,7 +144,11 @@
                     'keyword' => $search_requirements['keyword'],
                     'column' => ConstParams::KANA_FIRST_NAME, 
                     'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc'
-                    ])}}">{{ConstParams::KANA_FIRST_NAME_JP}}</a>
+                    ])}}"
+                    class="flex items-center justify-center hover:text-blue-800">
+                        <span class="inline-block mx-1">{{ConstParams::KANA_FIRST_NAME_JP}}</span>
+                        <span class="i-lucide-list-filter w-4 h-4 flex-shrink-0"></span>
+                    </a>
                 </th>
                 <th class="text-center whitespace-nowrap w-2/12 bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     詳細

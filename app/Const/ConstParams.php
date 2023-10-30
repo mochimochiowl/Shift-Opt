@@ -81,8 +81,8 @@ class ConstParams
     const UPDATED_AT_JP = '最終更新日時';
 
     //DB userテーブルのカラムの表示名を定義
-    const USER_JP = 'ユーザーデータ';
-    const USER_ID_JP = 'ユーザーID';
+    const USER_JP = 'スタッフデータ';
+    const USER_ID_JP = 'スタッフID';
     const KANJI_FIRST_NAME_JP = '名（漢字）';
     const KANJI_LAST_NAME_JP = '姓（漢字）';
     const KANA_FIRST_NAME_JP = '名（かな）';

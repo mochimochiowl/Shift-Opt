@@ -13,16 +13,19 @@
         <ul id="menu" class="fixed top-0 left-0 w-full text-center text-white font-bold bg-blue-500 translate-x-full transition duration-300 ease-linear">
             @if (Auth::check())
                 <li class="h-24 p-9 bg-blue-600">{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</li>
+            @endif
+            <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻</a></li>
+            @if (Auth::check())
                 @if (Auth::user()->is_admin)
-                    <li class="p-3"><a href="{{route('users.create')}}" class="">スタッフ登録</a></li>
+                    <li class="p-3"><a href="{{route('users.create')}}" class="">{{ConstParams::USER_JP}}登録</a></li>
                     <li class="p-3"><a href="{{route('users.search')}}" class="">{{ConstParams::USER_JP}}検索</a></li>
+                    <li class="p-3"><a href="{{route('at_records.create')}}" class="">{{ConstParams::AT_RECORD_JP}}登録</a></li>
                     <li class="p-3"><a href="{{route('at_records.search')}}" class="">{{ConstParams::AT_RECORD_JP}}検索</a></li>
-                    <li class="p-3"><a href="{{route('summary.index')}}" class="">サマリー</a></li>
+                    <li class="p-3"><a href="{{route('summary.index')}}" class="">日別実績集計表</a></li>
                 @endif
             @else
                 <li class="h-24 p-9 bg-blue-600">ログインしていません。</li>
             @endif
-            <li class="p-3"><a href="{{route('stamps.index')}}" class="">打刻</a></li>
             @if (Auth::check())
             <li class="p-3"><a href="{{route('logout')}}" class="">ログアウトする</a></li>
             @else

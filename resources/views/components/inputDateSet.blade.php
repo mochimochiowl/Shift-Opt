@@ -12,7 +12,7 @@
     <div class="inline-block mb-2 mr-1">
         @component('components.btnBlue', [
             'type' => 'button',
-            'label' => '昨日',
+            'label' => '前日',
             'onclick' => 'setPreviousDay',
             'arg' => "'#" . $name . "'",
             ])
@@ -30,7 +30,7 @@
     <div class="inline-block mb-2 mr-1">
         @component('components.btnBlue', [
         'type' => 'button',
-        'label' => '明日',
+        'label' => '翌日',
         'onclick' => 'setNextDay',
         'arg' => "'#" . $name . "'",
         ])
