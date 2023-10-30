@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // トップページのルート
-Route::get('/', [TopController::class, 'get'])->name('top');
+Route::view('/', 'top');
 
 // ログイン・ログアウトにかかわるルート
 Route::middleware('auth')->group(function () {
