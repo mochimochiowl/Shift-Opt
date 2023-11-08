@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         div_array.push(document.querySelector('#tech-4'));
         div_array.push(document.querySelector('#tech-5'));
         div_array.push(document.querySelector('#duration'));
+        div_array.push(document.querySelector('#menu-below'));
 
         console.log(document.querySelector('#guide'));
         console.log(div_array.length);

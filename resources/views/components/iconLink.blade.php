@@ -1,8 +1,8 @@
 <a href={{$href}}
 @if (isset($w_full) && $w_full)
-    class="flex items-center justify-center whitespace-nowrap bg-{{$color}}-500 hover:bg-{{$color}}-600 text-white text-lg font-semibold text-center rounded-md py-2 pl-4 pr-6 w-full h-auto drop-shadow-lg"
+    class="flex items-center justify-center whitespace-nowrap bg-{{$color}}-500 hover:bg-{{$color}}-600 text-white text-lg font-semibold text-center rounded-md py-2 pl-4 pr-6 w-full h-auto drop-shadow-lg border-b-4 border-b-gray-500"
 @else
-    class="flex items-center justify-center whitespace-nowrap bg-{{$color}}-500 hover:bg-{{$color}}-600 text-white text-lg font-semibold text-center rounded-md py-2 pl-4 pr-6 h-auto drop-shadow-lg"
+    class="flex items-center justify-center whitespace-nowrap bg-{{$color}}-500 hover:bg-{{$color}}-600 text-white text-lg font-semibold text-center rounded-md py-2 pl-4 pr-6 h-auto drop-shadow-lg border-b-4 border-b-gray-500"
 @endif
 >
     @if (isset($icon_class) && $icon_class)

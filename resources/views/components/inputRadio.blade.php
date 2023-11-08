@@ -15,7 +15,7 @@
             >
             <label 
                 for="{{$item['name']}}_{{$item['value']}}" 
-                class="block text-black font-semibold text-center border border-black rounded-xl px-3 py-2 mr-2 bg-blue-200"
+                class="block text-black font-semibold text-center border border-black rounded-xl px-3 py-2 mr-2 bg-blue-200 border-b-4 border-b-gray-500"
             >
                 {{$item['name_jp']}}
             </label>    

@@ -251,13 +251,52 @@
             </div>
         </div>
         <div id="duration" class="md:mt-20 mt-12 opacity-0 transition-opacity duration-700">
-            <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">開発に要した期間</h2>
+            <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">開発期間</h2>
             <div class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200">
                 <div class="p-4 text-center">
                     <p>学習 : 約5週間</p>
                     <p class="md:text-xl text-sm md:mb-2 mb-1">(PHP、Laravel、WEBの知識等)</p>
-                    <p>開発 : 約5週間</p>
+                    <p>設計～実装 : 約5週間</p>
                 </div>
+            </div>
+        </div>
+        <div id="menu-below" class="md:mt-20 mt-12 opacity-0 transition-opacity duration-700">
+            <div class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200">
+                <div class="p-4 text-center">
+                    <p>ご覧いただきありがとうございます！</p>
+                </div>
+                <ul class="md:mx-8">
+                    <li class="p-4">
+                        @component('components.iconLink', [
+                            'href'=> route('stamps.index'),
+                            'color' => 'blue',
+                            'icon_class'=> 'i-lucide-stamp w-7 h-7 mt-1 mr-3 flex-shrink-0',
+                            'label'=> '打刻する',
+                            'w_full' => true,
+                        ])
+                        @endcomponent
+                    </li>
+                    <li class="p-4">
+                        @component('components.iconLink', [
+                            'href'=> route('login.form'),
+                            'color' => 'blue',
+                            'icon_class'=> 'i-lucide-log-in w-6 h-6 mt-1 mr-3 flex-shrink-0',
+                            'label'=> 'ログインする',
+                            'w_full' => true,
+                        ])
+                        @endcomponent
+                    </li>
+                    <li class="p-4">
+                        @component('components.iconLink', [
+                            'href'=> 'https://github.com/mochimochiowl/Shift-Opt',
+                            'color' => 'blue',
+                            'icon_class'=> 'i-grommet-icons-github w-8 h-8 mt-1 mr-2 flex-shrink-0',
+                            'label'=> 'コードをみる',
+                            'w_full' => true,
+                        ])
+                        @endcomponent
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
