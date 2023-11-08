@@ -17,52 +17,66 @@
                 <li class="h-24 p-9 bg-blue-600">ログインしていません。</li>
             @endif
             <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                <a href="{{route('stamps.index')}}" class="block p-3">
-                    打刻
+                <a href="{{route('stamps.index')}}" class="flex justify-center p-3">
+                    <span class="inline-block i-lucide-stamp w-5 h-5 mr-2"></span>
+                    <span class="inline-block">打刻</span>
                 </a>
             </li>
             @if (Auth::check())
                 @if (Auth::user()->is_admin)
                     <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                        <a href="{{route('users.create')}}" class="block p-3">
-                            {{ConstParams::USER_JP}}登録
+                        <a href="{{route('users.create')}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-user-plus-2 w-6 h-6 mr-2"></span>
+                            <span class="inline-block">{{ConstParams::USER_JP}}登録</span>
                         </a>
                     </li>
                     <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                        <a href="{{route('users.search')}}" class="block p-3">
-                            {{ConstParams::USER_JP}}検索
+                        <a href="{{route('users.search')}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-users-2 w-6 h-6 mr-2"></span>
+                            <span class="inline-block">{{ConstParams::USER_JP}}検索</span>
                         </a>
                     </li>
                     <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                        <a href="{{route('at_records.create')}}" class="block p-3">
-                            {{ConstParams::AT_RECORD_JP}}登録
+                        <a href="{{route('at_records.create')}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-list-plus w-6 h-6 mr-2"></span>
+                            <span class="inline-block">{{ConstParams::AT_RECORD_JP}}登録</span>
                         </a>
                     </li>
                     <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                        <a href="{{route('at_records.search')}}" class="block p-3">
-                            {{ConstParams::AT_RECORD_JP}}検索
+                        <a href="{{route('at_records.search')}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-file-search w-6 h-6 mr-2"></span>
+                            <span class="inline-block">{{ConstParams::AT_RECORD_JP}}検索</span>
                         </a>
                     </li>
                     <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                        <a href="{{route('summary.index')}}" class="block p-3">
-                            日別実績集計表
+                        <a href="{{route('summary.index')}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-table w-6 h-6 mr-2"></span>
+                            <span class="inline-block">日別実績集計表</span>
                         </a>
                     </li>
                 @endif
             @endif
             @if (Auth::check())
             <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                <a href="{{route('logout')}}" class="block p-3">
-                    ログアウト
+                <a href="{{route('logout')}}" class="flex justify-center p-3">
+                    <span class="inline-block i-lucide-log-out w-6 h-6 mr-2"></span>
+                    <span class="inline-block">ログアウト</span>
                 </a>
             </li>
             @else
             <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
-                <a href="{{route('login.form')}}" class="block p-3">
-                    ログイン
+                <a href="{{route('login.form')}}" class="flex justify-center p-3">
+                    <span class="inline-block i-lucide-log-in w-6 h-6 mr-2"></span>
+                    <span class="inline-block">ログイン</span>
                 </a>
             </li>
             @endif
+            <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
+                <a href="https://github.com/mochimochiowl/Shift-Opt" class="flex justify-center p-3">
+                    <span class="inline-block i-grommet-icons-github w-6 h-6 mr-2"></span>
+                    <span class="inline-block">コードをみる</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>  
