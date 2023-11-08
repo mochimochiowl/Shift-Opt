@@ -81,8 +81,15 @@ class SummaryController
 
             $recordSets = AttendanceRecord::getDataForSummary($inputDate);
             $rowsSums = $this->makeRowsSums($recordSets);
+
+            $h2 = $inputDate->format('Y') . '年'
+                . $inputDate->format('m') . '月'
+                . $inputDate->format('d') . '日'
+                . $this->dayOfWeek($inputDate);
+
             $data = [
                 'date' => $date,
+                'h2' => $h2,
                 'rows' => $rowsSums['rows'],
                 'sums' => $rowsSums['sums'],
             ];
@@ -253,5 +260,27 @@ class SummaryController
         $hourly_wage = (string)$user->salary->hourly_wage;
         $cost = bcadd(bcmul($hourly_wage, (string)$working_time['hour'], 2), bcmul($hourly_wage, (string)($working_time['minute'] / 60), 2), 2);
         return round((float)$cost);
+    }
+
+    /**
+     * 曜日の文字列を取得する
+     * @param DateTime $date 対象のID
+     * @return string 曜日(日本語)
+     */
+    private function dayOfWeek(DateTime $date): string
+    {
+        $dayOfWeek = $date->format('D');
+
+        $daysInJp = [
+            'Mon' => '(月)',
+            'Tue' => '(火)',
+            'Wed' => '(水)',
+            'Thu' => '(木)',
+            'Fri' => '(金)',
+            'Sat' => '(土)',
+            'Sun' => '(日)',
+        ];
+
+        return $daysInJp[$dayOfWeek];
     }
 }

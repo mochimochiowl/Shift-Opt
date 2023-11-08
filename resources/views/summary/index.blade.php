@@ -21,7 +21,7 @@
     </form>
 </div>
 @if ($data)
-@component('components.h2',['title' => $data['date']])
+@component('components.h2',['title' => $data['h2']])
 @endcomponent
 <div class="overflow-x-auto">
     <table class="border-collapse w-full my-5">
