@@ -18,7 +18,7 @@ export default {
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(["tabler", "lucide"]),
+      collections: getIconCollections(["tabler", "lucide", "grommet-icons"]),
     }),
   ],
 }

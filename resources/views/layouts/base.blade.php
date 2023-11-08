@@ -28,8 +28,9 @@
                 @yield('content')
             </div>
         </div>
-        <footer class="px-3 py-5 bg-blue-500 text-sm text-gray-200 text-center">
-            copyright 2023 CoderOwlWing
+        <footer class="flex items-center text-center justify-center px-3 py-5 bg-blue-500 text-sm text-gray-200">
+            <span class="inline-block i-tabler-copyright w-4 h-4 mr-2"></span>
+            <span class="inline-block font-bold"> 2023 mochimochiowl</span>
             @yield('footer')
         </footer>
     </body>
