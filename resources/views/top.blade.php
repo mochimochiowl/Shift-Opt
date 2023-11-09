@@ -82,6 +82,16 @@
                             @endcomponent
                         </li>
                     @endif
+                    <li class="p-4">
+                        @component('components.iconLink', [
+                            'href'=> route('logout'),
+                            'color' => 'blue',
+                            'icon_class'=> 'i-lucide-key-round w-6 h-6 mt-1 mr-3 flex-shrink-0',
+                            'label'=> 'パスワード変更',
+                            'w_full' => true,
+                        ])
+                        @endcomponent
+                    </li>
                 @else
                     <li class="p-4">
                         @component('components.iconLink', [

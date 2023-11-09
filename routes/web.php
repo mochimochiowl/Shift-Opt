@@ -58,6 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::post('users/{user_id}/delete/confirm', [UserController::class, 'confirmDestroy'])->name('users.delete.confirm');
     Route::get('users/{user_id}/delete/result', [UserController::class, 'showDestroyResult'])->name('users.delete.result');
 
+    // password
+    Route::get('users/{user_id}/password/edit', [UserController::class, 'editPassword'])->name('users.password.edit');
+    Route::put('users/{user_id}/password', [UserController::class, 'updatePassword'])->name('users.password.update');
+    Route::get('users/{user_id}/password/edit/result', [UserController::class, 'showUpdatePasswordResult'])->name('users.password.update.result');
+
     // userSalaries
     Route::get('users/{user_id}/salaries/edit', [UserSalaryController::class, 'edit'])->name('users.salaries.edit');
     Route::put('users/{user_id}/salaries', [UserSalaryController::class, 'update'])->name('users.salaries.update');

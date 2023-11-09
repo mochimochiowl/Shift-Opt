@@ -54,6 +54,12 @@
                             <span class="inline-block">日別実績集計表</span>
                         </a>
                     </li>
+                    <li class="p-0 hover:text-gray-100 hover:bg-blue-400">
+                        <a href="{{route('users.password.edit', [ConstParams::USER_ID => Auth::user()->user_id])}}" class="flex justify-center p-3">
+                            <span class="inline-block i-lucide-key-round w-6 h-6 mr-2"></span>
+                            <span class="inline-block">パスワード変更</span>
+                        </a>
+                    </li>
                 @endif
             @endif
             @if (Auth::check())

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Const\ConstParams;
 use App\Exceptions\ExceptionThrower;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -194,7 +195,7 @@ class UserController extends Controller
 
     /**
      * ユーザー編集画面を返す
-     * @param int $at_record_id 更新対象のID
+     * @param int $user_id 更新対象のID
      * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
      */
     public function edit(int $user_id): View | RedirectResponse
@@ -256,6 +257,74 @@ class UserController extends Controller
             return view('users.editResult', [
                 'user_id' => session('user_id'),
                 'user_labels' => session('user_labels'),
+                'user_data' => session('user_data'),
+                'count' => session('count'),
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * パスワード更新画面を返す
+     * @param int $user_id 更新対象のID
+     * @return View|RedirectResponse 編集画面か、検索画面へのリダイレクト
+     */
+    public function editPassword(int $user_id): View | RedirectResponse
+    {
+        try {
+            $user = User::findByUserId($user_id);
+            $user_data = $user->dataArray();
+            return view('users.editPassword', [
+                'user_data' => $user_data
+            ]);
+        } catch (Exception $e) {
+            return redirect()
+                ->route('users.search')
+                ->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    /** 
+     * パスワードを更新する
+     * @param int $user_id 更新対象のID
+     * @param PasswordUpdateRequest $request バリデーション済みのリクエスト
+     * @return RedirectResponse  更新結果画面か、前の画面へのリダイレクト
+     *  */
+    public function updatePassword(int $user_id, PasswordUpdateRequest $request): RedirectResponse
+    {
+        try {
+            return DB::transaction(function () use ($user_id, $request) {
+                $validated_data = $request->validated();
+                $result = User::updatePassword($validated_data);
+
+                return redirect()
+                    ->route('users.password.update.result', [ConstParams::USER_ID => $user_id])
+                    ->with([
+                        'user_data' => $result['user_data'],
+                        'count' => $result['count'],
+                    ]);
+            }, 5);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * パスワードの更新結果画面を返す
+     * @return View|RedirectResponse 結果表示画面か検索画面へのリダイレクト
+     */
+    public function showUpdatePasswordResult(): View | RedirectResponse
+    {
+        try {
+            if (!session('user_data')) {
+                ExceptionThrower::unauthorizedAccess(1206);
+            }
+            return view('users.editPasswordResult', [
                 'user_data' => session('user_data'),
                 'count' => session('count'),
             ]);

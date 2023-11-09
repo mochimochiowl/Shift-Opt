@@ -158,7 +158,6 @@ class User extends Authenticatable
         return $results;
     }
 
-
     /**
      * ユーザーを更新する
      * @param array $data 氏名やログインIDなどを格納した配列
@@ -196,6 +195,50 @@ class User extends Authenticatable
         $result = [
             'user_id' => $user->user_id,
             'user_labels' => $user_labels,
+            'user_data' => $user_data,
+            'count' => $count,
+        ];
+
+        return $result;
+    }
+
+    /**
+     * パスワードを更新する
+     * @param array $data 現在のパスワードと新しいパスワードを格納した配列
+     * @return array 更新後のデータを格納した配列
+     */
+    public static function updatePassword(array $data): array
+    {
+        try {
+            $user = self::findByUserId($data[ConstParams::USER_ID]);
+
+            if (!Hash::check($data['old_pwd'], $user->password)) {
+                throw new Exception('現在のパスワードが正しくありません。');
+            }
+            if ($data['new_pwd_1'] !== $data['new_pwd_2']) {
+                throw new Exception('新しいパスワードが、確認用の欄に入力したものと一致しません。');
+            }
+
+            $count = self::findByUserId($data[ConstParams::USER_ID])
+                ->update(
+                    [
+                        ConstParams::PASSWORD => $data['new_pwd_1'],
+                        ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
+                    ]
+                );
+        } catch (Exception $e) {
+            ExceptionThrower::genericError($e->getMessage(), 210);
+        }
+
+        try {
+            $user = self::findByUserId($data[ConstParams::USER_ID]);
+        } catch (Exception $e) {
+            ExceptionThrower::fetchFailed(ConstParams::USER_JP, 211);
+        }
+
+        $user_data = $user->dataArray();
+
+        $result = [
             'user_data' => $user_data,
             'count' => $count,
         ];
