@@ -71,23 +71,23 @@
                             ])
                             @endcomponent
                         </li>
-                        <li class="p-4">
-                            @component('components.iconLink', [
-                                'href'=> route('logout'),
-                                'color' => 'blue',
-                                'icon_class'=> 'i-lucide-log-out w-6 h-6 mt-1 mr-3 flex-shrink-0',
-                                'label'=> 'ログアウト',
-                                'w_full' => true,
-                            ])
-                            @endcomponent
-                        </li>
                     @endif
+                    <li class="p-4">
+                        @component('components.iconLink', [
+                            'href'=> route('users.password.edit', [ConstParams::USER_ID => Auth::user()->user_id]),
+                            'color' => 'blue',
+                            'icon_class'=> 'i-lucide-key-round w-6 h-6 mt-1 mr-3 flex-shrink-0',
+                            'label'=> 'パスワード変更',
+                            'w_full' => true,
+                        ])
+                        @endcomponent
+                    </li>
                     <li class="p-4">
                         @component('components.iconLink', [
                             'href'=> route('logout'),
                             'color' => 'blue',
-                            'icon_class'=> 'i-lucide-key-round w-6 h-6 mt-1 mr-3 flex-shrink-0',
-                            'label'=> 'パスワード変更',
+                            'icon_class'=> 'i-lucide-log-out w-6 h-6 mt-1 mr-3 flex-shrink-0',
+                            'label'=> 'ログアウト',
                             'w_full' => true,
                         ])
                         @endcomponent
