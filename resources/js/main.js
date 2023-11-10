@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (document.querySelector('#explain_section')) {
         let div_array = [];
-        div_array.push(document.querySelector('#top_image'));
+        // div_array.push(document.querySelector('#top_image'));
         div_array.push(document.querySelector('#summary'));
         div_array.push(document.querySelector('#function'));
         div_array.push(document.querySelector('#function-1'));

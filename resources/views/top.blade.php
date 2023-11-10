@@ -144,7 +144,7 @@
             </div>
         </div>
     </div>
-    <div id="top_image" class="flex items-center justify-center md:mt-12 mt-8 md:p-0 p-4 opacity-0 transition-opacity duration-700">
+    <div id="top_image" class="flex items-center justify-center md:mt-12 mt-8 md:p-0 p-4">
         <img src="{{asset('/imgs/top.png')}}" width="800" alt="Shift-Opt イメージ画像">
     </div>
     <div id="guide" class="md:text-2xl text-xl">
