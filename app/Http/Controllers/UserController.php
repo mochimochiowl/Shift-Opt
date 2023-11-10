@@ -202,6 +202,9 @@ class UserController extends Controller
     {
         try {
             $user = User::findByUserId($user_id);
+            if ($user->login_id === 'system') {
+                ExceptionThrower::genericError('システムユーザーのスタッフデータを編集することはできません。', 1207);
+            }
             $user_data = $user->dataArray();
             return view('users.edit', [
                 'user_data' => $user_data

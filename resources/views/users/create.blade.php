@@ -1,6 +1,8 @@
 @extends('layouts.base')
 @section('title', 'スタッフ登録画面')
 @section('content')
+  @component('components.messageForUser')
+  @endcomponent
   <form action="{{route('users.store')}}" method="post">
   @csrf
     @component('components.inputText', [

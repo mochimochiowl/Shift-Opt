@@ -2,6 +2,8 @@
 @section('title', ConstParams::USER_SALARY_JP . '編集')
 @section('content')
 @if ($user_data && $salary_data)
+@component('components.messageForUser')
+@endcomponent
 @component('components.userBriefInfo',['user_data' => $user_data])
 @endcomponent
 <form action="{{route('users.salaries.update', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">

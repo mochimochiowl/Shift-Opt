@@ -2,6 +2,8 @@
 @section('title', ConstParams::USER_JP . '編集')
 @section('content')
 @if ($user_data)
+@component('components.messageForUser')
+@endcomponent
 <form action="{{route('users.update', [ConstParams::USER_ID => $user_data[ConstParams::USER_ID]])}}" method="POST">
     @csrf
     @method('PUT')

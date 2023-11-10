@@ -1,7 +1,8 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '登録画面')
 @section('content')
-
+@component('components.messageForUser')
+@endcomponent
 <form action="{{route('at_records.store')}}" method="post">
     @csrf
     @component('components.inputText', [

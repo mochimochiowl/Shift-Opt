@@ -1,6 +1,9 @@
 @extends('layouts.base')
 @section('title', ConstParams::AT_RECORD_JP . '編集')
 @section('content')
+
+@component('components.messageForUser')
+@endcomponent
 @component('components.userBriefInfo',['user_data' => [
     ConstParams::USER_ID =>  $data[ConstParams::USER_ID],
     ConstParams::KANJI_LAST_NAME =>  $data[ConstParams::KANJI_LAST_NAME],

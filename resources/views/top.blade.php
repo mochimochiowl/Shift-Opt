@@ -6,7 +6,7 @@
         <div>
             <span>{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</span>
         </div>
-        <nav class="mt-6">
+        <nav class="mt-8">
             <h2 class="my-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">メニュー</h2>
             <ul class="md:mx-8">
                 <li class="p-4">
@@ -107,7 +107,7 @@
             </ul>
         </nav>
     @else
-        <nav class="">
+        <nav class="mt-8">
             <h2 class="my-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">メニュー</h2>
             <ul class="md:mx-8">
                 <li class="p-4">
