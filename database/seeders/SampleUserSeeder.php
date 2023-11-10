@@ -22,11 +22,11 @@ class SampleUserSeeder extends Seeder
     public function run(): void
     {
         $infos = [
-            [ConstParams::KANJI_LAST_NAME => '河合', ConstParams::KANJI_FIRST_NAME => '有栖', ConstParams::KANA_LAST_NAME => 'カワイ', ConstParams::KANA_FIRST_NAME => 'アリス', ConstParams::LOGIN_ID => 'KawaiArisu', ConstParams::HOURLY_WAGE => 1000.00],
-            [ConstParams::KANJI_LAST_NAME => '鈴木', ConstParams::KANJI_FIRST_NAME => '花子', ConstParams::KANA_LAST_NAME => 'スズキ', ConstParams::KANA_FIRST_NAME => 'ハナコ', ConstParams::LOGIN_ID => 'SuzukiHanako', ConstParams::HOURLY_WAGE => 950.00],
-            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '洋平', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'ヨウヘイ', ConstParams::LOGIN_ID => 'TakahashiYohei', ConstParams::HOURLY_WAGE => 1030.00],
-            [ConstParams::KANJI_LAST_NAME => '田中', ConstParams::KANJI_FIRST_NAME => '明日香', ConstParams::KANA_LAST_NAME => 'タナカ', ConstParams::KANA_FIRST_NAME => 'アスカ', ConstParams::LOGIN_ID => 'TanakaAsuka', ConstParams::HOURLY_WAGE => 1200.00],
-            [ConstParams::KANJI_LAST_NAME => '山田', ConstParams::KANJI_FIRST_NAME => '直樹', ConstParams::KANA_LAST_NAME => 'ヤマダ', ConstParams::KANA_FIRST_NAME => 'ナオキ', ConstParams::LOGIN_ID => 'YamadaNaoki', ConstParams::HOURLY_WAGE => 980.00],
+            [ConstParams::KANJI_LAST_NAME => '河合', ConstParams::KANJI_FIRST_NAME => '有栖 (ｻﾝﾌﾟﾙ)', ConstParams::KANA_LAST_NAME => 'カワイ', ConstParams::KANA_FIRST_NAME => 'アリス (ｻﾝﾌﾟﾙ)', ConstParams::LOGIN_ID => 'KawaiArisu', ConstParams::HOURLY_WAGE => 1000.00],
+            [ConstParams::KANJI_LAST_NAME => '鈴木', ConstParams::KANJI_FIRST_NAME => '花子 (ｻﾝﾌﾟﾙ)', ConstParams::KANA_LAST_NAME => 'スズキ', ConstParams::KANA_FIRST_NAME => 'ハナコ (ｻﾝﾌﾟﾙ)', ConstParams::LOGIN_ID => 'SuzukiHanako', ConstParams::HOURLY_WAGE => 950.00],
+            [ConstParams::KANJI_LAST_NAME => '高橋', ConstParams::KANJI_FIRST_NAME => '洋平 (ｻﾝﾌﾟﾙ)', ConstParams::KANA_LAST_NAME => 'タカハシ', ConstParams::KANA_FIRST_NAME => 'ヨウヘイ (ｻﾝﾌﾟﾙ)', ConstParams::LOGIN_ID => 'TakahashiYohei', ConstParams::HOURLY_WAGE => 1030.00],
+            [ConstParams::KANJI_LAST_NAME => '田中', ConstParams::KANJI_FIRST_NAME => '明日香 (ｻﾝﾌﾟﾙ)', ConstParams::KANA_LAST_NAME => 'タナカ', ConstParams::KANA_FIRST_NAME => 'アスカ (ｻﾝﾌﾟﾙ)', ConstParams::LOGIN_ID => 'TanakaAsuka', ConstParams::HOURLY_WAGE => 1200.00],
+            [ConstParams::KANJI_LAST_NAME => '山田', ConstParams::KANJI_FIRST_NAME => '直樹 (ｻﾝﾌﾟﾙ)', ConstParams::KANA_LAST_NAME => 'ヤマダ', ConstParams::KANA_FIRST_NAME => 'ナオキ (ｻﾝﾌﾟﾙ)', ConstParams::LOGIN_ID => 'YamadaNaoki', ConstParams::HOURLY_WAGE => 980.00],
         ];
 
         foreach ($infos as $info) {
