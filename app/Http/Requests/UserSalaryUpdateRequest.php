@@ -40,6 +40,7 @@ class UserSalaryUpdateRequest extends FormRequest
     {
         return [
             'required' => ':attributeを入力してください。',
+            'numeric' => ':attributeの欄には数値を入力してください。',
             'email' => ConstParams::EMAIL_JP . 'の形式が正しくありません。',
             'min' => ':attributeは最低:min' . ConstParams::CURRENCY_JP . 'から設定可能です。',
             'max' => ':attributeは最大:max' . ConstParams::CURRENCY_JP . 'まで設定可能です。',

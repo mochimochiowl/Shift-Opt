@@ -11,7 +11,7 @@
     @method('PUT')
     <input type="hidden" name="{{ConstParams::USER_ID}}" value="{{$user_data[ConstParams::USER_ID]}}">
     @component('components.inputText', [
-        'type' => 'text',
+        'type' => 'number',
         'name'=> ConstParams::HOURLY_WAGE,
         'name_jp'=> ConstParams::HOURLY_WAGE_JP . ' (整数部分は6桁まで、小数は第2位まで入力可能 : 0 ~ 999999.99)',
         'value' => $salary_data[ConstParams::HOURLY_WAGE],

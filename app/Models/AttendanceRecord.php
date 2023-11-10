@@ -119,9 +119,9 @@ class AttendanceRecord extends Model
         } else if ($search_field === 'name') {
             $query = self::join(
                 'users',
-                'users.' . $search_field,
+                'users.' . ConstParams::USER_ID,
                 '=',
-                'attendance_records.' . $search_field
+                'attendance_records.' . ConstParams::USER_ID
             )->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
                 ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
@@ -140,10 +140,10 @@ class AttendanceRecord extends Model
             // user_id か login_id の場合
             $query = self::join(
                 'users',
-                'users.' . $search_field,
+                'users.' . ConstParams::USER_ID,
                 '=',
-                'attendance_records.' . $search_field
-            )->where('attendance_records.' . $search_field, $keyword)
+                'attendance_records.' . ConstParams::USER_ID
+            )->where('users.' . $search_field, $keyword)
                 ->whereBetween(
                     'attendance_records.' . ConstParams::AT_RECORD_DATE,
                     [$start_date, $end_date]

@@ -53,7 +53,7 @@
                         </li>
                         <li class="p-4">
                             @component('components.iconLink', [
-                                'href'=> route('users.search'),
+                                'href'=> route('at_records.search'),
                                 'color' => 'green',
                                 'icon_class'=> 'i-lucide-file-search w-6 h-6 mt-1 mr-3 flex-shrink-0',
                                 'label'=> ConstParams::AT_RECORD_JP . '検索',
