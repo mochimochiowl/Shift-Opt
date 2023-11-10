@@ -5,18 +5,21 @@
 </p>
 
 ## Shift-Opt とは
-<p align="left">
+<p align="center">
 Shift-Optは、勤怠管理システムです。 
 </p>
-<p align="left">
+<p align="center">
 時給制スタッフを雇用する会社の利用をイメージしております。
 </p>
-<p align="left">
+<p align="center">
 学習と技術デモの用意を目的として、製作いたしました。
 </p>
 
-<p align="left">
-機能、使用した技術などにつきましては、ポートフォリオサイトのTOP画面に掲載しております。
+<p align="center">
+機能、使用した技術などにつきましては、
+</p>
+<p align="center">
+ポートフォリオサイトのTOP画面に掲載しております。
 </p>
 
 <p align="center">
