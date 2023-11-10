@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://laravel.com" target="_blank">
+    <a href="https://gce.shift-opt.com">
         <img src="public/imgs/top.png" width="800" alt="Shift-Opt イメージ画像">
     </a>
 </p>
