@@ -144,6 +144,9 @@
             </div>
         </div>
     </div>
+    <div id="top_image" class="flex items-center justify-center md:mt-12 mt-8 md:p-0 p-4 opacity-0 transition-opacity duration-700">
+        <img src="{{asset('/imgs/top.png')}}" width="800" alt="Shift-Opt イメージ画像">
+    </div>
     <div id="guide" class="md:text-2xl text-xl">
         <div id="summary" class="md:mt-20 mt-12 opacity-0 transition-opacity duration-700">
             <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">概要</h2>
@@ -154,7 +157,7 @@
                 </div>
             </div>
         </div>
-        <div id="function" class="md:mt-20 mt-12">
+        <div id="function" class="md:mt-16 mt-8">
             <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">機能</h2>
             <div class="md:mt-12 mt-6">
                 <div id="function-1" class="pb-12 border-b-2 border-y-gray-100 opacity-0 transition-opacity duration-700">
