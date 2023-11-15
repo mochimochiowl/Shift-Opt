@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            ConstParams::LOGIN_ID => 'required|exists:users,login_id',
+            ConstParams::LOGIN_ID => 'required',
             ConstParams::PASSWORD => 'required',
         ];
     }
@@ -41,7 +41,6 @@ class LoginRequest extends FormRequest
     {
         return [
             'required' => ':attributeを入力して下さい。',
-            'exists' => ':attributeが存在しません。',
         ];
     }
 

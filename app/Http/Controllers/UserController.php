@@ -457,7 +457,7 @@ class UserController extends Controller
 
         // パスワードが一致しない場合
         return back()
-            ->withErrors(['message' => 'パスワードが一致しません。'])
+            ->withErrors(['message' => 'ログインIDとパスワードが一致しません。'])
             ->withInput($request->except(ConstParams::PASSWORD));
     }
 
