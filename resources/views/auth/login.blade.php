@@ -29,7 +29,7 @@
                 'maxlength'=> '20',
                 ])
             @endcomponent
-            @component('components.inputRadio', [
+            {{-- @component('components.inputRadio', [
                 'label' => '自動ログイン',
                 'items' => [
                         [
@@ -46,7 +46,7 @@
                         ],
                     ],
                 ])
-                @endcomponent
+                @endcomponent --}}
             <div class="pt-4">
                 @component('components.btnBlue', [
                 'type' => 'submit',

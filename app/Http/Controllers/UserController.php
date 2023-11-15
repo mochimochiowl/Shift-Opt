@@ -449,9 +449,9 @@ class UserController extends Controller
     public function login(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only(ConstParams::LOGIN_ID, ConstParams::PASSWORD);
-        $remember = $request->only('remember_me');
+        // $remember = $request->only('remember_me');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials/*, $remember*/)) {
             $request->session()->regenerate();
             return redirect()->intended(route('top'));
         }
