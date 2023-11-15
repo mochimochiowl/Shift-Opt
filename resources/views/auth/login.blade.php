@@ -29,6 +29,24 @@
                 'maxlength'=> '20',
                 ])
             @endcomponent
+            @component('components.inputRadio', [
+                'label' => '自動ログイン',
+                'items' => [
+                        [
+                            'name'=> 'remember_me',
+                            'name_jp'=> 'する',
+                            'value'=> "true",
+                            'checked'=> false,
+                        ],
+                        [
+                            'name'=> 'remember_me',
+                            'name_jp'=> 'しない',
+                            'value'=> "false",
+                            'checked'=> true,
+                        ],
+                    ],
+                ])
+                @endcomponent
             <div class="pt-4">
                 @component('components.btnBlue', [
                 'type' => 'submit',

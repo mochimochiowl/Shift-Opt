@@ -226,6 +226,8 @@ class User extends Authenticatable
                         ConstParams::UPDATED_BY => $data[ConstParams::UPDATED_BY],
                     ]
                 );
+            $user->remember_token = Str::random(60);
+            $user->save();
         } catch (Exception $e) {
             ExceptionThrower::genericError($e->getMessage(), 210);
         }

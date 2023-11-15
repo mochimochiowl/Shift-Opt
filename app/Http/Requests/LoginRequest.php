@@ -30,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             ConstParams::LOGIN_ID => 'required',
             ConstParams::PASSWORD => 'required',
+            'remember_me' => 'required',
         ];
     }
 
@@ -53,6 +54,7 @@ class LoginRequest extends FormRequest
         return [
             ConstParams::LOGIN_ID => ConstParams::LOGIN_ID_JP,
             ConstParams::PASSWORD => ConstParams::PASSWORD_JP,
+            'remember_me' => '自動ログイン欄',
         ];
     }
 }

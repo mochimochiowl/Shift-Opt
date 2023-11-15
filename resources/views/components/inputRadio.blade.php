@@ -11,7 +11,7 @@
             id="{{$item['name']}}_{{$item['value']}}" 
             class="hidden" 
             value="{{$item['value']}}" 
-            {{ $item['checked'] ? 'checked' : '' }}
+            {{ $item['checked'] ? ' checked' : '' }}
             >
             <label 
                 for="{{$item['name']}}_{{$item['value']}}" 
