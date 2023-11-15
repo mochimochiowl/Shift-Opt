@@ -6,6 +6,16 @@
         <div>
             <span>{{Auth::user()->getKanjiFullName()}}さん、こんにちは！</span>
         </div>
+        <div class="mt-8">
+            <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">サンプルデータについて</h2>
+            <div class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200">
+                <div class="p-4 text-center">
+                    <p>このデモ環境には、下記期間分のサンプルデータが登録済みです。</p>
+                    <p>2023/09/01 ~ 2023/11/10</p>
+                    <p>打刻レコードの検索や集計を行う際は、上記期間内でお試しください。</p>
+                </div>
+            </div>
+        </div>
         <nav class="mt-8">
             <h2 class="my-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">メニュー</h2>
             <ul class="md:mx-8">
@@ -201,6 +211,16 @@
                         <div class="flex flex-col text-center w-full md:w-1/2 pt-2 pb-4 mx-4 my-8 rounded-xl bg-blue-200">
                             <h3 class="font-semibold text-2xl md:text-3xl mt-4">集計機能</h3>
                             <p class="mt-8 md:mt-16 mb-4 mx-3">打刻記録をもとに、労働時間、休憩時間、人件費の実績値を表示します。</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="function-5" class="md:mt-20 mt-12 opacity-0 transition-opacity duration-700">
+                    <h2 class="m-4 p-4 font-semibold md:text-4xl text-3xl text-center border-y-2 border-y-gray-600">サンプルデータについて</h2>
+                    <div class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200">
+                        <div class="p-4 text-center">
+                            <p>このデモ環境には、下記期間分のサンプルデータが登録済みです。</p>
+                            <p>2023/09/01 ~ 2023/11/10</p>
+                            <p>打刻レコードの検索や集計を行う際は、上記期間内でお試しください。</p>
                         </div>
                     </div>
                 </div>

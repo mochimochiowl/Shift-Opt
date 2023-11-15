@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         div_array.push(document.querySelector('#function-2'));
         div_array.push(document.querySelector('#function-3'));
         div_array.push(document.querySelector('#function-4'));
+        div_array.push(document.querySelector('#function-5'));
         div_array.push(document.querySelector('#purpose'));
         div_array.push(document.querySelector('#tech-1'));
         div_array.push(document.querySelector('#tech-2'));
