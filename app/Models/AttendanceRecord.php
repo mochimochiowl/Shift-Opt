@@ -356,9 +356,9 @@ class AttendanceRecord extends Model
             }
 
             //退勤していないセッションがある場合、例外を投げる
-            if (!$finish_work_record) {
-                ExceptionThrower::notEndedSessionsExist(114);
-            }
+            // if (!$finish_work_record) {
+            //     ExceptionThrower::notEndedSessionsExist(114);
+            // }
 
             if (!$start_work_record) {
                 ExceptionThrower::notExist(ConstParams::AT_RECORD_START_WORK_JP . ConstParams::AT_RECORD_JP, 115);

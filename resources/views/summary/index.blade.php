@@ -31,7 +31,9 @@
                     名前
                 </th>
                 <th class="whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
-                    入｜出
+                    <span>出勤時刻</span>
+                    <span> | </span>
+                    <span>退勤時刻</span>
                 </th>
                 <th class="whitespace-nowrap bg-indigo-400 border border-black border-solid rounded-1g px-3 py-2">
                     労働時間
@@ -46,12 +48,14 @@
         </thead>
         <tbody>
         @foreach ($data['rows'] as $row)
-            <tr>
+            <tr class="text-center">
                 <td class="whitespace-nowrap bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     {{$row['name']}}
                 </td>
                 <td class="whitespace-nowrap bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
-                    {{$row['start_work_time']}} | {{$row['finish_work_time']}}
+                    <span>{{$row['start_work_time']}}</span>
+                    <span> | </span>
+                    <span>{{$row['finish_work_time']}}</span>
                 </td>
                 <td class="whitespace-nowrap bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     {{$row['working_hours']}}
@@ -64,7 +68,7 @@
                 </td>
             </tr>
         @endforeach
-            <tr>
+            <tr class="text-center">
                 <td class="whitespace-nowrap bg-indigo-100 border border-black border-solid rounded-1g px-3 py-2">
                     合計
                 </td>

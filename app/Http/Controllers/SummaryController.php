@@ -127,6 +127,19 @@ class SummaryController
             $start_break_records = $recordSet['start_break_records'];
             $finish_break_records = $recordSet['finish_break_records'];
 
+            if (!$finish_work_record) {
+                $row = [
+                    'name' => $start_work_record[ConstParams::KANJI_LAST_NAME] . $start_work_record[ConstParams::KANJI_FIRST_NAME],
+                    'start_work_time' => $start_work_record[ConstParams::AT_RECORD_TIME],
+                    'finish_work_time' => '(出勤中)',
+                    'working_hours' => '退勤後に表示',
+                    'breaking_hours' => '退勤後に表示',
+                    'cost_of_labor' => '退勤後に表示',
+                ];
+                array_push($rows, $row);
+                continue;
+            }
+
             //休憩時間を算出する
             $breaking_seconds = 0;
             for ($i = 0; $i < count($start_break_records); $i++) {
