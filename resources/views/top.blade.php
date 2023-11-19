@@ -249,8 +249,9 @@
                 <div id="tech-1" class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200 opacity-0 transition-opacity duration-700">
                     <h3 class="my-4 mx-8 p-4 font-semibold md:text-3xl text-2xl text-center border-b-2 border-b-gray-600">フロントエンド</h3>
                     <ul>
-                        <li class="p-4">Vite</li>
+                        <li class="p-4">JavaScript</li>
                         <li class="p-4">Tailwind CSS</li>
+                        <li class="p-4">Vite (JavaScriptとCSSのビルドに使用)</li>
                     </ul>
                 </div>
                 <div id="tech-2" class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200 opacity-0 transition-opacity duration-700">
