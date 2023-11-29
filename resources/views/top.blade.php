@@ -270,10 +270,9 @@
                 <div id="tech-4" class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200 opacity-0 transition-opacity duration-700">
                     <h3 class="my-4 mx-8 p-4 font-semibold md:text-3xl text-2xl text-center border-b-2 border-b-gray-600">サーバー、インフラ</h3>
                     <ul>
-                        <li class="p-4">Nginx</li>
+                        <li class="p-4">Laravel Sail</li>
                         <li class="p-4">Google Compute Engine</li>
                         <li class="p-4">Docker</li>
-                        <li class="p-4">Laravel Sail</li>
                     </ul>
                 </div>
                 <div id="tech-5" class="pt-2 pb-4 mx-4 mt-8 text-center rounded-xl bg-blue-200 opacity-0 transition-opacity duration-700">
