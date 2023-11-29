@@ -100,54 +100,44 @@ class AttendanceRecord extends Model
         $column = $search_requirements['column'];
         $order = $search_requirements['order'];
 
+        //共通の処理　外部結合＋日付絞り込み
+        $query = self::join(
+            'users',
+            'users.' . ConstParams::USER_ID,
+            '=',
+            'attendance_records.' . ConstParams::USER_ID
+        )->whereBetween(
+            'attendance_records.' . ConstParams::AT_RECORD_DATE,
+            [$start_date, $end_date]
+        );
+
         if ($search_field === 'all') {
-            $query = self::join(
-                'users',
-                'users.' . ConstParams::USER_ID,
-                '=',
-                'attendance_records.' . ConstParams::USER_ID
-            )->whereBetween(
-                'attendance_records.' . ConstParams::AT_RECORD_DATE,
-                [$start_date, $end_date]
-            )->select(
-                'attendance_records.*',
-                'users.' . ConstParams::KANJI_LAST_NAME,
-                'users.' . ConstParams::KANJI_FIRST_NAME,
-                'users.' . ConstParams::KANA_LAST_NAME,
-                'users.' . ConstParams::KANA_FIRST_NAME,
-            );
-        } else if ($search_field === 'name') {
-            $query = self::join(
-                'users',
-                'users.' . ConstParams::USER_ID,
-                '=',
-                'attendance_records.' . ConstParams::USER_ID
-            )->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
-                ->whereBetween(
-                    'attendance_records.' . ConstParams::AT_RECORD_DATE,
-                    [$start_date, $end_date]
-                )->select(
+            $query = $query
+                ->select(
                     'attendance_records.*',
                     'users.' . ConstParams::KANJI_LAST_NAME,
                     'users.' . ConstParams::KANJI_FIRST_NAME,
                     'users.' . ConstParams::KANA_LAST_NAME,
                     'users.' . ConstParams::KANA_FIRST_NAME,
                 );
+        } else if ($search_field === 'name') {
+            $query = $query->where(function ($query) use ($keyword) {
+                $query->where('users.' . ConstParams::KANA_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANA_FIRST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANJI_LAST_NAME, 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('users.' . ConstParams::KANJI_FIRST_NAME, 'LIKE', '%' . $keyword . '%');
+            })->select(
+                'attendance_records.*',
+                'users.' . ConstParams::KANJI_LAST_NAME,
+                'users.' . ConstParams::KANJI_FIRST_NAME,
+                'users.' . ConstParams::KANA_LAST_NAME,
+                'users.' . ConstParams::KANA_FIRST_NAME,
+            );
         } else {
             // user_id か login_id の場合
-            $query = self::join(
-                'users',
-                'users.' . ConstParams::USER_ID,
-                '=',
-                'attendance_records.' . ConstParams::USER_ID
-            )->where('users.' . $search_field, $keyword)
-                ->whereBetween(
-                    'attendance_records.' . ConstParams::AT_RECORD_DATE,
-                    [$start_date, $end_date]
-                )->select(
+            $query = $query
+                ->where('users.' . $search_field, $keyword)
+                ->select(
                     'attendance_records.*',
                     'users.' . ConstParams::KANJI_LAST_NAME,
                     'users.' . ConstParams::KANJI_FIRST_NAME,
