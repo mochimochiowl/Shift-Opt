@@ -24,9 +24,9 @@ class UserCondition extends Model
         ConstParams::HAS_ATTENDED,
         ConstParams::IS_BREAKING,
         ConstParams::CREATED_AT,
+        ConstParams::CREATED_BY,
         ConstParams::UPDATED_AT,
-        ConstParams::CREATED_AT,
-        ConstParams::UPDATED_AT,
+        ConstParams::UPDATED_BY,
     ];
 
     /** 

@@ -22,9 +22,9 @@ class UserSalary extends Model
         ConstParams::USER_ID,
         ConstParams::HOURLY_WAGE,
         ConstParams::CREATED_AT,
+        ConstParams::CREATED_BY,
         ConstParams::UPDATED_AT,
-        ConstParams::CREATED_AT,
-        ConstParams::UPDATED_AT,
+        ConstParams::UPDATED_BY,
     ];
 
     /**

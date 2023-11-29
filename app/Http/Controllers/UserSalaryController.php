@@ -54,7 +54,6 @@ class UserSalaryController extends Controller
                 $salary_data = User::findByUserId($user_id)->salary->dataArray();
                 $validated_data = $request->validated();
                 $formatted_data = $this->formatDataForUpdate($validated_data, $salary_data);
-
                 $result = UserSalary::updateInfo($formatted_data);
 
                 return redirect()
@@ -104,10 +103,12 @@ class UserSalaryController extends Controller
         /** @var \App\Models\User $logged_in_user */
         $logged_in_user = Auth::user();
 
+        $updated_by = $logged_in_user->getKanjiFullName();
+
         $formatted_data = [
             ConstParams::USER_SALARY_ID => $salary_data[ConstParams::USER_SALARY_ID],
             ConstParams::HOURLY_WAGE => $validated_data[ConstParams::HOURLY_WAGE],
-            ConstParams::UPDATED_BY => $logged_in_user->getKanjiFullName(),
+            ConstParams::UPDATED_BY => $updated_by,
         ];
 
         return $formatted_data;
